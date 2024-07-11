@@ -1,0 +1,60 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Context}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Motivation and Problem}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Objectives}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Contributions}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Document Structure}{4}{section.1.5}%
+\contentsline {chapter}{\numberline {2}State of the art}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}5G and 6G Characterization}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}5G Architecture}{7}{section.2.2}%
+\contentsline {section}{\numberline {2.3}RAN Deployment Approaches}{8}{section.2.3}%
+\contentsline {section}{\numberline {2.4}O-RAN Architecture}{11}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}O-RAN Components}{11}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}O-RAN Interfaces}{12}{subsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.2.1}E2 Interface}{13}{subsubsection.2.4.2.1}%
+\contentsline {section}{\numberline {2.5}Computer Vision-based detection and tracking solutions}{15}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Detection models}{16}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Tracking models}{17}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Open-source Tools}{18}{subsection.2.5.3}%
+\contentsline {section}{\numberline {2.6}Related Work}{21}{section.2.6}%
+\contentsline {section}{\numberline {2.7}CONVERGE project}{24}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Summary}{26}{section.2.8}%
+\contentsline {chapter}{\numberline {3}System Requirements, Specification, Design and Implementation}{28}{chapter.3}%
+\contentsline {section}{\numberline {3.1}System Requirements and Specification}{28}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Proposed Vision Module}{30}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Prediction of Blockage Messages}{31}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Blocking messages}{31}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Past Blockage}{31}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Location of UEs}{31}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}System Design}{32}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Software}{32}{subsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.1.1}OpenCV}{32}{subsubsection.3.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.3.1.2}Ultralytics YOLO}{34}{subsubsection.3.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.3.1.3}ASN1Tools and ASN1C}{34}{subsubsection.3.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.3.1.4}5G Core Network, 5G gNB, and 5G UE}{34}{subsubsection.3.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.3.1.5}Near-RT RIC}{34}{subsubsection.3.3.1.5}%
+\contentsline {subsection}{\numberline {3.3.2}Hardware}{34}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}System Implementation}{34}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}OAI 5G Core Network}{35}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}OAI gNB}{35}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}OAI 5G UE}{35}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}FlexRIC}{35}{subsection.3.4.4}%
+\contentsline {section}{\numberline {3.5}Summary}{35}{section.3.5}%
+\contentsline {chapter}{\numberline {4}System Validation}{36}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Methodology}{36}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Core Network}{36}{section.4.2}%
+\contentsline {section}{\numberline {4.3}FleXRIC}{37}{section.4.3}%
+\contentsline {section}{\numberline {4.4}gNB}{37}{section.4.4}%
+\contentsline {section}{\numberline {4.5}UE}{37}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Computer Vision Module}{37}{section.4.6}%
+\contentsline {section}{\numberline {4.7}Mobility Management xApp}{38}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Use case}{38}{section.4.8}%
+\contentsline {subsection}{\numberline {4.8.1}Scenario 1: UE Blocked by an Obstacle}{38}{subsection.4.8.1}%
+\contentsline {subsection}{\numberline {4.8.2}Scenario 2: UE Moving Away from the gNB}{39}{subsection.4.8.2}%
+\contentsline {section}{\numberline {4.9}Discussion}{39}{section.4.9}%
+\contentsline {chapter}{\numberline {5}Conclusion}{40}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Conclusions}{40}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Known Limitations and Future Work}{40}{section.5.2}%
+\contentsline {chapter}{References}{41}{section*.30}%
+\contentsline {chapter}{\numberline {A}Supplementary Resources}{45}{appendix.A}%
