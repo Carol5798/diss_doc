@@ -241,9 +241,68 @@ The main open-source software packages able to implement a Near-RT RIC are Mosai
 The first was chosen more suitable for our application due to the fact that lightweight application, launched from an executable file.
 
 \subsection{Hardware}
-% PC - which one?
-% WEBCAM
-% GO1
+\subsubsection{Core Network, FlexRIC, Computer Vision module and gNB}
+The OAI Core Network, FlexRIC,the Computer Vision module and the gNB were deployed in a laptop Acer Aspire A715-74G\@.
+The OAI Core was deployed using Docker containers, requiring 4 cores CPU, 16GB of RAM and a minimum of 1.5GB free storage for the docker images.
+As for FlexRIC, it does not have hardware requirements listed, but while deploying it was noticed that it is not resource intensive, sufficing the same ones required for the Core Network.
+The xApp was deployed alongside FlexRIC in order to assure reduced latency between the two components.
+Also,  the way interface E42 is implemented requires them to be running in the same computing unit.
+As for the gNB, the hardware recommended are 8 physical CPU cores and 32 GB of RAM\@.
+While the laptop used did not fulfill these requirements, it has proven sufficient to run the OAI gNB software, as it was noted before in \ref{}. % ref to dissertation of gonçalo
+
+As for the Computer Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{}, for Ultralytics YOLO model to properly run.
+Given that for our solution pre-trained model has proven enough to accurately detect and track objects, we did not worried about fulfilling the
+%%%%%%%%%%%% finalize
+
+
+
+Table ~\ref{tab:specs_pc} presents the specification of the computer.
+
+\begin{table}[H]
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Specification} & \textbf{Details} \\ \hline
+        Processor                      &           Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz   \\ \hline
+        RAM                      &          16GB        \\ \hline
+        Disk                      &   2 SSDs  512GB and 256GB         \\ \hline
+        GPU                     &   GeForce GTX 1050 (3GB)      \\ \hline
+        Operational System & Ubuntu 22.04.4 LTS                  \\ \hline
+    \end{tabular}\label{tab:specs_pc}
+\end{table}
+
+For the Computer Vision Module, we opted to use a webcam due to its simplicity and ease of integration.
+The chosen webcam, a model LL-4196, offers Full HD (1920 x 1080 Pixels) resolution and supports a frame rate of 30 FPS\@.
+This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion necessary for accurate computer vision processing.
+The camera connects to the computer using a USB 2.0 interface.
+The specifications of the camera are sufficient for the system to detect and track movements and objects within the environment, assuring the efficient operation of the Computer Vision Module.
+% why? velocity constant , processing of frame
+
+
+Deploying the gNB and the UE in two different host computers implicates the use of Software-Defined Radio (SDR) in order to establish a 5G connection between the gNB and the UE.
+OAI recommends the use of three SDR models: USRP B210, USRP N300 and USRP X300\@ \cite{}. %https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/NR_SA_Tutorial_OAI_nrUE.md
+For our implementation, we have selected the first since it is cost-effective and a popularity across the community.
+This model uses a USB 3.0 interface to connect to the computer acting as a processing unit.
+The SDR was equipped with two W5208K dipole antennas.
+Figure \ref{} shows the two SDRs with their respective antennas.
+We have selected 3.6GHz as the carrier frequency for the 5G RAN.
+
+\subsubsection{UE}
+The UE was deployed in HP EliteBook 840 Laptop.
+The hardware requirements for the deployment of the UE are 8 cores and 8GB of RAM\@.
+Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsible for the UE\@.
+
+\begin{table}[H]
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Specification} & \textbf{Details} \\ \hline
+        Processor                      &              \\ \hline
+        RAM                      &          8GB        \\ \hline
+        Disk                      &   2 SSDs  512GB and 256GB         \\ \hline
+        GPU                     &   None                \\ \hline
+        Operational System & Ubuntu 22.04.4 LTS                  \\ \hline  %  check
+    \end{tabular}\label{tab:specs_pc_ue}
+\end{table}
+
 
 \section{System Implementation}\label{sec:impl}
 
@@ -266,6 +325,16 @@ For the Vision Module:
         Making adjustments and optimizations based on observed performance and feedback.
 
 \subsection{OAI 5G Core Network}
+OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{}.
+Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, which enhances the overall efficiency and flexibility of the network infrastructure.
+
+Besides that, the Core can be implemented in two scenarios.
+We chose scenario I , since it contains the minimum components necessary in order to test end to end connectivity between the nodes.
+This scenario contains 8 containers.
+python3 core-network.py --type start-basic --scenario 1
+- Scenario I:  AMF, SMF, UPF (SPGWU), NRF, UDM, UDR, AUSF, MYSQL
+
+
 \subsection{OAI gNB}
 \subsection{OAI 5G UE}
 \subsection{FlexRIC}
