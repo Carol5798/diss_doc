@@ -35,7 +35,3 @@
     - testes interoperacionais
     - resultados coletados do sistema para cada cenário
     - como plotar resultados?
-
-Falar com Isidro sobre espuma absorvente
- testar ou na sala do converge
-ou no openspace
