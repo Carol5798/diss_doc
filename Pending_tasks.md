@@ -35,3 +35,7 @@
     - testes interoperacionais
     - resultados coletados do sistema para cada cenário
     - como plotar resultados?
+
+
+hoje
+- xApp - foto da inicialização
