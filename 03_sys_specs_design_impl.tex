@@ -33,7 +33,7 @@ The detailed requirements of the Computer Vision Module and its interface with t
         \item Reliability: The vision module and communication system should be robust, with mechanisms for error detection and recovery to maintain continuous operation. The model and its parameters are fundamental to assure reliability. % how can i prove it?
     \end{enumerate}
 \end{enumerate}
-
+\textcolor{red}{Devo remover os requerimentos não funcionais que não foram cumpridos, ou justifico o porque de não ser possível cumprí-los?}
 
 The requirements translate into table ~\ref{tab:spec}, containing system specifications:
 
@@ -212,7 +212,7 @@ If the module predicts an impending blockage, it generates a message containing 
 
 
 
-
+\textcolor{red}{Continue writing about other messages}
 \subsection{Blocking messages}
 
 \begin{table}[H]
@@ -303,19 +303,17 @@ This includes comparing current and previous visible ArUco IDs, buffering for ch
 
 
 \section{System Design}\label{sec:design}
-% review to improve
-% where does the server goes? because the camera is on the gnb
+
 This section will present the system designed to implement and evaluate the proposed solution.
 The system is depicted in Figure~\ref{fig:design_arch}.
 It is composed of two main logical units.
-One implementing the vision module server and the 5G Core Network, the Near-RT RIC and the xApp.
-It also implements the mobile RAN, consisting of the gNB and the Computer Vision Module. % control application: vision module client and control of robot
-The last unit implements the UE software.
+The first implements the 5G Core Network, the Near-RT RIC and the Vision-aided gNB\@.
+The second unit implements the UE software.
 
 
 \begin{figure}
     \centering
-    \includegraphics{figures/uporto-feup}
+    \includegraphics[width=0.7\linewidth]{figures/System Arch.drawio}
     \caption[System architecture designed for implementing and evaluating the proposed solution]{System architecture designed for implementing and evaluating the proposed solution}
     \label{fig:design_arch}
 \end{figure}
@@ -461,10 +459,10 @@ Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsibl
         Operational System & Ubuntu 22.04.4 LTS                  \\ \hline  %  check
     \end{tabular}\label{tab:specs_pc_ue}
 \end{table}
-
+\textcolor{red}{Finish table!!!!}
 
 \section{System Implementation}\label{sec:impl}
-
+\textcolor{red}{Improve this paragraph}
 For the Vision Module:
 
     Coding:
@@ -493,7 +491,9 @@ This scenario contains 8 containers.
 python3 core-network.py --type start-basic --scenario 1
 - Scenario I:  AMF, SMF, UPF (SPGWU), NRF, UDM, UDR, AUSF, MYSQL
 
+\textcolor{red}{Finish explanation}
 
+\textcolor{red}{Finish writing the other subsections}
 \subsection{OAI gNB}
 \subsection{OAI 5G UE}
 \subsection{FlexRIC}
