@@ -17,24 +17,26 @@
   - iperf3 - 
   - ping - ping core, ping gnb, ping UE
 - testes c/ SDR
-- 
+
   - Cenário 0 : coletar resultados já!!! - 16/jul
   - 1 : gNB move-se para evitar bloqueio
   - 2 : UE move-se para NLOS
 
 
 - escrever dissertação
-  - Capítulo 3:
-    - figura do sistema
-    - descrever arquitetura
-  - Capítulo 4:
-    - descrição dos cenários
-    - testes realizados
-    - testes de componentes 
-      - referir testes realizados so com o modulo de visão
-    - testes interoperacionais
-    - resultados coletados do sistema para cada cenário
-    - como plotar resultados?
+  - Resumo e Abstract
+  - SDGs
+  - Abbreviations
+  - Cap 3
+    - citações
+  - Cap 4
+      - descrição dos cenários
+      - testes realizados
+      - testes de componentes 
+        - referir testes realizados so com o modulo de visão
+      - testes interoperacionais
+      - resultados coletados do sistema para cada cenário
+      - como plotar resultados?
 
 
 hoje

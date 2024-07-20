@@ -9,12 +9,14 @@ Finally , Section~\ref{sec:impl} presents the implementation of the system.
 The goal of this dissertation was to extract vision-based information relevant to a 5G network.
 This information should be available in near real-time to relevant entities of the network architecture upon subscription.
 This solution envisions obstacle-aware networks and should enable a Base Station to autonomously control its placement and configuration based on the environment perception provided by the vision-based information.
-To achieve this goal, specific system requirements were established to ensure the efficient detection, tracking, and communication of obstacles within the 5G network.
+
+To demonstrate these concepts, we conceptualized a simple model.
+The scenario is set in an indoor office environment, where it is determined if common objects will impact the LOS between a gNB and a UE\@.
+
+To achieve this, specific system requirements were established to ensure the efficient detection, tracking, and communication of obstacles within the 5G network.
 
 The detailed requirements of the Computer Vision Module and its interface with the network are as follows:
 
-
-% check this requirements with the results
 \begin{enumerate}
     \item \textbf{Functional Requirements}:
     \begin{enumerate}
@@ -25,15 +27,15 @@ The detailed requirements of the Computer Vision Module and its interface with t
     \end{enumerate}
     \item \textbf{Non-Functional Requirements}:
     \begin{enumerate}
-        \item Processing speed: Must process video frames within a maximum of 100ms.
-        \item Messaging latency: Messages must be sent within 50ms of detection.
+        \item Maximize processing speed resorting to parallel processing on the GPU whenever possible\@.
+        \item Minimize messaging latency ensuring rapid response by the xApp for optimal connection maintenance.
         \item Accuracy: High accuracy in object detection and tracking to minimize false positives/negatives.
         \item Scalability: The solution should be scalable to handle multiple video streams, Base Stations and UEs, allowing for broader deployment in various network environments.
         \item Interoperability: The system must use standardized messaging formats to ensure interoperability with different network components and vendors.
-        \item Reliability: The vision module and communication system should be robust, with mechanisms for error detection and recovery to maintain continuous operation. The model and its parameters are fundamental to assure reliability. % how can i prove it?
+        \item Reliability: The vision module and communication system should be robust, with mechanisms for error detection and recovery to maintain continuous operation.
+        The model and its parameters are fundamental to assure reliability. % how can i prove it?
     \end{enumerate}
 \end{enumerate}
-\textcolor{red}{Devo remover os requerimentos não funcionais que não foram cumpridos, ou justifico o porque de não ser possível cumprí-los?}
 
 The requirements translate into table ~\ref{tab:spec}, containing system specifications:
 
@@ -73,14 +75,25 @@ User data is transmitted between the UE and the UPF via the gNB\@.
 The UPF routes the data to and from external networks, ensuring efficient data flow.
 
 %------------ move to another place
-The 5G Core Network is responsible for managing the overall network functions, including authentication, mobility management, and routing of data.
-In our solution, both the RAN and the core are deployed within the same processing unit to maintain efficiency, mobility and simplicity.
-The AMF is a critical component of the 5G core that handles user authentication and mobility management. When a UE attempts to connect to the network, the AMF verifies the user's credentials and manages their session as they move across different cells in the network.
+%The 5G Core Network is responsible for managing the overall network functions, including authentication, mobility management, and routing of data.
+%In our solution, both the RAN and the core are deployed within the same processing unit to maintain efficiency, mobility and simplicity.
+%The AMF is a critical component of the 5G core that handles user authentication and mobility management.
+%When a UE attempts to connect to the network, the AMF verifies the user's credentials and manages their session as they move across different cells in the network.
 
-The User Plane Function (UPF) manages the user data traffic, ensuring that data packets are efficiently routed between the UE and external data networks. It plays a pivotal role in delivering low-latency, high-bandwidth services to the end-users. Another essential core network function is the Unified Data Management (UDM), responsible for handling subscriber data and profiles. It ensures that user data is consistent and accessible across the network, supporting seamless user experiences.
+%The User Plane Function (UPF) manages the user data traffic, ensuring that data packets are efficiently routed between the UE and external data networks.
+%It plays a pivotal role in delivering low-latency, high-bandwidth services to the end-users.
+%Another essential core network function is the Unified Data Management (UDM), responsible for handling subscriber data and profiles.
+%It ensures that user data is consistent and accessible across the network, supporting seamless user experiences.
+%The User Plane Function (UPF) manages the user data traffic, ensuring that data packets are efficiently routed between the UE and external data networks.
+%It plays a pivotal role in delivering low-latency, high-bandwidth services to the end-users.
+%Another essential core network function is the Unified Data Management (UDM), responsible for handling subscriber data and profiles.
+%It ensures that user data is consistent and accessible across the network, supporting seamless user experiences.
 
-To ensure the mobility and efficiency of our solution, the RAN and the core network components are deployed within the same processing unit.
-This integration offers several advantages. By colocating the RAN and core network functions, data processing and transmission delays are minimized, resulting in a more responsive network. The mobile RAN can seamlessly maintain connectivity with the UE, even when the gNB is moving, without relying on distant core network infrastructure. Having the RAN and core in a single unit simplifies the deployment process, making it easier to set up and manage the network in various locations, whether stationary or on the move.
+%To ensure the mobility and efficiency of our solution, the RAN and the core network components are deployed within the same processing unit.
+%This integration offers several advantages.
+%By colocating the RAN and core network functions, data processing and transmission delays are minimized, resulting in a more responsive network.
+%The mobile RAN can seamlessly maintain connectivity with the UE, even when the gNB is moving, without relying on distant core network infrastructure.
+%Having the RAN and core in a single unit simplifies the deployment process, making it easier to set up and manage the network in various locations, whether stationary or on the move.
 %-------------------
 
 In our solution, the RAN can be repositioned according to environment conditions that possibly affect the RF\@.
@@ -88,7 +101,7 @@ Those are reported by the Vision Module (Vision Module).
 This enables the RAN to control manage its placement, based on those conditions together with radio metrics, such as SNR\@.
 In order to establish the integration of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specified by O-RAN, to deploy a xApp responsible for the handling both radio metrics and the VM messages.
 The communication between the VM and the xApp, is done through an interface inspired by the O-RAN E2 interface and E2 Application Protocol (E2AP).
-This interface facilitates reliable data exchange using a socket connection that utilizes the SCTP protocol (cf.\ref{fig:stack}), along with an Abstract Syntax Notation One (ASN.1) definition that structures the messages.
+This interface facilitates reliable data exchange using a SCTP socket connection (cf.\ref{fig:stack}), along with an Abstract Syntax Notation One (ASN.1) definition that structures the messages.
 The use of ASN.1 ensures that the message formats are standardized, promoting interoperability and efficiency in data transmission.
 This design allows the VM to effectively communicate with the xApp, enabling the integration of data extracted from video for the mobile RAN management.
 
@@ -98,10 +111,6 @@ This design allows the VM to effectively communicate with the xApp, enabling the
     \caption[Proposed Vision Module Protocol Stack]{Proposed Vision Module Protocol Stack}
     \label{fig:stack}
 \end{figure}
-
-Since the mobility control of the RAN can be made through a xApp, as seen in \ref{Gonçalo}, we took this opportunity to approach the Vision Module interface to the E2 interface.
-Due to time constrains, and since this was not one of the objectives of our work, we limited ourselves to
-% continue...
 
 
 \section{Proposed Vision Module}\label{sec:prop_vision}
@@ -128,33 +137,29 @@ Each message will be explained further in the following sections.
         \end{tabular}}
 \end{table}
 
-The module includes functions responsible for communication, detection and tracking, image processing, and utility functions.
-We present a high level functionality overview of the developed Vision Module.
-We utilized multi-threading in order to assure the timely processing of the video.
-The first thread is responsible for handling communication, i.e.\ the connection with the xApp and sending the generated messages.
-The second thread is responsible for the video processing, i.e.\ identifying objects and generating messages corresponding to the environment perception.
+The module includes functionality responsible for communication, detection and tracking, image processing, and utility functions.
+We present a high level overview of the developed Vision Module.
 
 The processing of the video starts with the capture of frames from the camera.
 One frame is processed at a time.
 The UE has a ArUco Marker in order to identify its placement.
 OpenCV is responsible for identifying this marker and returning the ROI corresponding to the marker, as well as its identification.
-Periodically, the Module sends a message containing the location (normalized coordinates x and y) of the UE\@.
-This is the first message designed, seeking to address XYZ. % finish this sentance
-Following this, yolov8n, a YOLO pre trained model jointly with BoT-SORT, is responsible for detecting and tracking the obstacles in the frame.
-The main returned value is a track history containing a unique identifier of the obstacle and its associated last positions (also normalized x, y, w and h coordinates), alongside its classes and confidence scores.
+Periodically, the Module sends a message containing the location (normalized cartesian coordinates) of the UE within the frame\@.
+Following this, yolov8n, a YOLO pre-trained model jointly with BoT-SORT, is responsible for detecting and tracking the obstacles in the frame.
+To improve control over frame selection for tracking detected objects, we have set specific parameters that allow timing adjustments in object detection.
+This persistence has enabled us to extend the functionality of the Ultralytics API\@.
 
-If it is noticed a difference between the last visible ArUcos and the current seen, the module checks if the obstacle last position intercepts the ArUcos position.
+The main returned value by Ultralytics is a track history containing a unique identifier of the obstacle and its associated last positions (also normalized cartesian coordinates), alongside its classes and confidence scores.If it is noticed a difference between the last visible ArUcos and the current seen, the module checks if the obstacle last position intercepts the ArUcos position.
 If this is true, the module generates a blockage message, indicating that an obstacle blocked the UE\@.
+Immediately after the UE is unblocked, the module emits a message of Past Blockage, indicating that the LOS between gNB and UE returned.
 
-\textcolor{red}{CONTINUE EXPLANATION}
+Beyond that, the module is capable of predicting with certain anticipation that an obstacle seen by the camera will block the UE\@.
+This is done using the tracking history constructed upon the results of the tracking.
+This enables the calculation of the velocity of the objects.
+Then, we can estimate the future positions and calculate whether the projected bounding boxes will intercept the ArUco.
+This prediction allows us to reposition the gNB seeking the maintenance of the LOS and the channel quality assessed by the SNR\@.
 
-
-%It is worth considering that:
-%\begin{itemize}
-%    \item
-%\end{itemize}
-
-The file ObstacleDetectionReport.asn contains the specification of the set of messages created.
+The file \textit{ObstacleDetectionReport.asn} contains the specification of the set of messages created.
 The messages are composed of a header and a payload.
 The header of all messages is the same, as described in Table~\ref{tab:header}:
 
@@ -169,8 +174,10 @@ The header of all messages is the same, as described in Table~\ref{tab:header}:
             \textbf{Field} & \textbf{Description} \\ \hline
             messageType & Identifies the type of the message. \\ \hline
             timestamp & Identify the  timestamp in which the message was created. \\ \hline
-            sourceId & Identify the source of the message. In this case, the Vision Module.\\ \hline
-            destinationId & Identifies the intended recipient of the message. In this case, the xApp. \\ \hline
+            sourceId & Identify the source of the message.
+            In this case, the Vision Module.\\ \hline
+            destinationId & Identifies the intended recipient of the message.
+            In this case, the xApp. \\ \hline
             e2InstanceId & Provides a unique identifier for the E2 interface instance associated with the message. \\ \hline
         \end{tabular}
     }
@@ -180,7 +187,7 @@ As for the content of the payload, it varies according to the type of message.
 Each message requires different processing in order to extract the information required, as mentioned previously.
 The following subsections present further each message.
 
-\subsection{Prediction of Blockage Messages}
+\subsection{Prediction of Blockage Messages}\label{subsec:prediction-of-blockage-messages}
 
 To infer that an obstacle will block the line-of-sight (LOS) between the gNB and the UE, it is necessary to obtain a tracking history of the obstacle.
 We achieved this by storing data over a number of frames, using the YOLO and BoT-SORT algorithms.
@@ -201,7 +208,7 @@ If the module predicts an impending blockage, it generates a message containing 
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
             obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle (x,y normalized coordinates, in the frame). \\ \hline
+            obstacleLocation & Location of the detected obstacle within the frame ( normalized cartesian coordinates). \\ \hline
             obstacleVelocity & Velocity of the detected obstacle (normalized vector). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
             timeToCross & Predicted time  that the obstacle will obstruct the UE. \\ \hline
@@ -212,8 +219,11 @@ If the module predicts an impending blockage, it generates a message containing 
 
 
 
-\textcolor{red}{Continue writing about other messages}
-\subsection{Blocking messages}
+
+\subsection{Blocking messages}\label{subsec:blocking-messages}
+
+In order to indicate that an obstacle is blocking the LOS between gNB and UE, it is
+\textcolor{red}{Continue}
 
 \begin{table}[H]
     \caption{Components of the Prediction of Blockage Payload}
@@ -234,7 +244,11 @@ If the module predicts an impending blockage, it generates a message containing 
 \end{table}
 
 
-\subsection{Past Blockage}
+\subsection{Past Blockage}\label{subsec:past-blockage}
+
+This message is sent to inform that the UE is no longer blocked by the obstacle.
+Table~\ref{tab:past_block_payload} presents the fields for the
+\textcolor{red}{Continue}
 
 \begin{table}[H]
     \caption{Components of the payload of PastBlockage Message}
@@ -253,44 +267,48 @@ If the module predicts an impending blockage, it generates a message containing 
     }
 \end{table}
 
-This message contains
 
-\subsection{Location of UEs}
+\subsection{Location of UEs}\label{subsec:location-of-ues}
+The message presents the location data of the UEs. Table~\ref{tab:ue_payload} presents the message payload.
+To extract this information, it is necessary to detect the bounding boxes of the markers assigned to the UEs.
+
+The system continuously monitors the movement of the UEs and transmits updates whenever changes are detected.
+
+This process involves identifying and tracking the bounding boxes of the ArUco markers associated with the UEs.
+Then, comparing the current visible ArUco IDs with the previously detected IDs. This is done though buffering, temporarily storing changes to ensure accuracy and consistency.
+Periodically, location reports are sent when changes in the UEs' positions are confirmed.
+
+This approach ensures precise and timely updates on the UEs' locations.
 
 \begin{table}[H]
     \caption{Components of the UE Location Message payload}
     \label{tab:ue_payload}
     \centering
-    \resizebox{\textwidth}{!}{
+    \resizebox{0.7\textwidth}{!}{
         \begin{tabular}{|c|c|}
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
-            ueLocation & Contains the location of the UE (User Equipment). \\ \hline
-            ueId & Identifier for the UE, ranging from 0 to 1023. \\ \hline
+            ueLocation & Contains the location of the UE. \\ \hline
+            ueId & Identifier for the UE, based on the ArUco ID. \\ \hline
         \end{tabular}
     }
 \end{table}
 
 
-This message contains the location of the UEs. In order to extract such information it is required to detect the bounding boxes of the markers given for the UEs. 
 
-The movement of the UE is monitored and sent when changes are detected.
-This includes comparing current and previous visible ArUco IDs, buffering for changes, and sending location reports.
 
-    ArUco IDs Comparison:
-        Compare current and last visible ArUco IDs to detect changes.
-    Buffering Changes:
-        Use a time buffer to avoid rapid, repetitive changes.
-    Sending Reports:
-        Send location reports when the buffer is filled.
+\subsection{Frame Processed}\label{subsec:frame-processed}
+In our system, frame processed messages play an important role in maintaining communication and monitoring the performance of the Vision Module.
+These messages are primarily designed to inform the xApp that the Vision Module is actively running and processing frames.
+Additionally, they allow for the tracking of the time taken to process each frame, which is essential for performance optimization and debugging purposes.
 
-\subsection{Frame Processed}
+The frame processed message contains the following fields, as detailed in Table~\ref{tab:frame_proc_pay}:
 
 \begin{table}[H]
     \caption{Components of the Frame Processed Message payload}
     \label{tab:frame_proc_pay}
     \centering
-    \resizebox{\textwidth}{!}{
+    \resizebox{0.7\textwidth}{!}{
         \begin{tabular}{|c|c|}
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
@@ -300,6 +318,8 @@ This includes comparing current and previous visible ArUco IDs, buffering for ch
     }
 \end{table}
 
+These messages serve as heartbeat signals to the xApp, confirming the Vision Module's operational status and performance.
+By continuously sending frame processed messages, the system ensures that the xApp is kept up-to-date with the Vision Module's activity.
 
 
 \section{System Design}\label{sec:design}
@@ -311,7 +331,7 @@ The first implements the 5G Core Network, the Near-RT RIC and the Vision-aided g
 The second unit implements the UE software.
 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/System Arch.drawio}
     \caption[System architecture designed for implementing and evaluating the proposed solution]{System architecture designed for implementing and evaluating the proposed solution}
@@ -321,7 +341,7 @@ The second unit implements the UE software.
 The following subsections detail the hardware used in the implementation and the choices for software packages.
 
 
-\subsection{Software}
+\subsection{Software}\label{subsec:software}
 This section presents the main software packages used to develop the Vision Module and implement the 5G network.
 Beyond this, in the repository containing the VM, there is a file for reproducing the Python virtual environment.
 
@@ -351,8 +371,10 @@ OpenCV's extensive documentation, tutorials, and active community support furthe
 
 In our proposed solution, OpenCV is utilized to:
 \begin{itemize}
-    \item \textbf{Obtain Frames:} OpenCV is used to capture video frames from the camera. It provides easy-to-use interfaces to capture and manipulate video streams from various input sources.
-    \item \textbf{Detect ArUco Markers:} OpenCV includes modules for detecting ArUco markers, which are widely used in computer vision applications for camera calibration, pose estimation, and augmented reality. In our solution, these markers help in identifying the UEs without the need to train the YOLO model to perceive such objects.
+    \item \textbf{Obtain Frames:} OpenCV is used to capture video frames from the camera.
+    It provides easy-to-use interfaces to capture and manipulate video streams from various input sources.
+    \item \textbf{Detect ArUco Markers:} OpenCV includes modules for detecting ArUco markers, which are widely used in computer vision applications for camera calibration, pose estimation, and augmented reality.
+    In our solution, these markers help in identifying the UEs without the need to train the YOLO model to perceive such objects.
 \end{itemize}
 
 \subsubsection{Ultralytics YOLO}
@@ -362,14 +384,17 @@ While there are other solutions, also preseted in that Section, we chose Ultraly
 
 In our proposed solution, Ultralytics YOLO is employed to:
 \begin{itemize}
-    \item \textbf{Detection:} YOLO is used to detect various objects in the frames captured by the camera. Its real-time capabilities allow for the immediate identification of obstacles within the field of view.
-    \item \textbf{Tracking:} YOLO’s tracking module is used to keep track of detected objects over successive frames. This is crucial for maintaining the continuity of object identification and for predicting future positions of the obstacles. %BOTSORT and BYTETRACK
+    \item \textbf{Detection:} YOLO is used to detect various objects in the frames captured by the camera.
+    Its real-time capabilities allow for the immediate identification of obstacles within the field of view.
+    \item \textbf{Tracking:} YOLO’s tracking module is used to keep track of detected objects over successive frames.
+    This is crucial for maintaining the continuity of object identification and for predicting future positions of the obstacles. %BOTSORT and BYTETRACK
 \end{itemize}
 
 The combination of OpenCV and Ultralytics YOLO allows for robust detection, tracking, and communication functionalities in our vision module.
 OpenCV handles the initial capture and processing of video frames, while YOLO and BoT-SORT performs the real-time detection and tracking of objects.
 This integrated approach ensures that the vision module can effectively monitor and report on obstacles, providing key information to subscribed services.
 
+\textcolor{red}{CITATIONS}
 \subsubsection{ASN1Tools and ASN1C}
 There are a few open-source libraries available for handling ASN.1.
 FlexRIC utilizes asn1c \cite{}, so for simplicity we chose the same for the xApp (client).
@@ -388,6 +413,7 @@ While other libraries such as pyasn1 and libasn1 are available, they have certai
 pyasn1, for instance, is less efficient in terms of performance and has a more complex API\@.
 libasn1, part of the GNU project, is less user-friendly and optimized for performance.
 
+\textcolor{red}{CITATIONS}
 \subsubsection{5G Core Network, 5G gNB, and 5G UE}
 The main open-source 5G software packages for implementing an O-RAN based architecture are OAI \cite[]{} and srsRAN \cite[]{}.
 For our system, we chose OAI because it provides all the necessary components to deploy a 5G standalone network, including both the RAN and Core networks.
@@ -397,7 +423,9 @@ In contrast, srsRAN only supports the deployment of the RAN, requiring an additi
 The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC \cite[]{} and  O-RAN Software Community’s Near-RT RIC \cite[]{}.
 The first was chosen more suitable for our application due to the fact that lightweight application, launched from an executable file.
 
-\subsection{Hardware}
+\subsection{Hardware}\label{subsec:hardware}
+
+\textcolor{red}{CITATIONS}
 \subsubsection{Core Network, FlexRIC, Computer Vision module and gNB}
 The OAI Core Network, FlexRIC,the Computer Vision module and the gNB were deployed in a laptop Acer Aspire A715-74G\@.
 The OAI Core was deployed using Docker containers, requiring 4 cores CPU, 16GB of RAM and a minimum of 1.5GB free storage for the docker images.
@@ -409,7 +437,8 @@ While the laptop used did not fulfill these requirements, it has proven sufficie
 
 As for the Computer Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{}, for Ultralytics YOLO model to properly run.
 Given that for our solution pre-trained model has proven enough to accurately detect and track objects, we did not worried about fulfilling the
-%%%%%%%%%%%% finalize
+
+\textcolor{red}{FINALIZE}
 
 
 
@@ -433,15 +462,24 @@ This ensures that the video feed acquired is of high quality, providing sufficie
 The camera connects to the computer using a USB 2.0 interface.
 The specifications of the camera are sufficient for the system to detect and track movements and objects within the environment, assuring the efficient operation of the Computer Vision Module.
 % why? velocity constant , processing of frame
-
+\textcolor{red}{Mention the comparision between dispacement of objects and processing rate}
 
 Deploying the gNB and the UE in two different host computers implicates the use of Software-Defined Radio (SDR) in order to establish a 5G connection between the gNB and the UE.
 OAI recommends the use of three SDR models: USRP B210, USRP N300 and USRP X300\@ \cite{}. %https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/NR_SA_Tutorial_OAI_nrUE.md
 For our implementation, we have selected the first since it is cost-effective and a popularity across the community.
 This model uses a USB 3.0 interface to connect to the computer acting as a processing unit.
 The SDR was equipped with two W5208K dipole antennas.
-Figure \ref{} shows the two SDRs with their respective antennas.
-We have selected 3.6GHz as the carrier frequency for the 5G RAN.
+Figure~\ref{fig:SDRs} shows the two SDRs with their respective antennas.
+We have selected 3.6GHz as the carrier frequency for the 5G RAN\@.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
+    \caption{SDRS}
+    \label{fig:SDRs}
+\end{figure}
+
+
 
 \subsubsection{UE}
 The UE was deployed in HP EliteBook 840 Laptop.
@@ -452,17 +490,15 @@ Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsibl
     \begin{tabular}{|c|c|}
         \hline
         \textbf{Specification} & \textbf{Details} \\ \hline
-        Processor                      &              \\ \hline
-        RAM                      &          8GB        \\ \hline
-        Disk                      &   2 SSDs  512GB and 256GB         \\ \hline
-        GPU                     &   None                \\ \hline
+        Processor                      &  Intel(R) Core(TM) i7-5600U CPU @ 2.60GHz          \\ \hline
+        RAM                      &          16GB        \\ \hline
+        Disk                      &   128GB         \\ \hline
+        GPU                     &   Intel Corporation HD Graphics 5500                \\ \hline
         Operational System & Ubuntu 22.04.4 LTS                  \\ \hline  %  check
     \end{tabular}\label{tab:specs_pc_ue}
 \end{table}
-\textcolor{red}{Finish table!!!!}
 
 \section{System Implementation}\label{sec:impl}
-\textcolor{red}{Improve this paragraph}
 For the Vision Module:
 
     Coding:
@@ -481,7 +517,22 @@ For the Vision Module:
         Monitoring performance in real-time scenarios to ensure it meets the defined requirements.
         Making adjustments and optimizations based on observed performance and feedback.
 
-\subsection{OAI 5G Core Network}
+\textcolor{red}{adjust hole vision module part}
+The module includes functions responsible for communication, detection and tracking, image processing, and utility functions.
+We present a high level functionality overview of the developed Vision Module.
+We utilized multi-threading in order to assure the timely processing of the video.
+The first thread is responsible for handling communication, i.e.\ the connection with the xApp and sending the generated messages.
+The second thread is responsible for the video processing, i.e.\ identifying objects and generating messages corresponding to the environment perception.
+
+The processing of the video starts with the capture of frames from the camera.
+One frame is processed at a time.
+The UE has a ArUco Marker in order to identify its placement.
+
+Arquitetura cliente servidor
+Como integrar e testar - multi-threading  --comm e processing video.
+
+\textcolor{red}{CITATIONS}
+\subsection{OAI 5G Core Network}\label{subsec:oai-5g-core-network}
 OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{}.
 Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, which enhances the overall efficiency and flexibility of the network infrastructure.
 
@@ -493,14 +544,94 @@ python3 core-network.py --type start-basic --scenario 1
 
 \textcolor{red}{Finish explanation}
 
-\textcolor{red}{Finish writing the other subsections}
-\subsection{OAI gNB}
-\subsection{OAI 5G UE}
-\subsection{FlexRIC}
+\textcolor{red}{CITATIONS}
+\subsection{OAI gNB}\label{subsec:oai-gnb}
+The deployment of the OAI gNB, we used the latest version of OAI RAN. In order to deploy the gNB with the SDR, it was required to do some alterations to \textit{gnb.sa.band78
+.fr1.106PRB.usrpb210.conf} configuration file.
+Namely, edit MCC, MNC and TAC values to assure they corresponded to the values present in the Core \textit{docker-compose.yaml} file.
+If these values do not align, the NGAP setup between AMF and gNB over N2 interface will fail.
+It is also necessary to modify the IP address of the AMF and an IP so that the gNB can communicate with the AMF and SMF\@.
 
-% what else?
+\textcolor{red}{CONTINUE}
 
-\section{Summary}
+Finally, it is necessary to establish a connection between the OAI gNB software and the SDR\@.
+As recommended by OAI, we utilized the USRP Hardware Driver (UHD)~\cite{}.
+UHD is a driver that enables communication between software and USRP hardware, providing a standardized interface for configuring and controlling aspects of the SDR devices, such as frequency, sample rate, gain, and antenna settings.
+Figure~\ref{fig:uhd_probe} illustrates the UHD driver detecting the USRP device, loading its firmware, and performing diagnostic tests.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
+    \caption{UHD obtaining information about the connected USRP device and testing it}
+    \label{fig:uhd_probe}
+\end{figure}
+
+\subsection{OAI 5G UE}\label{subsec:oai-5g-ue}
+In order to deploy the OAI UE, we needed to initiate the OAI UE software modem with parameters corresponding to the gNB settings.
+The command used is as follows:
+
+\lstinline[columns=flexible,breaklines=true]{sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --ue-fo-compensation --sa -E --uicc0.imsi 208990200000001}
+
+
+The parameters are:
+
+\begin{itemize}
+    \item \texttt{-r 106}: Sets the radio configuration to 106.
+    This must match the radio configuration set on the gNB to ensure proper communication.
+    \item \texttt{--numerology 1}: Specifies the numerology index, set to 1, defining sub carrier spacing and slot duration.
+    The gNB must use the same numerology index for compatibility.
+    \item \texttt{--band 78}: Configures the UE to operate in the n78 band.
+    The gNB is also set to operate in the n78 band, facilitating the connection.
+    \item \texttt{-C 3619200000}: Sets the center frequency to 3619.2 MHz. The gNB is configured to transmit on this same center frequency.
+    \item \texttt{--ue-fo-compensation}: Enables frequency offset compensation for the UE, ensuring synchronization with the gNB.
+    \item \texttt{--sa}: Indicates that the UE is operating in standalone mode, directly connecting to the 5G network without relying on an LTE anchor, matching the gNB configuration.
+    \item \texttt{-E}: Specifies that the program should utilize 75\% of the sampling rate frequency.
+    \item \texttt{--uicc0.imsi 208990200000001}: Sets the IMSI for the UE to \texttt{208990200000001}.
+\end{itemize}
+
+We needed to use one of the International Mobile Subscriber Identity (IMSI) values present in the Core database to ensure that the UE could authenticate successfully.
+The IMSI value, \texttt{208990200000001}, was selected from the Core database and used in the \texttt{nr-uesoftmodem} command.
+This selection was crucial because it aligns with the subscriber information stored in the network, facilitating proper authentication and allowing the UE to connect and communicate with the network.
+By ensuring that the IMSI used in the UE configuration matches an entry in the Core database, we verify that the UE can be authenticated correctly and allowed access to the network services.
+
+If we use an IMSI value that is not present in the Core database, the authentication process will fail, as illustrated by the Wireshark capture shown in Figure \ref{fig:UE_failure}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
+    \caption{UE registration rejected due to UE SIM details}
+    \label{fig:UE_failure}
+\end{figure}
+
+\subsection{FlexRIC}\label{subsec:flexric}
+FlexRIC is deployed in the same computer as the OAI 5G Core Network.
+The procedure is to install the required dependencies and compile FlexRIC software.
+By default, FlexRIC is configured to run on the Loopback Interface address (127.0.0.1).
+Since we are deploying gNB and FlexRIC in the same Host, this is not necessary to change.
+In order to assure the use of the E2 Agent, is necessary to include in the configuration file of the gNB the following:
+
+\begin{verbatim}
+e2_agent = {
+  near_ric_ip_addr = "127.0.0.1";
+  sm_dir = "/usr/local/lib/flexric/"
+}
+\end{verbatim}
+
+This informs that FlexRIC is running on the localhost IP, indicating that the RIC is running on the same machine as the E2 agent.
+The directory informs where the Service Models for FlexRIC are located.
+This is essential to assure the correct communication between OAI gNB and FlexRIC\@.
+
+
+
+\section{Summary}\label{sec:summary}
+Our proposed architecture is divided into two logical units.
+The first one comprises the OAI 5G Core Network, FlexRIC, xApp and Vision Module, deployed in an Acer Aspire Laptop.
+The second unit comprehends the OAI UE, deployed in an HP Elitebook.
+The gNB and the UE used USRP B210 SDR board to connect via 5G Wireless Link.
+The Vision Module received a video feed, processed it and sent relevant obstacle information seen in the video, via its interface.
+The xApp was responsible for monitoring the received messages and the SNR.
+The chapter demonstrates the feasibility and benefits of integrating computer vision with mobile communications.
+By leveraging Computer Vision, the quality of the communication channel can be enhanced.
 
 
 
