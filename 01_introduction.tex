@@ -1,6 +1,6 @@
 \chapter{Introduction} \label{ch:intro}
 
-\section{Context}
+\section{Context}\label{sec:context}
 
 The continuous evolution of mobile networks, driven by an increasing number of users, devices, and online applications, has been marked by successive generations of technological advancements.
 These advancements have introduced increased complexity and a growing reliance on proprietary solutions.
@@ -18,7 +18,13 @@ Given these anticipated deployment and challenges, it is important to address th
 Furthermore, there is an increasing recognition of the importance of open and interoperable architectures in accelerating technological progress.
 Therefore, there is a pressing need to develop open-source solutions that integrate with existing network infrastructures while accommodating future advancements.
 
-% should this paragraph go on?
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/urban_scenario}
+    \caption[mmWave base station equipped with camera to monitor LoS obstruction to users]{mmWave base station equipped with camera to monitor LoS obstruction to users \cite{Block_predict}.}
+    \label{fig:urban_scenario}
+\end{figure}
+
 Within 6G, integrating mobile Base Stations (BSs) will be an enabler for achieving ubiquitous, network connectivity.
 Radio Access Networks (RANs), consisting of mobile BSs, offer a dynamic and on-demand deployment approach, promising to meet varying Quality of Service (QoS) requirements in diverse contexts.
 However, taking advantage of the full potential of mobile BSs requires developing software applications that can optimize RAN management.
@@ -30,20 +36,7 @@ Using multiple sensors and video cameras, real-time environmental awareness may 
 For that purpose, state-of-the-art CV algorithms may take charge of tasks related to processing and interpreting visual data while proactively identifying obstacles to prevent signal attenuation and blockage.
 This convergence of CV and communications represents a promising advancement, holding the potential for improved heightened responsiveness, adaptability, and overall network performance.
 
-\begin{figure}
-    \centering
-    \includegraphics{figures/urban_scenario}
-    \caption[mmWave base station equipped with camera to monitor and prevent LoS obstruction to users]{mmWave base station equipped with camera to monitor and prevent LoS obstruction to users \cite{Block_predict}.}
-    \label{fig:urban_scenario}
-\end{figure}
-\textcolor{red}{Increase resolution}
-
-
-
-% removing solution from this chapter
-%Recognizing these limitations, the 6G paradigm emerges as a response, aiming at paving the way to the evolution from closed systems to open-source implementations. This paradigm envisions a future where the complexity of mobile networks is met with interoperable solutions.
-
-\section{Motivation and Problem}
+\section{Motivation and Problem}\label{sec:motivation-and-problem}
 
 In the ongoing evolution of mobile networks, successive generations have expanded connectivity capabilities while introducing heightened complexity.
 This complexity, along with a growing dependence on closed, proprietary solutions, represents a significant challenge to integrating diverse technologies.
@@ -67,7 +60,7 @@ A promising solution to the wireless communications challenges faced in densely 
 By integrating CV algorithms, wireless networks can recognize and proactively overcome the challenges posed by moving obstacles.
 This approach holds the potential to ensure uninterrupted communications and foster a seamless network experience in urban environments, aligning with the vision set forth by the 6G paradigm.
 
-\section{Objectives}
+\section{Objectives}\label{sec:objectives}
 
 The main objective of this dissertation was to implement vision-based RAN. This solution provides a Base Station to with environmental real-time perception provided by vision-based information.
 

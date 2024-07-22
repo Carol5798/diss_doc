@@ -49,7 +49,7 @@ These requirements translate into Table ~\ref{tab:spec}, containing system speci
 \begin{tabular}{|l|p{12cm}|}
 \hline
 \textbf{Specification} & \textbf{Description} \\ \hline
-\textbf{Detection and tracking} & Use YOLOv5 Ultralytics \cite{ultralytics} and BoT-SORT \cite{botsort} for high accuracy and optimized speed. \\ \hline
+\textbf{Detection and tracking} & Use YOLOv5 Ultralytics~\cite{Ultralytics_repo} and BoT-SORT~\cite{botsort} for high accuracy and optimized speed. \\ \hline
 \textbf{Messaging} & Encode messages using ASN.1 standards. \newline Transmit messages via SCTP protocol. \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
 \end{tabular}}
 \end{table}
@@ -222,9 +222,11 @@ If the module predicts an impending blockage, it generates a message containing 
 
 
 \subsection{Blocking messages}\label{subsec:blocking-messages}
+To detect if an obstacle is blocking the Line of Sight (LOS) between the gNB and the UE, the system must verify whether the obstacle’s current position corresponds to its last known position where the ArUco marker was detected.
+This involves comparing the obstacle's most recent recorded position with the last seen coordinates of the UE\@.
+If these positions overlap, the system will generate a blockage alert.
+Table~\ref{tab:block_payload} presents the fields of the payload of this message.
 
-In order to indicate that an obstacle is blocking the LOS between gNB and UE, it is
-\textcolor{red}{Continue}
 
 \begin{table}[H]
     \caption{Components of the Prediction of Blockage Payload}
@@ -246,10 +248,11 @@ In order to indicate that an obstacle is blocking the LOS between gNB and UE, it
 
 
 \subsection{Past Blockage}\label{subsec:past-blockage}
-
 This message is sent to inform that the UE is no longer blocked by the obstacle.
-Table~\ref{tab:past_block_payload} presents the fields for the
-\textcolor{red}{Continue}
+When the system detects a blockage, it updates a list containing the state for each tracked object.
+If the state changes from blocking to non-blocking, it triggers a past blockage message.
+Table~\ref{tab:past_block_payload} presents the fields of this message.
+
 
 \begin{table}[H]
     \caption{Components of the payload of PastBlockage Message}
@@ -346,7 +349,7 @@ Beyond this, in the repository containing the VM, there is a file for reproducin
 \subsubsection{OpenCV}
 % revision
 There are several open-source software packages available for Computer Vision in Python.
-Open Source Computer Vision Library (OpenCV) is one of them.
+Open Source Computer Vision Library (OpenCV)~\cite{opencv} is one of them.
 It contains several optimized algorithms, which can be used for different tasks, including object detection, image processing, and real-time video analysis.
 This diverse support makes it suitable for both basic tasks and complex applications requiring advanced functionalities.
 Moreover, OpenCV's well-documented API facilitates ease of use and integration into various projects, ensuring efficient development and deployment.
@@ -360,9 +363,9 @@ These markers are specially designed square or rectangular patterns with a uniqu
 ArUco markers are typically used in computer vision tasks to provide reference points in a scene, enabling accurate localization and tracking of objects or video cameras.
 
 OpenCV emerges as the premier choice among general computer vision libraries, distinguished by its extensive feature set, optimized performance, and robust community support.
-Unlike scikit-image \cite{}, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and video camera calibration.
-In contrast to Pillow (PIL Fork) \cite{}, which specializes in image format handling and basic manipulation, OpenCV provides comprehensive tools for both foundational and advanced computer vision applications.
-Moreover, while SimpleCV \cite{} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, which is crucial for real-time processing and large-scale data operations.
+Unlike scikit-image~\cite{Scikit-learn}, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and video camera calibration.
+In contrast to Pillow (PIL Fork)~\cite{pillow}, which specializes in image format handling and basic manipulation, OpenCV provides comprehensive tools for both foundational and advanced computer vision applications.
+Moreover, while SimpleCV~\cite{simplecv} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, which is crucial for real-time processing and large-scale data operations.
 
 In our proposed solution, OpenCV is utilized to:
 \begin{itemize}
@@ -373,9 +376,9 @@ In our proposed solution, OpenCV is utilized to:
 \end{itemize}
 
 \subsubsection{Ultralytics YOLO}
-As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO (You Only Look Once) is a state-of-the-art, real-time object detection solution.
+As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO (You Only Look Once)~\cite{ultralytics_docs} is a state-of-the-art, real-time object detection solution.
 It is known for its speed and accuracy, making it suitable for applications that require fast and reliable object detection and tracking.
-While there are other solutions, also preseted in that Section, we chose Ultralytics YOLO due to simplicity, integration and since it is suitable for the intended application and use in state-of-the-art object detection and tracking situations.
+While there are other solutions, also presented in that Section, we chose Ultralytics YOLO due to simplicity, integration and since it is suitable for the intended application and use in state-of-the-art object detection and tracking situations.
 
 In our proposed solution, Ultralytics YOLO is employed to:
 \begin{itemize}
@@ -389,58 +392,64 @@ The combination of OpenCV and Ultralytics YOLO allows for robust detection, trac
 OpenCV handles the initial capture and processing of video frames, while YOLO and BoT-SORT performs the real-time detection and tracking of objects.
 This integrated approach ensures that the vision module can effectively monitor and report on obstacles, providing key information to subscribed services.
 
-\textcolor{red}{CITATIONS}
 \subsubsection{ASN1Tools and ASN1C}
 There are a few open-source libraries available for handling ASN.1.
-FlexRIC utilizes asn1c~\cite{}, so for simplicity we chose the same for the xApp (client).
-asn1c~\cite[asn1c]{} is a open-source ASN.1 compiler that generated C/C++ code for ASN.1 data structures, supporting different encoding rules.
+FlexRIC utilizes asn1c~\cite{asn1c}, so for simplicity we chose the same for the xApp (client).
+asn1c is a open-source ASN.1 compiler that generated C/C++ code for ASN.1 data structures, supporting different encoding rules.
 While this library also supports Python, we chose not to use it, since there are simpler APIs specially tailored for Python development.
 As for the Vision Module (Python server), we chose ASN1Tools because it offers certain advantages.
 
-ASN1Tools is a Python library provides a simple way to handle ASN.1 data structures, through a straightforward API\@.
+ASN1Tools~\cite{asn1tools} is a Python library provides a simple way to handle ASN.1 data structures, through a straightforward API\@.
 The library support for a range of ASN.1 specifications and encoding rules, including BER, DER, and PER\@.
 Moreover, ASN1Tools is actively maintained, with regular updates and improvements.
 This guarantees that we have access to the latest features and bug fixes, which enhances the reliability and stability of our system.
 ASN1Tools is optimized for performance, allowing for fast encoding and decoding operations.
 This optimization is suited for real-time applications like our Vision Module, where processing speed is essential to maintain system responsiveness and accuracy.
 
-While other libraries such as pyasn1 and libasn1 are available, they have certain limitations.
+While other libraries such as pyasn1~\cite{pyasn1} and libtasn1~\cite{libtasn1} are available, they have certain limitations.
 pyasn1, for instance, is less efficient in terms of performance and has a more complex API\@.
-libasn1, part of the GNU project, is less user-friendly and optimized for performance.
+libtasn1, part of the GNU project, is less user-friendly and optimized for performance.
 
-\textcolor{red}{CITATIONS}
+
 \subsubsection{5G Core Network, 5G gNB, and 5G UE}
-The main open-source 5G software packages for implementing an O-RAN based architecture are OAI~\cite[]{} and srsRAN~\cite{}.
+The main open-source 5G software packages for implementing an O-RAN based architecture are OAI~\cite{openairinterface} and srsRAN~\cite{srslte}.
 For our system, we chose OAI because it provides all the necessary components to deploy a 5G standalone network, including both the RAN and Core network.
 In contrast, srsRAN only supports the deployment of the RAN, requiring an additional software package, such as OAI, to implement the Core network.
 
 \subsubsection{Near-RT RIC}
-The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC~\cite[]{} and  O-RAN Software Community’s Near-RT RIC~\cite[]{}.
+The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC~\cite{flexric} and  O-RAN Software Community’s Near-RT RIC~\cite{oran-sc}.
 FlexRIC was chosen for our solution due to its lightweight nature, launched from an executable file.
-\textcolor{red}{Include disadvantage of ORAN RIC}
+
+In contrast, the O-RAN RIC presents a disadvantage in terms of its complexity and resource requirements.
+It often demands more substantial computational resources and a more involved setup process, which is a significant drawback for our solution.
 
 \subsection{Hardware}\label{subsec:hardware}
 
-\textcolor{red}{CITATIONS}
+
 \subsubsection{Core Network, FlexRIC, Computer Vision module and gNB}
-The OAI Core Network, FlexRIC,the Computer Vision module and the gNB were deployed in a laptop Acer Aspire A715-74G\@.
+The OAI Core Network, FlexRIC,the Computer Vision module and the gNB were deployed in a laptop Acer Aspire A715-74G, show in Figure~\ref{fig:computer_acer}.
 The OAI Core was deployed using Docker containers, requiring 4 cores CPU, 16GB of RAM and a minimum of 1.5GB free storage for the docker images.
 As for FlexRIC, it does not have hardware requirements listed, but while deploying it was noticed that it is not resource intensive, sufficing the same ones required for the Core Network.
 The xApp was deployed alongside FlexRIC in order to assure reduced latency between the two components.
 Also,  the way interface E42 is implemented requires them to be running in the same computing unit.
 As for the gNB, the hardware recommended are 8 physical CPU cores and 32 GB of RAM\@.
-While the laptop used did not fulfill these requirements, it has proven sufficient to run the OAI gNB software, as it was noted before in~\ref{}. % ref to dissertation of gonçalo
+While the laptop used did not fulfill these requirements, it has proven sufficient to run the OAI gNB software, as it was noted before in~\cite{queiros2023autonomous}.
 
-As for the Computer Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{}, for Ultralytics YOLO model to properly run.
-Given that for our solution pre-trained model has proven enough to accurately detect and track objects, we did not worried about fulfilling the
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{figures/acer}
+    \caption{Acer Aspire A715-74G Laptop}
+    \label{fig:computer_acer}
+\end{figure}
 
-\textcolor{red}{FINALIZE}
-
-
+As for the Computer Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{ultralytics_faq}, for Ultralytics YOLO model to properly run.
+Given that for our solution a pre-trained model has proven enough to accurately detect and track objects, we did not necessitate great GPU capacity to train a model.
 
 Table ~\ref{tab:specs_pc} presents the specification of the computer.
 
 \begin{table}[H]
+    \caption{Specifications of the Acer Aspire A715-74G.}
+    \label{tab:specs_pc}
     \begin{tabular}{|c|c|}
         \hline
         \textbf{Specification} & \textbf{Details} \\ \hline
@@ -449,19 +458,24 @@ Table ~\ref{tab:specs_pc} presents the specification of the computer.
         Disk                      &   2 SSDs  512GB and 256GB         \\ \hline
         GPU                     &   GeForce GTX 1050 (3GB)      \\ \hline
         Operational System & Ubuntu 22.04.4 LTS                  \\ \hline
-    \end{tabular}\label{tab:specs_pc}
+    \end{tabular}
 \end{table}
 
 For the Computer Vision Module, we opted to use a webcam due to its simplicity and ease of integration.
-The chosen webcam, a model LL-4196, offers Full HD (1920 x 1080 Pixels) resolution and supports a frame rate of 30 FPS\@.
+The chosen was a model LL-4196, offering Full HD (1920 x 1080 Pixels) resolution and supporting a frame rate of 30 FPS\@.
 This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion necessary for accurate computer vision processing.
 The camera connects to the computer using a USB 2.0 interface.
-The specifications of the camera are sufficient for the system to detect and track movements and objects within the environment, assuring the efficient operation of the Computer Vision Module.
-% why? velocity constant , processing of frame
-\textcolor{red}{Mention the comparision between dispacement of objects and processing rate}
+Figure \ref{fig:camera} shows the video camera and its USB interface.
 
-Deploying the gNB and the UE in two different host computers implicates the use of Software-Defined Radio (SDR) in order to establish a 5G connection between the gNB and the UE.
-OAI recommends the use of three SDR models: USRP B210, USRP N300 and USRP X300\@ \cite{}. %https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/develop/doc/NR_SA_Tutorial_OAI_nrUE.md
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{figures/webcam}
+    \caption{Webcam used to capture the video.}
+    \label{fig:camera}
+\end{figure}
+
+Deploying the gNB and the UE in two different host computers implicates the use of Software-Defined Radio (SDR) in order to establish a 5G connection between the gNB and the UE\@.
+OAI recommends the use of three SDR models: USRP B210, USRP N300 and USRP X300\@ \cite{openairinterface_tutorial}.
 For our implementation, we have selected the first since it is cost-effective and a popularity across the community.
 This model uses a USB 3.0 interface to connect to the computer acting as a processing unit.
 The SDR was equipped with two W5208K dipole antennas.
@@ -470,19 +484,28 @@ We have selected 3.6GHz as the carrier frequency for the 5G RAN\@.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
-    \caption{SDRS}
+    \includegraphics[width=0.5\linewidth]{figures/SDRs}
+    \caption{USRP B210 SDRs and their respective antennas.}
     \label{fig:SDRs}
 \end{figure}
 
 
 
 \subsubsection{UE}
-The UE was deployed in HP EliteBook 840 Laptop.
+The UE was deployed in HP EliteBook 840 Laptop, shown in Figure~\ref{fig:computer_hp}.
 The hardware requirements for the deployment of the UE are 8 cores and 8GB of RAM\@.
-Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsible for the UE\@.
+Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsible for the UE\@, showcasing that the hardware is enough to run the UE application.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{figures/hp}
+    \caption{HP EliteBook 840 Laptop}
+    \label{fig:computer_hp}
+\end{figure}
 
 \begin{table}[H]
+    \caption{Specifications of the HP EliteBook 840.}
+    \label{tab:specs_pc_ue}
     \begin{tabular}{|c|c|}
         \hline
         \textbf{Specification} & \textbf{Details} \\ \hline
@@ -491,67 +514,109 @@ Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsibl
         Disk                      &   128GB         \\ \hline
         GPU                     &   Intel Corporation HD Graphics 5500                \\ \hline
         Operational System & Ubuntu 22.04.4 LTS                  \\ \hline  %  check
-    \end{tabular}\label{tab:specs_pc_ue}
+    \end{tabular}
 \end{table}
 
 \section{System Implementation}\label{sec:impl}
-For the Vision Module:
 
-    Coding:
-        Implementing object detection and tracking using YOLO and BoT-SORT algorithms.
-        Implementing ArUco marker detection using OpenCV
-        Developing the communication interface using SCTP and ASN.1 for message encoding.
-        Handle video input, process each frame, and generate output messages.
+\subsection{Vision Module}\label{subsec:vision-module}
+Our vision module is implemented as a Python server, designed to interface with the xApp (its client) via an SCTP socket over the Loopback interface (127.0.0.1) on port 4321.
+The module is designed to manage multiple functions efficiently, including:
 
-    Testing:
-        Running unit tests to ensure each component (detection, tracking, messaging) works as intended.
-        Conducting integration tests to verify that components interact correctly.
-        Performing system tests with both pre-recorded videos and real-time captures to ensure the module meets the specified performance criteria (e.g., processing speed, accuracy).
+\begin{itemize}
+\item Information Exchange: Facilitates communication between the server and client.
+\item Detection and Tracking: Identifies and tracks objects within the video feed.
+\item Image Processing: Processes video data to derive meaningful insights.
+\item Utility Operations: Performs various supportive tasks to enhance overall functionality.
+\end{itemize}
 
-    Deployment:
-        Deploying the vision module on the specified hardware.
-        Monitoring performance in real-time scenarios to ensure it meets the defined requirements.
-        Making adjustments and optimizations based on observed performance and feedback.
+To ensure timely and efficient video processing, we utilize a multi-threading approach:
 
-\textcolor{red}{adjust hole vision module part}
-The module includes functions responsible for communication, detection and tracking, image processing, and utility functions.
-We present a high level functionality overview of the developed Vision Module.
-We utilized multi-threading in order to assure the timely processing of the video.
-The first thread is responsible for handling communication, i.e.\ the connection with the xApp and sending the generated messages.
-The second thread is responsible for the video processing, i.e.\ identifying objects and generating messages corresponding to the environment perception.
+\begin{enumerate}
+\item Communication Thread: Manages the connection with the client, handling message exchanges and maintaining seamless communication.
+\item Processing Thread: Focuses on video analysis, including object identification and generating messages based on the environmental data processed from the video stream.
+\end{enumerate}
 
-The processing of the video starts with the capture of frames from the camera.
-One frame is processed at a time.
-The UE has a ArUco Marker in order to identify its placement.
+For optimized performance in handling the computationally intensive tasks of image processing, we leverage GPU acceleration.
+Specifically, we use the Ultralytics YOLOv8n model.
+We selected the nano version, YOLOv8n, due to its reduced parameter count, which makes it less resource-intensive and better suited to our use case.
+This choice significantly accelerates processing times and reduces CPU load, leading to enhanced overall system efficiency and responsiveness.
+The combination of GPU utilization and the streamlined YOLOv8n model ensures that our module operates effectively even under high-demand conditions.
 
-Arquitetura cliente servidor
-Como integrar e testar - multi-threading  --comm e processing video.
 
-\textcolor{red}{CITATIONS}
+
 \subsection{OAI 5G Core Network}\label{subsec:oai-5g-core-network}
-OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{}.
+OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{oai5gcore}.
 Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, which enhances the overall efficiency and flexibility of the network infrastructure.
+Figure~\ref{fig:core_depl} shows the deployed 5G Core diagram.
+The IP addresses for each Core Network component and Data Network and can be seen respectively in Tables~\ref{tab:ip_core} and~\ref{tab:ip_dn}.
 
-Besides that, the Core can be implemented in two scenarios.
-We chose scenario I , since it contains the minimum components necessary in order to test end to end connectivity between the nodes.
-This scenario contains 8 containers.
-python3 core-network.py --type start-basic --scenario 1
-- Scenario I:  AMF, SMF, UPF (SPGWU), NRF, UDM, UDR, AUSF, MYSQL
 
-\textcolor{red}{Finish explanation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/core_deply}
+    \caption{Core deployment diagram~\cite{oai_cn5g_fed_deploy}.}
+    \label{fig:core_depl}
+\end{figure}
 
-\textcolor{red}{CITATIONS}
+
+\begin{table}[H]
+    \caption{Deployed 5G Core Network Functions IP addresses.}
+    \label{tab:ip_core}
+    \centering
+    \resizebox{0.3\textwidth}{!}{%
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{Core Network Function} & \textbf{IP} \\ \hline
+            NRF & 192.168.70.130 \\ \hline
+            MySQL & 192.168.70.131\\ \hline
+            AMF & 192.168.70.132 \\ \hline
+            SMF & 192.168.70.133 \\ \hline
+            UPF & 192.168.70.134 \\ \hline
+            UDR & 192.168.70.136 \\ \hline
+            UDM & 192.168.70.137 \\ \hline
+            AUSF & 192.168.70.138 \\ \hline
+        \end{tabular}}
+\end{table}
+
+\begin{table}[H]
+    \caption{Deployed Data Network Components IP addresses.}
+    \label{tab:ip_dn}
+    \centering
+    \resizebox{0.3\textwidth}{!}{%
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{Core Network Function} & \textbf{IP} \\ \hline
+            UPF & 192.168.70.134 \\ \hline
+            External-DN & 192.168.70.135 \\ \hline
+        \end{tabular}}
+\end{table}
+
+
+
+
+
+
 \subsection{OAI gNB}\label{subsec:oai-gnb}
-The deployment of the OAI gNB, we used the latest version of OAI RAN. In order to deploy the gNB with the SDR, it was required to do some alterations to \textit{gnb.sa.band78
+The deployment of the OAI gNB, we used the latest version of OAI RAN, following the steps present in~\ref{openairinterface5g_e2ap}.
+Other than the steps described in the tutorial, in order to deploy the gNB with the SDR, it was required to do some alterations to \textit{gnb.sa.band78
 .fr1.106PRB.usrpb210.conf} configuration file.
 Namely, edit MCC, MNC and TAC values to assure they corresponded to the values present in the Core \textit{docker-compose.yaml} file.
+Figure~\ref{fig:gnb_conf} depicts the alterations, in lines 13 and 14 of the file to comply with the Core values.
 If these values do not align, the NGAP setup between AMF and gNB over N2 interface will fail.
 It is also necessary to modify the IP address of the AMF and an IP so that the gNB can communicate with the AMF and SMF\@.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/gnb_conf}
+    \caption{.}
+    \label{fig:gnb_conf}
+\end{figure}
 
 \textcolor{red}{CONTINUE}
 
 Finally, it is necessary to establish a connection between the OAI gNB software and the SDR\@.
-As recommended by OAI, we utilized the USRP Hardware Driver (UHD)~\cite{}.
+As recommended by OAI, we utilized the USRP Hardware Driver (UHD)~\cite{uhdusrpdriver}.
 UHD is a driver that enables communication between software and USRP hardware, providing a standardized interface for configuring and controlling aspects of the SDR devices, such as frequency, sample rate, gain, and antenna settings.
 Figure~\ref{fig:uhd_probe} illustrates the UHD driver detecting the USRP device, loading its firmware, and performing diagnostic tests.
 
@@ -594,7 +659,7 @@ If we use an IMSI value that is not present in the Core database, the authentica
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
+    \includegraphics[width=\linewidth]{figures/Ue_fail}
     \caption{UE registration rejected due to UE SIM details}
     \label{fig:UE_failure}
 \end{figure}
