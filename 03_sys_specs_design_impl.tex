@@ -1,61 +1,63 @@
-\chapter{System Requirements, Specification, Design and Implementation}\label{ch:specs_design_implem}
+\chapter{System Specification, Design, and Implementation}\label{ch:specs_design_implem}
 
-This chapter presents the proposed solution, encompassing system requirements, specification, design and implementation.
+This chapter presents the proposed solution, including four main sections.
 Section~\ref{sec:specs} discusses the requirements and specifications, Section~\ref{sec:prop_vision} presents the proposed vision module.
-Section~\ref{sec:design} introduces the design.
-Finally , Section~\ref{sec:impl} presents the implementation of the system.
+Section~\ref{sec:design} explains the solution design.
+Finally, Section~\ref{sec:impl} presents the implementation of the system.
 
-\section{System Requirements and Specification}\label{sec:specs}
+\section{System Specification}\label{sec:specs}
 The goal of this dissertation was to extract vision-based information relevant to a 5G network.
 This information should be available in near real-time to relevant entities of the network architecture upon subscription.
-This solution envisions obstacle-aware networks and should enable a Base Station to autonomously control its placement and configuration based on the environment perception provided by the vision-based information.
+This solution envisions obstacle-aware networks and should enable a RAN to autonomously control the BS' placement and configuration based on the environment perception provided by the vision-based information.
+
+\subsection{System Requirements}\label{subsec:system-requirements}
 
 To demonstrate these concepts, we conceptualized a simple model.
 The scenario is set in an indoor office environment, where it is determined if common objects will impact the LOS between a gNB and a UE\@.
 
-To achieve this, specific system requirements were established to ensure the efficient detection, tracking, and communication of obstacles within the 5G network.
+To achieve this, specific system requirements were established to ensure the efficient detection, tracking, and dissemination of obstacles information within the 5G network.
 
 The detailed requirements of the Computer Vision Module and its interface with the network are as follows:
 
 \begin{enumerate}
-    \item \textbf{Functional Requirements}:
+    \item \textbf{Functional Requirements}
     \begin{enumerate}
         \item Detect and track objects in near real-time using computer vision algorithms.
         \item Identify specific obstacles and predict potential blockages.
-        \item Send formatted messages to the xApp for further processing and decision-making.
+        \item Send well-defined messages to a novel O-RAN xApp for further processing and decision-making.
         \item Ensure interoperability with the 5G network components via standardized messaging protocols. % should i use standarized, since there is no standard for it, i created a structure?
     \end{enumerate}
-    \item \textbf{Non-Functional Requirements}:
+    \item \textbf{Non-Functional Requirements}
     \begin{enumerate}
         \item Maximize processing speed resorting to parallel processing on the GPU whenever possible\@.
         \item Minimize messaging latency ensuring rapid response by the xApp for optimal connection maintenance.
-        \item Accuracy: High accuracy in object detection and tracking to minimize false positives/negatives.
-        \item Scalability: The solution should be scalable to handle multiple video streams, Base Stations and UEs, allowing for broader deployment in various network environments.
-        \item Interoperability: The system must use standardized messaging formats to ensure interoperability with different network components and vendors.
-        \item Reliability: The vision module and communication system should be robust, with mechanisms for error detection and recovery to maintain continuous operation.
-        The model and its parameters are fundamental to assure reliability. % how can i prove it?
+        \item High accuracy in object detection and tracking to minimize false positives and negatives.
+        \item The solution should be scalable to handle multiple video streams, Base Stations, and UEs, allowing for broader deployment in various network environments.
+        \item The system must use standardized messaging formats to ensure interoperability with different network components and vendors.
+        \item The vision module and communications system should be robust, with mechanisms for error detection and recovery to maintain continuous operation.
+        The model and its parameters are fundamental to assuring reliability. % how can i prove it?
     \end{enumerate}
 \end{enumerate}
 
-The requirements translate into table ~\ref{tab:spec}, containing system specifications:
+These requirements translate into Table ~\ref{tab:spec}, containing system specifications:
 
 \begin{table}[H]
-\caption{Specifications}
+\caption{System Specifications.}
 \label{tab:spec}
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|p{12cm}|}
 \hline
 \textbf{Specification} & \textbf{Description} \\ \hline
-\textbf{Detection and Tracking} & Use YOLOv5 Ultralytics and BoT-SORT for high accuracy and optimized speed. \\ \hline
-\textbf{Messaging} & Encode messages using ASN.1 standards. \newline Transmit messages via SCTP protocol. \newline Include relevant information such as object ID, type, position (x, y coordinates), and confidence score. \\ \hline
+\textbf{Detection and tracking} & Use YOLOv5 Ultralytics \cite{ultralytics} and BoT-SORT \cite{botsort} for high accuracy and optimized speed. \\ \hline
+\textbf{Messaging} & Encode messages using ASN.1 standards. \newline Transmit messages via SCTP protocol. \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
 \end{tabular}}
 \end{table}
 
-The above specifications ensure that the Vision Module meets the requirements necessary for integration and operation within a 5G network environment.
+These specifications ensure that the Vision Module meets the requirements necessary for integration and operation within a 5G network environment.
 
 
-Following the requirements and specifications, the system architecture was designed to facilitate efficient data processing and communication:
+Following these requirements and specifications, the system architecture was designed to facilitate efficient data processing.
 
 \begin{figure}[H]
     \centering
@@ -101,22 +103,21 @@ Those are reported by the Vision Module (Vision Module).
 This enables the RAN to control manage its placement, based on those conditions together with radio metrics, such as SNR\@.
 In order to establish the integration of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specified by O-RAN, to deploy a xApp responsible for the handling both radio metrics and the VM messages.
 The communication between the VM and the xApp, is done through an interface inspired by the O-RAN E2 interface and E2 Application Protocol (E2AP).
-This interface facilitates reliable data exchange using a SCTP socket connection (cf.\ref{fig:stack}), along with an Abstract Syntax Notation One (ASN.1) definition that structures the messages.
+This interface facilitates reliable data exchange using a SCTP socket connection (cf.Figure~\ref{fig:stack}) along with an Abstract Syntax Notation One (ASN.1) definition to structure the messages.
 The use of ASN.1 ensures that the message formats are standardized, promoting interoperability and efficiency in data transmission.
-This design allows the VM to effectively communicate with the xApp, enabling the integration of data extracted from video for the mobile RAN management.
+This design allows the VM to communicate with the xApp, enabling the integration of data extracted from video for the mobile RAN management.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.35\linewidth]{figures/VisionModule_ProtocolStack.drawio(2)}
-    \caption[Proposed Vision Module Protocol Stack]{Proposed Vision Module Protocol Stack}
+    \caption[Proposed Vision Module Protocol Stack]{Proposed vision module protocol stack.}
     \label{fig:stack}
 \end{figure}
 
 
 \section{Proposed Vision Module}\label{sec:prop_vision}
-Our Vision Module uses Computer Vision techniques to extract information about obstacles within the camera's field of view.
+Our proposed vision module uses Computer Vision techniques to extract information about obstacles within the video camera's field of view.
 This system processes video frames to detect and track obstacles, subsequently sending messages to services connected with relevant information.
-
 The module sends five types of messages: blockage, future blockage, past blockage, the location of the UE and frame processed.
 Table~\ref{tab:message_type} summarizes the description of each message type.
 Each message will be explained further in the following sections.
@@ -137,7 +138,7 @@ Each message will be explained further in the following sections.
         \end{tabular}}
 \end{table}
 
-The module includes functionality responsible for communication, detection and tracking, image processing, and utility functions.
+The module includes functionality responsible for information exchange, detection and tracking, image processing, and utility functions.
 We present a high level overview of the developed Vision Module.
 
 The processing of the video starts with the capture of frames from the camera.
@@ -161,7 +162,7 @@ This prediction allows us to reposition the gNB seeking the maintenance of the L
 
 The file \textit{ObstacleDetectionReport.asn} contains the specification of the set of messages created.
 The messages are composed of a header and a payload.
-The header of all messages is the same, as described in Table~\ref{tab:header}:
+The header of all messages is presented in Table~\ref{tab:header}:
 
 
 \begin{table}[H]
@@ -184,8 +185,8 @@ The header of all messages is the same, as described in Table~\ref{tab:header}:
 \end{table}
 
 As for the content of the payload, it varies according to the type of message.
-Each message requires different processing in order to extract the information required, as mentioned previously.
-The following subsections present further each message.
+Each message requires different processing to extract the information required, as mentioned previously.
+The following subsections present further each message type.
 
 \subsection{Prediction of Blockage Messages}\label{subsec:prediction-of-blockage-messages}
 
@@ -270,14 +271,11 @@ Table~\ref{tab:past_block_payload} presents the fields for the
 
 \subsection{Location of UEs}\label{subsec:location-of-ues}
 The message presents the location data of the UEs. Table~\ref{tab:ue_payload} presents the message payload.
-To extract this information, it is necessary to detect the bounding boxes of the markers assigned to the UEs.
-
+To extract this information, it is necessary to detect the bounding boxes of the markers associated with the UEs.
 The system continuously monitors the movement of the UEs and transmits updates whenever changes are detected.
-
 This process involves identifying and tracking the bounding boxes of the ArUco markers associated with the UEs.
 Then, comparing the current visible ArUco IDs with the previously detected IDs. This is done though buffering, temporarily storing changes to ensure accuracy and consistency.
 Periodically, location reports are sent when changes in the UEs' positions are confirmed.
-
 This approach ensures precise and timely updates on the UEs' locations.
 
 \begin{table}[H]
@@ -324,7 +322,7 @@ By continuously sending frame processed messages, the system ensures that the xA
 
 \section{System Design}\label{sec:design}
 
-This section will present the system designed to implement and evaluate the proposed solution.
+This section presents the system designed to implement and evaluate the proposed solution.
 The system is depicted in Figure~\ref{fig:design_arch}.
 It is composed of two main logical units.
 The first implements the 5G Core Network, the Near-RT RIC and the Vision-aided gNB\@.
@@ -334,7 +332,7 @@ The second unit implements the UE software.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/System Arch.drawio}
-    \caption[System architecture designed for implementing and evaluating the proposed solution]{System architecture designed for implementing and evaluating the proposed solution}
+    \caption[System architecture designed for implementing and evaluating the proposed solution]{System architecture designed for implementing and evaluating the proposed solution.}
     \label{fig:design_arch}
 \end{figure}
 
@@ -349,56 +347,53 @@ Beyond this, in the repository containing the VM, there is a file for reproducin
 % revision
 There are several open-source software packages available for Computer Vision in Python.
 Open Source Computer Vision Library (OpenCV) is one of them.
-It contains several optimized algorithms, which can be used for a variety of tasks including object detection, image processing, and real-time video analysis.
-This extensive algorithmic support makes it suitable for both basic tasks and complex applications requiring advanced functionalities.
+It contains several optimized algorithms, which can be used for different tasks, including object detection, image processing, and real-time video analysis.
+This diverse support makes it suitable for both basic tasks and complex applications requiring advanced functionalities.
 Moreover, OpenCV's well-documented API facilitates ease of use and integration into various projects, ensuring efficient development and deployment.
-Unlike some other libraries that may focus on specific aspects of image processing or lack comprehensive support across different domains, OpenCV provides a solution with cross-platform compatibility, making it applicable across diverse operating systems and hardware setups.
+Unlike some other libraries that may focus on specific aspects of image processing or lack support across different domains, OpenCV provides a solution with cross-platform compatibility, making it applicable across diverse operating systems and hardware setups.
 Furthermore, OpenCV benefits from a large and active community, offering extensive resources, tutorials, and community support, which are invaluable for developers and researchers seeking assistance or collaboration in tackling complex computer vision challenges effectively and efficiently.
 Therefore, OpenCV is the leading choice for robust and scalable computer vision applications.
-
-
 
 Additionally, OpenCV is the only library who directly supports ArUco Markers.
 ArUco is a widely-used open-source library for Augmented Reality (AR) applications that involves detecting and tracking augmented markers.
 These markers are specially designed square or rectangular patterns with a unique binary encoding, which can be printed and placed in the physical environment.
-ArUco markers are typically used in computer vision tasks to provide reference points in a scene, enabling accurate localization and tracking of objects or cameras.
+ArUco markers are typically used in computer vision tasks to provide reference points in a scene, enabling accurate localization and tracking of objects or video cameras.
 
 OpenCV emerges as the premier choice among general computer vision libraries, distinguished by its extensive feature set, optimized performance, and robust community support.
-Unlike scikit-image, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and camera calibration.
-In contrast to Pillow (PIL Fork), which specializes in image format handling and basic manipulation, OpenCV provides comprehensive tools for both foundational and advanced computer vision applications.
-Moreover, while SimpleCV simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities deliver superior performance crucial for real-time processing and large-scale data operations.
-OpenCV's extensive documentation, tutorials, and active community support further solidify its position as the preferred choice for developers and researchers seeking versatility, efficiency, and collaborative resources in the realm of computer vision.
+Unlike scikit-image \cite{}, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and video camera calibration.
+In contrast to Pillow (PIL Fork) \cite{}, which specializes in image format handling and basic manipulation, OpenCV provides comprehensive tools for both foundational and advanced computer vision applications.
+Moreover, while SimpleCV \cite{} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, which is crucial for real-time processing and large-scale data operations.
 
 In our proposed solution, OpenCV is utilized to:
 \begin{itemize}
-    \item \textbf{Obtain Frames:} OpenCV is used to capture video frames from the camera.
+    \item \textbf{Obtain Frames:} OpenCV is used to capture video frames from the video camera.
     It provides easy-to-use interfaces to capture and manipulate video streams from various input sources.
-    \item \textbf{Detect ArUco Markers:} OpenCV includes modules for detecting ArUco markers, which are widely used in computer vision applications for camera calibration, pose estimation, and augmented reality.
+    \item \textbf{Detect ArUco Markers:} OpenCV includes modules for detecting ArUco markers, which are widely used in computer vision applications for video camera calibration, pose estimation, and augmented reality.
     In our solution, these markers help in identifying the UEs without the need to train the YOLO model to perceive such objects.
 \end{itemize}
 
 \subsubsection{Ultralytics YOLO}
-As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO (You Only Look Once) is a state-of-the-art, real-time object detection system.
+As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO (You Only Look Once) is a state-of-the-art, real-time object detection solution.
 It is known for its speed and accuracy, making it suitable for applications that require fast and reliable object detection and tracking.
 While there are other solutions, also preseted in that Section, we chose Ultralytics YOLO due to simplicity, integration and since it is suitable for the intended application and use in state-of-the-art object detection and tracking situations.
 
 In our proposed solution, Ultralytics YOLO is employed to:
 \begin{itemize}
-    \item \textbf{Detection:} YOLO is used to detect various objects in the frames captured by the camera.
+    \item \textbf{Detection:} YOLO is used to detect various objects in the frames captured by the video camera.
     Its real-time capabilities allow for the immediate identification of obstacles within the field of view.
     \item \textbf{Tracking:} YOLO’s tracking module is used to keep track of detected objects over successive frames.
     This is crucial for maintaining the continuity of object identification and for predicting future positions of the obstacles. %BOTSORT and BYTETRACK
 \end{itemize}
 
-The combination of OpenCV and Ultralytics YOLO allows for robust detection, tracking, and communication functionalities in our vision module.
+The combination of OpenCV and Ultralytics YOLO allows for robust detection, tracking, and message exchange functionalities in our vision module.
 OpenCV handles the initial capture and processing of video frames, while YOLO and BoT-SORT performs the real-time detection and tracking of objects.
 This integrated approach ensures that the vision module can effectively monitor and report on obstacles, providing key information to subscribed services.
 
 \textcolor{red}{CITATIONS}
 \subsubsection{ASN1Tools and ASN1C}
 There are a few open-source libraries available for handling ASN.1.
-FlexRIC utilizes asn1c \cite{}, so for simplicity we chose the same for the xApp (client).
-asn1c \cite[asn1c]{} is a open-source ASN.1 compiler that generated C/C++ code for ASN.1 data structures, supporting different encoding rules.
+FlexRIC utilizes asn1c~\cite{}, so for simplicity we chose the same for the xApp (client).
+asn1c~\cite[asn1c]{} is a open-source ASN.1 compiler that generated C/C++ code for ASN.1 data structures, supporting different encoding rules.
 While this library also supports Python, we chose not to use it, since there are simpler APIs specially tailored for Python development.
 As for the Vision Module (Python server), we chose ASN1Tools because it offers certain advantages.
 
@@ -415,13 +410,14 @@ libasn1, part of the GNU project, is less user-friendly and optimized for perfor
 
 \textcolor{red}{CITATIONS}
 \subsubsection{5G Core Network, 5G gNB, and 5G UE}
-The main open-source 5G software packages for implementing an O-RAN based architecture are OAI \cite[]{} and srsRAN \cite[]{}.
-For our system, we chose OAI because it provides all the necessary components to deploy a 5G standalone network, including both the RAN and Core networks.
+The main open-source 5G software packages for implementing an O-RAN based architecture are OAI~\cite[]{} and srsRAN~\cite{}.
+For our system, we chose OAI because it provides all the necessary components to deploy a 5G standalone network, including both the RAN and Core network.
 In contrast, srsRAN only supports the deployment of the RAN, requiring an additional software package, such as OAI, to implement the Core network.
 
 \subsubsection{Near-RT RIC}
-The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC \cite[]{} and  O-RAN Software Community’s Near-RT RIC \cite[]{}.
-The first was chosen more suitable for our application due to the fact that lightweight application, launched from an executable file.
+The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC~\cite[]{} and  O-RAN Software Community’s Near-RT RIC~\cite[]{}.
+FlexRIC was chosen for our solution due to its lightweight nature, launched from an executable file.
+\textcolor{red}{Include disadvantage of ORAN RIC}
 
 \subsection{Hardware}\label{subsec:hardware}
 
@@ -433,7 +429,7 @@ As for FlexRIC, it does not have hardware requirements listed, but while deployi
 The xApp was deployed alongside FlexRIC in order to assure reduced latency between the two components.
 Also,  the way interface E42 is implemented requires them to be running in the same computing unit.
 As for the gNB, the hardware recommended are 8 physical CPU cores and 32 GB of RAM\@.
-While the laptop used did not fulfill these requirements, it has proven sufficient to run the OAI gNB software, as it was noted before in \ref{}. % ref to dissertation of gonçalo
+While the laptop used did not fulfill these requirements, it has proven sufficient to run the OAI gNB software, as it was noted before in~\ref{}. % ref to dissertation of gonçalo
 
 As for the Computer Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{}, for Ultralytics YOLO model to properly run.
 Given that for our solution pre-trained model has proven enough to accurately detect and track objects, we did not worried about fulfilling the
@@ -594,7 +590,7 @@ The IMSI value, \texttt{208990200000001}, was selected from the Core database an
 This selection was crucial because it aligns with the subscriber information stored in the network, facilitating proper authentication and allowing the UE to connect and communicate with the network.
 By ensuring that the IMSI used in the UE configuration matches an entry in the Core database, we verify that the UE can be authenticated correctly and allowed access to the network services.
 
-If we use an IMSI value that is not present in the Core database, the authentication process will fail, as illustrated by the Wireshark capture shown in Figure \ref{fig:UE_failure}.
+If we use an IMSI value that is not present in the Core database, the authentication process will fail, as illustrated by the Wireshark capture shown in Figure~\ref{fig:UE_failure}.
 
 \begin{figure}[H]
     \centering
