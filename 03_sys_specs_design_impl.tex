@@ -209,7 +209,7 @@ If the module predicts an impending blockage, it generates a message containing 
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
             obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle within the frame ( normalized cartesian coordinates). \\ \hline
+            obstacleLocation & Location of the detected obstacle within the frame (normalized cartesian coordinates). \\ \hline
             obstacleVelocity & Velocity of the detected obstacle (normalized vector). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
             timeToCross & Predicted time  that the obstacle will obstruct the UE. \\ \hline
@@ -238,7 +238,7 @@ Table~\ref{tab:block_payload} presents the fields of the payload of this message
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
             obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle (x,y normalized coordinates, in the frame). \\ \hline
+            obstacleLocation & Location of the detected obstacle within the frame (normalized cartesian coordinates). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
             timeBlocked & Time the obstacle has been blocking, up to 5000 milliseconds (optional). \\ \hline
             ueId & Identifier for the UE, in this case its ArUco identifier. \\ \hline
@@ -264,7 +264,7 @@ Table~\ref{tab:past_block_payload} presents the fields of this message.
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
             obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle (x,y normalized coordinates, in the frame). \\ \hline
+            obstacleLocation & Location of the detected obstacle  within the frame (normalized cartesian coordinates). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
             ueId & Identifier for the UE, in this case its ArUco identifier. \\ \hline
         \end{tabular}
@@ -465,7 +465,7 @@ For the Computer Vision Module, we opted to use a webcam due to its simplicity a
 The chosen was a model LL-4196, offering Full HD (1920 x 1080 Pixels) resolution and supporting a frame rate of 30 FPS\@.
 This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion necessary for accurate computer vision processing.
 The camera connects to the computer using a USB 2.0 interface.
-Figure \ref{fig:camera} shows the video camera and its USB interface.
+Figure~\ref{fig:camera} shows the video camera and its USB interface.
 
 \begin{figure}[H]
     \centering
@@ -495,6 +495,7 @@ We have selected 3.6GHz as the carrier frequency for the 5G RAN\@.
 The UE was deployed in HP EliteBook 840 Laptop, shown in Figure~\ref{fig:computer_hp}.
 The hardware requirements for the deployment of the UE are 8 cores and 8GB of RAM\@.
 Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsible for the UE\@, showcasing that the hardware is enough to run the UE application.
+The UE used the USRP B210 SDR board in order to communicate with the gNB\@.
 
 \begin{figure}[H]
     \centering
@@ -521,7 +522,7 @@ Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsibl
 
 \subsection{Vision Module}\label{subsec:vision-module}
 Our vision module is implemented as a Python server, designed to interface with the xApp (its client) via an SCTP socket over the Loopback interface (127.0.0.1) on port 4321.
-The module is designed to manage multiple functions efficiently, including:
+The module is designed to manage the following functions efficiently:
 
 \begin{itemize}
 \item Information Exchange: Facilitates communication between the server and client.
@@ -538,17 +539,17 @@ To ensure timely and efficient video processing, we utilize a multi-threading ap
 \end{enumerate}
 
 For optimized performance in handling the computationally intensive tasks of image processing, we leverage GPU acceleration.
-Specifically, we use the Ultralytics YOLOv8n model.
 We selected the nano version, YOLOv8n, due to its reduced parameter count, which makes it less resource-intensive and better suited to our use case.
 This choice significantly accelerates processing times and reduces CPU load, leading to enhanced overall system efficiency and responsiveness.
-The combination of GPU utilization and the streamlined YOLOv8n model ensures that our module operates effectively even under high-demand conditions.
+The combination of GPU utilization and the streamlined YOLOv8n model ensures that our module operates effectively.
 
 
 
 \subsection{OAI 5G Core Network}\label{subsec:oai-5g-core-network}
 OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{oai5gcore}.
 Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, which enhances the overall efficiency and flexibility of the network infrastructure.
-Figure~\ref{fig:core_depl} shows the deployed 5G Core diagram.
+Figure~\ref{fig:core_depl} shows a diagram of the deployed 5G Core containers, in version v1.5.1~\cite{oai-cn5g-fed-v1.5.1}.
+The Figure also presents the configuration commands necessary in order to properly forward traffic to and from the Core Network containers.
 The IP addresses for each Core Network component and Data Network and can be seen respectively in Tables~\ref{tab:ip_core} and~\ref{tab:ip_dn}.
 
 
@@ -596,7 +597,6 @@ The IP addresses for each Core Network component and Data Network and can be see
 
 
 
-
 \subsection{OAI gNB}\label{subsec:oai-gnb}
 The deployment of the OAI gNB, we used the latest version of OAI RAN, following the steps present in~\ref{openairinterface5g_e2ap}.
 Other than the steps described in the tutorial, in order to deploy the gNB with the SDR, it was required to do some alterations to \textit{gnb.sa.band78
@@ -613,7 +613,11 @@ It is also necessary to modify the IP address of the AMF and an IP so that the g
     \label{fig:gnb_conf}
 \end{figure}
 
-\textcolor{red}{CONTINUE}
+Besides configuring the fields above, it is also necessary to configure the proper IP address of the AMF\@.
+As seen in Table~\ref{tab:ip_core}, this value is 192.168.70.132.
+Following that, we set the IP that the gNB use in order to communicate with the AMF and SMF\@.
+We have selected to use the Wi-Fi link for it.
+
 
 Finally, it is necessary to establish a connection between the OAI gNB software and the SDR\@.
 As recommended by OAI, we utilized the USRP Hardware Driver (UHD)~\cite{uhdusrpdriver}.
@@ -682,6 +686,12 @@ This informs that FlexRIC is running on the localhost IP, indicating that the RI
 The directory informs where the Service Models for FlexRIC are located.
 This is essential to assure the correct communication between OAI gNB and FlexRIC\@.
 
+\subsection{xApp}\label{subsec:xapp}
+To enhance the functionality and adaptability of our 5G network, we developed an xApp specifically designed to receive and process messages sent by the Vision Module.
+The xApp operates by combining the decoded location data with Signal-to-Noise Ratio (SNR) metrics received from the network.
+By analyzing this combined information, the xApp can make intelligent decisions regarding the optimal positioning of the gNB\@.
+Specifically, if the SNR metrics indicate that the current location of the gNB is low and the Vision Module indicates that this is due to obstacles, the xApp will print a message indicating the need to move the gNB.
+This dynamic adjustment helps maintain optimal SNR, ensuring better network performance and reliability.
 
 
 \section{Summary}\label{sec:summary}
@@ -690,9 +700,8 @@ The first one comprises the OAI 5G Core Network, FlexRIC, xApp and Vision Module
 The second unit comprehends the OAI UE, deployed in an HP Elitebook.
 The gNB and the UE used USRP B210 SDR board to connect via 5G Wireless Link.
 The Vision Module received a video feed, processed it and sent relevant obstacle information seen in the video, via its interface.
-The xApp was responsible for monitoring the received messages and the SNR.
-The chapter demonstrates the feasibility and benefits of integrating computer vision with mobile communications.
-By leveraging Computer Vision, the quality of the communication channel can be enhanced.
+The xApp was responsible for monitoring the received messages and the SNR between gNB and UE\@.
+In summary, this chapter explains how we integrated CV in 5G OAI\@.
 
 
 
