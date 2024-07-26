@@ -5,21 +5,38 @@
 This chapter presents the validation of the proposed solution.
 The validation process is described into different sections, each addressing different components of the system.
 Section~\ref{sec:meth} outlines the methodology used for validation.
-Section~\ref{sec:core_network} describes the Core network setup.
-Section~\ref{sec:flexric} details the FlexRIC solution used in the system.
-Section~\ref{sec:gnb} details the gNB configuration and validation.
-Section~\ref{sec:ue} addresses the User Equipment (UE) setup and tests.
-Section~\ref{sec:cv_module} discusses the computer vision module and its integration.
-Section~\ref{sec:mm_xapp} focuses on the Mobility Management xApp and its role in the system .
+Section ~\ref{sec:experimental-setup} presents the experimental setup.
+In Section ~\ref{sec:component-testing}, each component is tested.
+\textcolor{red}{UPDATE ACCORDINLY}
 Section~\ref{sec:use_case} presents a specific use case to demonstrate the system's functionality.
 Finally, Section~\ref{sec:discuss} provides a discussion of the results and insights gained from the validation process.
 
 \section{Methodology}\label{sec:meth}
-This section describes the overall methodology employed to validate the system.
-It includes details on the experimental setup, data collection methods, and the criteria used for evaluation.
+We have divided our tests into three categories: Component Testing, Interoperability Testing and Use Case Validation.
+The first was used to validate the proper functioning of each component, with a performance evaluation when possible.
+The second category serve to determine if the components were working jointly properly.
+The last seek to validate the proposed system in a reference scenario.
+In each set of tests, we conducted a functional validation using tools such as ping and Iperf.
+When applicable, the performance was evaluated.
+\textcolor{red}{Maybe write something more}
 
-\section{Core Network}\label{sec:core_network}
-In this section, the core network configuration and validation are discussed.
+\section{Experimental Setup}\label{sec:experimental-setup}
+This section presents the experimental setup.
+Figure~\ref{fig:setup} shows a photograph of the experimental scenario.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Experimental setup}
+    \label{fig:setup}
+\end{figure}
+
+
+\section{Component testing}\label{sec:component-testing}
+
+
+\subsection{Core Network}\label{subsec:core_network}
+In this section, the Core Network configuration and validation are discussed.
 It includes the setup of network elements, their interactions, and performance metrics.
 In order to make sure that all Core Network components are working properly, we performed a test.
 The deployment of the Core Network is done through Docker containers.
@@ -33,55 +50,97 @@ After the initialization of the Docker containers, it is possible to see the log
     \label{fig:core_init}
 \end{figure}
 
-    Then, we verified that all the containers had connectivity using the interface created in the Host OS, using the ping tool,as shown by Figure~\ref{fig:ping_core}.
-    Each interface sends requests to each network component according to the table~\ref{}.
+In order to confirm the correct deployment, the interface \textit{demo-oai} must appear when running the \textit{ifconfig} command.
+
+Then, we verified that all the containers had connectivity using the interface created in the Host OS, using the ping tool,as shown by Figure~\ref{fig:ping_core}.
+Each interface sends requests to each network component according to the table~\ref{tab:ip_core}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\linewidth]{figures/ping_core}
-\caption[Pinging NRF, MySQL Database, AMF, SMF and UPF respectively from Host OS
-interface]{Pinging NRF, MySQL Database, AMF, SMF and UPF respectively from Host OS
+\includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+\caption[Pinging NRF, MySQL Database, AMF, SMF, UPF, UDR, UDM and AUSF respectively from Host OS
+interface]{Pinging NRF, MySQL Database, AMF, SMF, UPF, UDR, UDM and AUSF respectively from Host OS
 interface}
 \label{fig:ping_core}
 \end{figure}
 
+
 Successfully concluding this tests ensures that the 5G Core Network is operational.
-
-
 
 \section{FleXRIC}\label{sec:flexric}
 As for the FlexRIC deployment, it is simply necessary to assure its correct launch.
-Upon launching, it awaits for incomming connection requests from an E2 Node.
-Figure~\ref{} shows the initialization of the FlexRIC.
+Upon launching, it awaits for incoming connection requests from an E2 Node.
+Figure~\ref{fig:near-rt-ric} shows the initialization of the FlexRIC\@.
 
-% launch of FLEXRIC ./nearRT-RIC
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Initialization of FlexRIC's executable}
+    \label{fig:near-rt-ric}
+\end{figure}
+
+When it is properly launched, the gNB can be initialized.
 
 \section{gNB}\label{sec:gnb}
+\textcolor{red}{Finish}
 To ensure the correct functioning of the gNB, it should be registered in the 5G Core Network, connected to the FlexRIC and registered as a E2 node.
 They need to be validated separately since the connections are independent.
 
 To access the gNB connectivity to the Core, we need to check the connection between the gNB Host and the AMF and UPF, since the gNB needs to communicate with them.
 This can be tested with ping from the gNB's Host to these entities.
-Figure~\ref{} shows the results.
+Figure~\ref{fig:ping_gnb} shows the results.
 
 % figure with ping to AMF and UPF 132 and 134
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Conection test to AMF and UPF, respectively, from gNB Host.}
+    \label{fig:ping_gnb}
+\end{figure}
 
 After
 
 \section{UE}\label{sec:ue}
-This section discusses the User Equipment (UE) configuration and validation.
-It includes the setup of devices, connection procedures, and performance assessments.
+\textcolor{red}{Finish}
+
+In order to test the correct initialization of the UE we needed to ensure connection with the Core Network.
+After executing the command present in~\ref{subsec:oai-5g-ue}, we observed in Wireshark the correct registration of the UE in Figure~\ref{fig:registration_ue}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Registration of the UE}
+    \label{fig:registration_ue}
+\end{figure}
+
+When this synchronization occurs, we can verify the creation of \textit{oaitun\_ue1}, the tunnel interface between UE and Core Network.
+With that, we can test its connectivity, by pinging to every Core Network component, as well as the Internet.
+Figures~\ref{fig:ping_ue_core} and~\ref{fig:ping_ue_internet} shows the outcome of these tests, to Core and to the Internet respectively.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Pinging from UE to the Core Components}
+    \label{fig:ping_ue_core}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Pinging from UE to Google's public DNS server}
+    \label{fig:ping_ue_internet}
+\end{figure}
+
+
+
 
 \section{Computer Vision Module}\label{sec:cv_module}
-The computer vision module is the main developed component in the system of this dissertation, enabling object detection and tracking to enhance dynamic network management.
-The computer vision module act as a server to the xApp.
-Their interface ensures reliable data exchange using a socket connection, leveraging an ASN.1 file to standardize the structure of the messages.
-
 To ensure the correctness and reliability of the computer vision module, a series of validation tests were conducted.
 These tests were designed to evaluate both the processing capabilities of the module and the accuracy of the message exchange between the vision module and the xApp.
 
 The processing time of each frame was measured to assess the real-time performance of the computer vision module.
-This was critical to ensure that the module could keep up with dynamic environments, such as an office setting where people and objects are constantly moving.
+This is important to ensure that the module could keep up with dynamic environments, such as an office setting where people and objects are constantly moving.
 The tests showed that the processing times were within acceptable limits, allowing for timely detection and response.
 % show some math on why this result is sufficient
 % plot some results
@@ -89,8 +148,15 @@ The tests showed that the processing times were within acceptable limits, allowi
 A reference video was used to evaluate the detection and tracking results of the computer vision module.
 This video, containing typical office movements like people walking and objects being moved, was processed to check for detection accuracy and tracking consistency.
 The results confirmed that the module could accurately detect and track objects, validating its effectiveness in a real-world scenario.
+Figure~\ref{fig:reference_video} shows the
 
 % image of a frame of the video and the corresponding messages
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Reference video and corresponding messages generated.}
+    \label{fig:reference_video}
+\end{figure}
 
 Print statements were used on the server side to verify the correct formatting, coding, and decoding of the messages.
 This step was crucial to ensure that the messages sent from the computer vision module to the xApp were correctly structured and could be properly interpreted upon receipt.
@@ -114,7 +180,7 @@ The module demonstrated good performance in these scenarios, and its near real-t
 
 
 
-\section{Mobility Management xApp}\label{sec:mm_xapp}
+\section{xApp}\label{sec:mm_xapp}
 This section focuses on the Mobility Management xApp and its role in the system.
 It details the design and implementation of the xApp, how it interfaces with other components, and the results of its validation.
 
@@ -128,7 +194,7 @@ The goal of test was to access the functionality of the whole system, considerin
 
 The use case shows the system's capabilities in three test scenarios, described in the following subsections.
 
-\subsection{Scenario 0 : Fixed gNB and UE}
+\subsection{Scenario 0 : Fixed gNB and UE}\label{subsec:scenario-0-:-fixed-gnb-and-ue}
 
 In this scenario, the objective is to assess the impact of blockages on the line of sight (LOS) between the gNB (gNodeB) and the UE (User Equipment).
 By maintaining a fixed position for both the gNB and the UE, we can introduce obstacles to observe their effects on signal quality and transmission reliability.
@@ -137,13 +203,13 @@ This scenario also aims to validate the accuracy of the messages sent by the vis
 The results from this scenario will serve as a baseline for comparison with Scenarios 1 and 2, where the positions of the gNB and UE may vary.
 This analysis is important for evaluating the gains of having computer vision solutions integrated into mobile networks.
 
-\subsection{Scenario 1: Moving gNB}
+\subsection{Scenario 1: Moving gNB}\label{subsec:scenario-1:-moving-gnb}
 % change it
 In this scenario, the User Equipment (UE) encounters an obstacle that obstructs its line of sight. % change specially this sentance
 The system promptly identifies the obstacle and predicts when the blockage is expected to happen.
 A message indicating the future blockage is sent to the xApp, which then informs the gNB (gNodeB). In response, the gNB preemptively adjusts its position to maintain a clear line of sight with the UE, thereby sustaining a consistent average Signal-to-Noise Ratio (SNR). This proactive approach ensures uninterrupted communication and optimal performance despite the presence of obstacles.
 
-\subsection{Scenario 2: UE Moving Away from the gNB}
+\subsection{Scenario 2: UE Moving Away from the gNB}\label{subsec:scenario-2:-ue-moving-away-from-the-gnb}
 
 This scenario involves the UE moving progressively further from the gNB. In the absence of identified obstacles, a decrease in the Signal-to-Noise Ratio (SNR) is interpreted as the UE increasing its distance from the gNB. To address this, the robotic platform, leveraging the Mobility Management xApp, dynamically moves towards the UE to uphold optimal communication quality.
 This adaptive response ensures that the UE remains within the effective communication range of the gNB, thereby maintaining robust and reliable connectivity.
