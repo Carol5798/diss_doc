@@ -1,2 +1,18 @@
 \chapter*{Resumo}
-This document introduces the preliminary work on a perception-aided solution for 6G networks, addressing the increasing demands of users and overcoming limitations posed by proprietary solutions. It provides insights into the paradigms and applications of 5G and 6G networks and deployment approaches for Radio Access Networks (RANs). The document explores computer vision detection and tracking models, highlighting relevant work on blockage prediction, proactive handover, and O-RAN. It also presents the Horizon Europe CONVERGE research project. The main objective of this dissertation is to implement vision-based functionality into a 6G Base Station (gNB), paving the way for obstacle-aware networks. Specific objectives include implementing object detection and tracking mechanisms, developing a Vision-Enabled gNB Enhancement Application for real-time perception, creating a web service for information dissemination, and researching validation in networking scenarios. The document presents a proposed solution and outlines a work plan for the dissertation, detailing objectives that involve integrating computer vision tools with a service-oriented network architecture to support the operation of a perception-aided Base Station. The proposed solution aims to enable obstacle-aware networks by providing video-based information to a 6G Base Station repositioning. To validate the solution's effectiveness, a use case illustrating the synergy between computer vision, machine learning, and wireless communications will be considered, to demonstrate the potential of visual perception for seamless wireless connectivity.
+A evolução das redes móveis, caracterizada pelo aumento da complexidade e pela dependência de soluções proprietárias, tem levado a desafios na integração de novas tecnologias.
+Essas redes, que utilizam frequências de ondas milimétricas, são altamente suscetíveis a obstruções de Linha de Vista (LoS), o que leva a problemas de conectividade.
+Abordar esses desafios requer soluções adaptativas, e a integração de arquiteturas de código aberto é essencial.
+
+A Aliança O-RAN busca abordar esses desafios promovendo interfaces e arquiteturas abertas para aprimorar a interoperabilidade e a inovação nas Redes de Acesso Rádio (RANs).
+Alavancar os princípios da O-RAN ao integrar Estações Base móveis (BSs) pode possibilitar uma melhoria na conectividade.
+As BSs móveis oferecem uma abordagem de implantação dinâmica, prometendo atender a requisitos variados de Qualidade de Serviço (QoS) em diferentes contextos.
+
+Nesse sentido, a convergência de sensoriamento e telecomunicações é esperada para revolucionar o desempenho da rede ao fornecer percepção do ambiente em tempo real.
+A Visão Computacional (CV) tem um potencial significativo para aprimorar o desempenho da rede, proporcionando essa percepção para superar os desafios de propagação do sinal.
+Ao processar e interpretar dados visuais, as redes podem identificar e mitigar proativamente obstáculos para garantir uma propagação de sinal ideal.
+Essa capacidade é vital para manter uma força e qualidade de sinal consistentes em ambientes urbanos densos, onde os métodos tradicionais tem dificuldade ao lidar com obstáculos dinâmicos e móveis.
+
+O principal objetivo da dissertação foi implementar uma RAN baseada em visão computacional, permitindo que uma BS perceba seu ambiente.
+A principal contribuição foi a criação de um Módulo de Visão Computacional, responsável por extrair informações de vídeos e gerar mensagens relevantes de obstáculos para a RAN\@.
+Para interpretar essas mensagens, foi desenvolvida uma xApp, integrando as mensagens com métricas da RAN, como a Relação Sinal-Ruído (SNR), visando aprimorar a percepção do ambiente do gNodeB (gNB).
+A solução proposta foi validada experimentalmente considerando um caso de uso realista, demonstrando o potencial das RANs baseadas em visão na otimização do desempenho da rede.

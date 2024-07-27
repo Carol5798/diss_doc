@@ -13,10 +13,10 @@
 
 
 - escrever dissertação
-  - Resumo e Abstract
-  - SDGs
+  - [x]Resumo e Abstract
+  - [x]SDGs
   - Abbreviations
-  - Cap 3
+  - [x]Cap 3
   - Cap 4
       - descrição dos cenários
       - testes realizados

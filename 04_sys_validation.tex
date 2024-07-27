@@ -16,7 +16,7 @@ We have divided our tests into three categories: Component Testing, Interoperabi
 The first was used to validate the proper functioning of each component, with a performance evaluation when possible.
 The second category serve to determine if the components were working jointly properly.
 The last seek to validate the proposed system in a reference scenario.
-In each set of tests, we conducted a functional validation using tools such as ping and Iperf.
+In each set of tests, we conducted a functional validation using tools such as ping and Iperf~\cite{iperf}.
 When applicable, the performance was evaluated.
 \textcolor{red}{Maybe write something more}
 
@@ -188,20 +188,102 @@ It details the design and implementation of the xApp, how it interfaces with oth
 In order to validate the implemented solution, a use case testing scenario was established.
 In an indoor environment, the system followed the architecture presented in Figure~\ref{fig:}.
 
-
-
 The goal of test was to access the functionality of the whole system, considering maintaining end-to-end connection between the UE and the external DN. The Mobile RAN positioning is defined by the mobility management xApp, based on data collected from the Computer Vision Module and the radio metrics collected from the RAN via the Near-RT RIC. It aimed at maintaining the channel quality, or increasing it whenever possible.
 
 The use case shows the system's capabilities in three test scenarios, described in the following subsections.
 
+For all scenarios we are assuming constant velocity for all moving entities.
+
 \subsection{Scenario 0 : Fixed gNB and UE}\label{subsec:scenario-0-:-fixed-gnb-and-ue}
 
-In this scenario, the objective is to assess the impact of blockages on the line of sight (LOS) between the gNB (gNodeB) and the UE (User Equipment).
-By maintaining a fixed position for both the gNB and the UE, we can introduce obstacles to observe their effects on signal quality and transmission reliability.
-This scenario also aims to validate the accuracy of the messages sent by the vision module regarding the presence and nature of these blockages.
+In this scenario, the objective is to assess the impact of blockages on the LoS between the gNB and the UE\@.
+By maintaining a fixed position for both the gNB and the UE, we can introduce obstacles to observe their effects on signal quality.
+This scenario also aims to validate the accuracy of the messages sent by the vision module regarding the presence of blockages.
+Figure~\ref{fig:test_fixed} presents a top-view from the testing scenario.
+The obstacle moves from left to right, over time at a constant velocity.
 
-The results from this scenario will serve as a baseline for comparison with Scenarios 1 and 2, where the positions of the gNB and UE may vary.
+The results from this scenario serve as a baseline for comparison with other scenarios, where the positions of the gNB and UE may vary.
 This analysis is important for evaluating the gains of having computer vision solutions integrated into mobile networks.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption{Overview of scenario}
+    \label{fig:test_fixed}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/dummy results}
+    \caption{Dummy results}
+    \label{fig:results_0}
+\end{figure}
+
+
+This test was successful, showcasing the CV module messages received, as well as SNR metrics corresponding to those expected.
+
+Figure~\ref{fig:results_0} presents the graph with the results collected from this experiment.
+It is possible to see the SNR variation over time in the y-axis , associated with each message, over a period of 10 seconds.
+The average SNR values are collected by the xApp in intervals of 200 milliseconds (20 sample collected over a period of 10ms).
+Possible values for this collection of data are 1ms,2ms, 5ms or 10ms.
+This value is set according to the estimated fps of the video.
+Since prior test has shown that capturing in 30fps results in the processing of video of about 5fps, we chose this value so that each message reception will have an SNR associated.
+Each message is represented by a colour, as shown in the legend.
+Notice that we can also have situations were we have SNR data collection but no associated message, for instance when no obstacles are detected or when the obstacles seen are not expected to block the LoS\@.
+
+The graph is divided into three distinct stages, separated by the transition lines.
+In the first stage, where the obstacle is moving towards the UE, Prior Blockage messages are sent.
+The SNR is high (above 30dB) since there are no obstruction of LoS between gNB and UE, indicating a strong and clean signal.
+
+The first transition at X seconds is labeled \("\)Lost LoS\("\).
+This marks the beginning of the blockage period.
+
+In the second stage,the obstacle stops in front of UE,
+and it is possible to see the reception of the first Blockage Message, indicating the beginning of such obstruction.
+As expected, the average SNR lowers.
+
+The second transition at X seconds is labeled **\("\)Return of LoS\("\)**, indicating the end of the blockage and the return to normal signal conditions.
+In the third stage, the obstacle moves away from the UE, no longer blocking the LoS\@.
+As expected, the average SNR approximate those seen in the first stage.
+The SNR values return to above 30 dB, similar to the prior blockage stage, indicating the restoration of a clear and strong signal, suggesting the removal or resolution of the blockage.
+
+In this scenario, we also have used iperf tool to test the throughput in two instants.
+The first one was when no blockage was occurring.
+The second on was when a blockage was ongoing.
+As expected, the throughput is lower when there is a blockage.
+Table~\ref{tab:iperf} presents the measured values.
+
+
+\begin{table}[h]
+    \centering % Center the table
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Instant} & \textbf{Connection type} & \textbf{DL} & \textbf{UL} \\ \hline
+        \multirow{2}{*}{No blockage} & UDP & & \\ \cline{2-4}
+        & TCP & & \\ \hline
+        \multirow{2}{*}{Blockage}    & UDP & & \\ \cline{2-4}
+        & TCP & & \\ \hline
+    \end{tabular}
+    \caption{Iperf results} % Add a caption for the table
+    \label{tab:iperf} % Add a label for referencing the table
+\end{table}
+
+
+
+
+
+
+\subsection{Scenario 0.1: Fixed gNB, moving UE}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue}
+This scenario also aimed at evaluating the
+
+This test occurred as expected.
+We noticed that the CV module generated wrong messages specially when it came to Pior Blockage messages, as anticipated.
+This is due to the fact that the module has no notion of depth.
+
+\subsection{Scenario 0.1: Fixed gNB, moving UE, Obstacle present}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue-obstacle-present}
+
+This scenarios aims at evaluating the accuracy of the messages generated.
+It also aims at showcasing the multi obstacle capacity of the bot-SORT model and how it interferes with the messages generated by the vision module..
 
 \subsection{Scenario 1: Moving gNB}\label{subsec:scenario-1:-moving-gnb}
 % change it
@@ -209,10 +291,10 @@ In this scenario, the User Equipment (UE) encounters an obstacle that obstructs 
 The system promptly identifies the obstacle and predicts when the blockage is expected to happen.
 A message indicating the future blockage is sent to the xApp, which then informs the gNB (gNodeB). In response, the gNB preemptively adjusts its position to maintain a clear line of sight with the UE, thereby sustaining a consistent average Signal-to-Noise Ratio (SNR). This proactive approach ensures uninterrupted communication and optimal performance despite the presence of obstacles.
 
-\subsection{Scenario 2: UE Moving Away from the gNB}\label{subsec:scenario-2:-ue-moving-away-from-the-gnb}
+%\subsection{Scenario 2: UE Moving Away from the gNB}\label{subsec:scenario-2:-ue-moving-away-from-the-gnb}
 
-This scenario involves the UE moving progressively further from the gNB. In the absence of identified obstacles, a decrease in the Signal-to-Noise Ratio (SNR) is interpreted as the UE increasing its distance from the gNB. To address this, the robotic platform, leveraging the Mobility Management xApp, dynamically moves towards the UE to uphold optimal communication quality.
-This adaptive response ensures that the UE remains within the effective communication range of the gNB, thereby maintaining robust and reliable connectivity.
+%This scenario involves the UE moving progressively further from the gNB. In the absence of identified obstacles, a decrease in the Signal-to-Noise Ratio (SNR) is interpreted as the UE increasing its distance from the gNB. To address this, the robotic platform, leveraging the Mobility Management xApp, dynamically moves towards the UE to uphold optimal communication quality.
+%This adaptive response ensures that the UE remains within the effective communication range of the gNB, thereby maintaining robust and reliable connectivity.
 
 
 \section{Discussion}\label{sec:discuss}

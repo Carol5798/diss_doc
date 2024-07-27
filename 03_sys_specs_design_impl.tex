@@ -1,9 +1,9 @@
 \chapter{System Specification, Design, and Implementation}\label{ch:specs_design_implem}
 
-This chapter presents the proposed solution, including four main sections.
-Section~\ref{sec:specs} discusses the requirements and specifications, Section~\ref{sec:prop_vision} presents the proposed vision module.
-Section~\ref{sec:design} explains the solution design.
-Finally, Section~\ref{sec:impl} presents the implementation of the system.
+This chapter details the proposed solution, in three sections.
+Section~\ref{sec:specs} discusses the requirements and specifications.
+Section~\ref{subsec:prop_vision} presents the system design.
+Finally, Section~\ref{sec:impl} describes the system implementation.
 
 \section{System Specification}\label{sec:specs}
 The goal of this dissertation was to extract vision-based information relevant to a 5G network.
@@ -12,12 +12,22 @@ This solution envisions obstacle-aware networks and should enable a RAN to auton
 
 \subsection{System Requirements}\label{subsec:system-requirements}
 
-To demonstrate these concepts, we conceptualized a simple model.
-The scenario is set in an indoor office environment, where it is determined if common objects will impact the LOS between a gNB and a UE\@.
+The scenario is set in an indoor environment, where it is determined if common objects will impact the LOS between a gNB and a UE\@.
+This concept is inspired in the anechoic chamber seen in Figure~\ref{fig:chamber_converge}.
+In this dissertation, we will make use of a single UE and a mobile BS\@.
+Figure~\ref{fig:my_chamber} presents the overall intended system.
+
+\textcolor{red}{Figure to ilustrate system}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
+    \caption[Another figure]{Another figure}
+    \label{fig:my_chamber}
+\end{figure}
 
 To achieve this, specific system requirements were established to ensure the efficient detection, tracking, and dissemination of obstacles information within the 5G network.
 
-The detailed requirements of the Computer Vision Module and its interface with the network are as follows:
+The detailed functional and non-functional requirements of the Computer Vision Module and its interface with the network are as follows:
 
 \begin{enumerate}
     \item \textbf{Functional Requirements}
@@ -35,14 +45,14 @@ The detailed requirements of the Computer Vision Module and its interface with t
         \item The solution should be scalable to handle multiple video streams, Base Stations, and UEs, allowing for broader deployment in various network environments.
         \item The system must use standardized messaging formats to ensure interoperability with different network components and vendors.
         \item The vision module and communications system should be robust, with mechanisms for error detection and recovery to maintain continuous operation.
-        The model and its parameters are fundamental to assuring reliability. % how can i prove it?
+        The model and its parameters are fundamental to ensure reliability. % how can i prove it?
     \end{enumerate}
 \end{enumerate}
 
 These requirements translate into Table ~\ref{tab:spec}, containing system specifications:
 
 \begin{table}[H]
-\caption{System Specifications.}
+\caption{System specifications.}
 \label{tab:spec}
 \centering
 \resizebox{\textwidth}{!}{%
@@ -50,7 +60,7 @@ These requirements translate into Table ~\ref{tab:spec}, containing system speci
 \hline
 \textbf{Specification} & \textbf{Description} \\ \hline
 \textbf{Detection and tracking} & Use YOLOv5 Ultralytics~\cite{Ultralytics_repo} and BoT-SORT~\cite{botsort} for high accuracy and optimized speed. \\ \hline
-\textbf{Messaging} & Encode messages using ASN.1 standards. \newline Transmit messages via SCTP protocol. \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
+\textbf{Messaging} & Encode messages using ASN.1 definitions~\cite{ITU_ASN1}. \newline Transmit messages via SCTP. \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
 \end{tabular}}
 \end{table}
 
@@ -59,22 +69,27 @@ These specifications ensure that the Vision Module meets the requirements necess
 
 Following these requirements and specifications, the system architecture was designed to facilitate efficient data processing.
 
+\section{System Design}\label{sec:design}
+
+\textcolor{red}{Modify figure to include RAN and Core distinction - maybe colors and change interface of vision module to E2'}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/Syst_Arch.drawio}
-    \caption[System Architecture of the proposed solution]{System Architecture of the proposed solution}
+    \caption[System architecture of the proposed solution]{System architecture of the proposed solution}
     \label{fig:my_arch}
 \end{figure}
 
 % draw: SMF[x], SPGWU[x], AMF[x], AUSF, UDM, UDR, mysql, NRF ext DN[x]
 % requires improvements
-In the proposed architecture, shown in Figure~\ref{fig:my_arch}, a UE requires 5G connectivity.
-The 5G connection workflow begins with the UE initiating a connection request to the gNB, which then forwards the request to the AMF\@.
-The gNB serves as the intermediary between the UE and the 5G core network, managing the radio resources, handling data transmission, and ensuring seamless connectivity as the UE moves.
-The AMF authenticates the UE using credentials stored in the UDM. Upon successful authentication, the UE is granted access to the network.
-The AMF and UPF then establish a data session for the UE, configuring the necessary resources for data transmission.
+
+\textcolor{red}{Confirm acronism}
+The proposed architecture, shown in Figure~\ref{fig:my_arch}, includes a UE requiring 5G connectivity.
+The 5G connection process begins with the UE initiating a connection request to the gNB, which then forwards the request to the AMF\@.
+The gNB acts as the intermediary between the UE and the 5G core network, managing the radio resources, handling data transmission, and ensuring seamless connectivity as the UE moves.
+The AMF authenticates the UE using credentials stored in the UDM. Upon successful authentication, the UE is granted  network access.
+Subsequently, the AMF and UPF establish a data session for the UE, configuring the necessary resources for data transmission.
 User data is transmitted between the UE and the UPF via the gNB\@.
-The UPF routes the data to and from external networks, ensuring efficient data flow.
+The UPF routes the data to and from external networks, ensuring data fowarding.
 
 %------------ move to another place
 %The 5G Core Network is responsible for managing the overall network functions, including authentication, mobility management, and routing of data.
@@ -98,32 +113,33 @@ The UPF routes the data to and from external networks, ensuring efficient data f
 %Having the RAN and core in a single unit simplifies the deployment process, making it easier to set up and manage the network in various locations, whether stationary or on the move.
 %-------------------
 
-In our solution, the RAN can be repositioned according to environment conditions that possibly affect the RF\@.
-Those are reported by the Vision Module (Vision Module).
-This enables the RAN to control manage its placement, based on those conditions together with radio metrics, such as SNR\@.
-In order to establish the integration of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specified by O-RAN, to deploy a xApp responsible for the handling both radio metrics and the VM messages.
-The communication between the VM and the xApp, is done through an interface inspired by the O-RAN E2 interface and E2 Application Protocol (E2AP).
-This interface facilitates reliable data exchange using a SCTP socket connection (cf.Figure~\ref{fig:stack}) along with an Abstract Syntax Notation One (ASN.1) definition to structure the messages.
-The use of ASN.1 ensures that the message formats are standardized, promoting interoperability and efficiency in data transmission.
-This design allows the VM to communicate with the xApp, enabling the integration of data extracted from video for the mobile RAN management.
+In our solution, the RAN can be repositioned based on environment conditions that may affect the RF signal propagation\@.
+These conditions, perceived and reported by the Vision Module (VM).
+This enables, as well as RF metrics such as SNR, allow the RAN to manage its placement.
+In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specified by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
+Communications between the VM and the xApp, is achieved through interface E2', based on the O-RAN E2 interface and E2 Application Protocol (E2AP).
+E2' interface supports reliable data exchange using a SCTP socket connection (cf.
+Figure~\ref{fig:stack}) along with an ASN.1 definition to structure the messages.
+The use of ASN.1 ensures that the standarized message formats , promoting interoperability and efficiency in data exchange.
+This design enables the VM to communicate with the xApp, allowing the integration of data extracted from video for the mobile RAN management.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.35\linewidth]{figures/VisionModule_ProtocolStack.drawio(2)}
+    \includegraphics[width=0.25\linewidth]{figures/VisionModule_ProtocolStack.drawio(2)}
     \caption[Proposed Vision Module Protocol Stack]{Proposed vision module protocol stack.}
     \label{fig:stack}
 \end{figure}
 
 
-\section{Proposed Vision Module}\label{sec:prop_vision}
-Our proposed vision module uses Computer Vision techniques to extract information about obstacles within the video camera's field of view.
-This system processes video frames to detect and track obstacles, subsequently sending messages to services connected with relevant information.
-The module sends five types of messages: blockage, future blockage, past blockage, the location of the UE and frame processed.
-Table~\ref{tab:message_type} summarizes the description of each message type.
-Each message will be explained further in the following sections.
+\subsection{Proposed Vision Module}\label{subsec:prop_vision}
+The proposed Vision Module uses Computer Vision techniques to extract information about obstacles within the video camera's field of view.
+This system processes video frames to detect and track obstacles, while sending messages with relevant information to services connected.
+The module sends five types of messages: blockage, prior to blockage, post blockage, the location of the UE and frame processed.
+Table~\ref{tab:message_type} summarizes each message type.
+Each message is explained further in the following sections.
 
 \begin{table}[H]
-    \caption{Summary of each message type}
+    \caption{Summary of each message type.}
     \label{tab:message_type}
     \centering
     \resizebox{\textwidth}{!}{%
@@ -131,42 +147,48 @@ Each message will be explained further in the following sections.
             \hline
             \textbf{Type of message} & \textbf{Description} \\ \hline
             Blockage Messages & Sent when an obstacle is currently blocking the UE. \\ \hline
-            Future Blockage Messages & Sent when an obstacle is predicted to block the UE based on its current trajectory. \\ \hline
-            Past Blockage Messages & Sent when an obstacle that was previously blocking the UE is no longer doing so. \\ \hline
+            Prior Blockage Messages & Sent when an obstacle is predicted to block the UE based on its current trajectory. \\ \hline
+            Post Blockage Messages & Sent when an obstacle that was previously blocking the UE is no longer doing so. \\ \hline
             UE Location Messages & Provide the current location of the UE. \\ \hline
             Frame Processed & Provide information that a frame of the video was processed. \\ \hline
         \end{tabular}}
 \end{table}
 
-The module includes functionality responsible for information exchange, detection and tracking, image processing, and utility functions.
-We present a high level overview of the developed Vision Module.
+VM includes functionalities responsible for information exchange, detection and tracking, image processing, and auxiliary functions, such as coordinates transformations and definition of the structure of the messages.
+We present a high level overview of the developed VM\@.
 
-The processing of the video starts with the capture of frames from the camera.
+The video processing starts capturing frames from the video camera.
 One frame is processed at a time.
-The UE has a ArUco Marker in order to identify its placement.
-OpenCV is responsible for identifying this marker and returning the ROI corresponding to the marker, as well as its identification.
-Periodically, the Module sends a message containing the location (normalized cartesian coordinates) of the UE within the frame\@.
-Following this, yolov8n, a YOLO pre-trained model jointly with BoT-SORT, is responsible for detecting and tracking the obstacles in the frame.
-To improve control over frame selection for tracking detected objects, we have set specific parameters that allow timing adjustments in object detection.
-This persistence has enabled us to extend the functionality of the Ultralytics API\@.
+The UE has an ArUco marker in order to identify its placement.
+ArUco markers are square markers commonly used in CV applications to simplify the process of camera pose estimation and object tracking.
+They are easily detectable in images and videos, providing a reliable method for identifying and localizing objects in various environments.
+In order to simply the differentiation between UE and obstacles, they were chosen to represent the position of the UE\@.
 
-The main returned value by Ultralytics is a track history containing a unique identifier of the obstacle and its associated last positions (also normalized cartesian coordinates), alongside its classes and confidence scores.If it is noticed a difference between the last visible ArUcos and the current seen, the module checks if the obstacle last position intercepts the ArUcos position.
-If this is true, the module generates a blockage message, indicating that an obstacle blocked the UE\@.
-Immediately after the UE is unblocked, the module emits a message of Past Blockage, indicating that the LOS between gNB and UE returned.
+OpenCV is responsible for identifying ArUco marker and returning the ROI corresponding to the marker, as well as its identification.
+Periodically, the VM sends a message containing the location (in normalized Cartesian coordinates) of the UE within the frame\@.
+Following this, \emph{yolov8n}, a YOLO pre-trained model jointly with BoT-SORT, is responsible for detecting and tracking the obstacles in the frame.
+To improve control over frame selection for tracking detected objects, we have set specific parameters that allow timing adjustments in object detection, extending the Ultralytics API and enabling us to adjust the duration an obstacle remains detectable in the frame.
+Adjusting the persistence time is important because it allows for more accurate and stable tracking of objects, especially in dynamic environments.
+By fine-tuning how long an obstacle remains detectable in the frame, we can prevent sudden disappearances and reappearances of objects, leading to smoother and more reliable tracking.
+This enhances the overall performance of object detection systems and is particularly useful in applications where consistent monitoring is critical.
 
-Beyond that, the module is capable of predicting with certain anticipation that an obstacle seen by the camera will block the UE\@.
-This is done using the tracking history constructed upon the results of the tracking.
-This enables the calculation of the velocity of the objects.
-Then, we can estimate the future positions and calculate whether the projected bounding boxes will intercept the ArUco.
-This prediction allows us to reposition the gNB seeking the maintenance of the LOS and the channel quality assessed by the SNR\@.
+The main returned value by Ultralytics is a track history containing a unique identifier of the obstacle and its associated last positions (in normalized Cartesian coordinates), alongside its classes and confidence scores.
+If it is noticed that there is a difference between the last visible ArUco marker and the current seen ones, the module checks if the obstacle last position intercepts the ArUcos position.
+If an intersection is confirmed, the module generates a Blockage message, indicating that an obstacle blocked the UE\@.
+Once the UE is unblocked, the module issues a Post Blockage message, indicating the reestablishment of the LoS between gNB and UE.
 
-The file \textit{ObstacleDetectionReport.asn} contains the specification of the set of messages created.
-The messages are composed of a header and a payload.
-The header of all messages is presented in Table~\ref{tab:header}:
+Additionally, the module is capable of predicting with some anticipation that an obstacle seen by the video camera will block the UE\@.
+This is done using the tracking history constructed from the tracking results.
+This enables the calculation of the objects' velocity.
+We can then estimate the future positions and calculate whether the projected bounding boxes will intercept the ArUco.
+This prediction allows us to reposition the gNB to maintain of the LoS and the channel quality, assessed by the SNR\@.
+
+The messages consist of a header and a payload.
+The header of all messages is presented in Table~\ref{tab:header}.
 
 
 \begin{table}[H]
-    \caption{Components of the Message Header}
+    \caption{Components of each message header.}
     \label{tab:header}
     \centering
     \resizebox{\textwidth}{!}{
@@ -174,33 +196,32 @@ The header of all messages is presented in Table~\ref{tab:header}:
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
             messageType & Identifies the type of the message. \\ \hline
-            timestamp & Identify the  timestamp in which the message was created. \\ \hline
-            sourceId & Identify the source of the message.
+            timestamp & Identifies the  timestamp when the message was created. \\ \hline
+            sourceId & Identifies the source of the message.
             In this case, the Vision Module.\\ \hline
             destinationId & Identifies the intended recipient of the message.
             In this case, the xApp. \\ \hline
-            e2InstanceId & Provides a unique identifier for the E2 interface instance associated with the message. \\ \hline
         \end{tabular}
     }
 \end{table}
 
-As for the content of the payload, it varies according to the type of message.
-Each message requires different processing to extract the information required, as mentioned previously.
-The following subsections present further each message type.
+The payload varies by message type.
+Each message requires different processing to extract the required information, as mentioned previously.
+The following subsections further present each message type.
 
-\subsection{Prediction of Blockage Messages}\label{subsec:prediction-of-blockage-messages}
+\subsection{Prior to Blockage Messages}\label{subsec:prediction-of-blockage-messages}
 
-To infer that an obstacle will block the line-of-sight (LOS) between the gNB and the UE, it is necessary to obtain a tracking history of the obstacle.
-We achieved this by storing data over a number of frames, using the YOLO and BoT-SORT algorithms.
-Once the tracking history is established, we have modeled the object's movement assuming a constant velocity.
+To infer that an obstacle will block the LoS between the gNB and the UE, it is necessary to obtain the obstacles' tracking history.
+We achieve this by storing data over several frames, using the YOLO and BoT-SORT algorithms.
+Once the tracking history is established, we modeled the object's movement assuming a constant velocity.
 This has proven effective for handling typical indoor movements, such as people walking or objects being moved.
-By calculating the object's velocity, we can predict its future positions in upcoming video frames.
-This allowed us to determine whether the obstacle will interrupt the LOS\@.
+By calculating the object's velocity, it is possible to predict its future positions in upcoming video frames.
+This allows us to determine whether the obstacle will interrupt the LoS\@.
 If the module predicts an impending blockage, it generates a message containing the information summarized in Table~\ref{tab:future_block_message}.
 
 
 \begin{table}[H]
-    \caption{Components of the Prediction of Blockage Payload}
+    \caption{Components of the Prior to Blockage message's payload}
     \label{tab:future_block_message}
     \centering
     \resizebox{\textwidth}{!}{
@@ -208,12 +229,12 @@ If the module predicts an impending blockage, it generates a message containing 
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
-            obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle within the frame (normalized cartesian coordinates). \\ \hline
+            obstacleType & Type of obstacle detected. \\ \hline
+            obstacleLocation & Location of the detected obstacle within the frame (normalized Cartesian coordinates). \\ \hline
             obstacleVelocity & Velocity of the detected obstacle (normalized vector). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
-            timeToCross & Predicted time  that the obstacle will obstruct the UE. \\ \hline
-            ueId & Identifier for the UE, in this case its ArUco identifier. \\ \hline
+            timeToCross & Predicted time the obstacle will obstruct the UE. \\ \hline
+            ueId & Identifier for the UE; in this case, its ArUco identifier. \\ \hline
         \end{tabular}
     }
 \end{table}
@@ -221,15 +242,15 @@ If the module predicts an impending blockage, it generates a message containing 
 
 
 
-\subsection{Blocking messages}\label{subsec:blocking-messages}
-To detect if an obstacle is blocking the Line of Sight (LOS) between the gNB and the UE, the system must verify whether the obstacle’s current position corresponds to its last known position where the ArUco marker was detected.
+\subsection{Blockage messages}\label{subsec:blocking-messages}
+To detect if an obstacle is blocking the LoS between the gNB and the UE, the system must verify whether the obstacle’s current position corresponds to its last known position where the ArUco marker was detected.
 This involves comparing the obstacle's most recent recorded position with the last seen coordinates of the UE\@.
-If these positions overlap, the system will generate a blockage alert.
-Table~\ref{tab:block_payload} presents the fields of the payload of this message.
+If these positions overlap, the system generates a blockage alert.
+Table~\ref{tab:block_payload} presents the payload fields of this message.
 
 
 \begin{table}[H]
-    \caption{Components of the Prediction of Blockage Payload}
+    \caption{Components of the Blockage payload.}
     \label{tab:block_payload}
     \centering
     \resizebox{\textwidth}{!}{
@@ -237,8 +258,8 @@ Table~\ref{tab:block_payload} presents the fields of the payload of this message
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
-            obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle within the frame (normalized cartesian coordinates). \\ \hline
+            obstacleType & Type of obstacle detected. \\ \hline
+            obstacleLocation & Location of the detected obstacle within the frame (normalized Cartesian coordinates). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
             timeBlocked & Time the obstacle has been blocking, up to 5000 milliseconds (optional). \\ \hline
             ueId & Identifier for the UE, in this case its ArUco identifier. \\ \hline
@@ -246,16 +267,20 @@ Table~\ref{tab:block_payload} presents the fields of the payload of this message
     }
 \end{table}
 
+The time limit for an object being considered \("\)blocked\("\) is set to 5 seconds, which matches the persistence time.
+If  the object's blocking time exceeds this limit, the object will no longer be registered in the tracking model, ensuring that the object blocking the ArUco marker is no longer tracked.
+This design choice ensures that the VM remains resilient when the UE is no longer in the frame or in LoS, even in situations without obstruction.
 
-\subsection{Past Blockage}\label{subsec:past-blockage}
+
+\subsection{Post Blockage}\label{subsec:past-blockage}
 This message is sent to inform that the UE is no longer blocked by the obstacle.
 When the system detects a blockage, it updates a list containing the state for each tracked object.
 If the state changes from blocking to non-blocking, it triggers a past blockage message.
-Table~\ref{tab:past_block_payload} presents the fields of this message.
+Table~\ref{tab:past_block_payload} presents the payload fields of this message.
 
 
 \begin{table}[H]
-    \caption{Components of the payload of PastBlockage Message}
+    \caption{Components of the payload of Post Blockage message.}
     \label{tab:past_block_payload}
     \centering
     \resizebox{\textwidth}{!}{
@@ -263,26 +288,26 @@ Table~\ref{tab:past_block_payload} presents the fields of this message.
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
             obstacleID & Unique identifier for the obstacle, provided by the tracking. \\ \hline
-            obstacleType & Type of the obstacle detected. \\ \hline
-            obstacleLocation & Location of the detected obstacle  within the frame (normalized cartesian coordinates). \\ \hline
+            obstacleType & Type of obstacle detected. \\ \hline
+            obstacleLocation & Location of the detected obstacle  within the frame (normalized Cartesian coordinates). \\ \hline
             obstacleConfidence & Confidence level in the identification of the object. \\ \hline
-            ueId & Identifier for the UE, in this case its ArUco identifier. \\ \hline
+            ueId & Identifier for the UE; in this case, its ArUco identifier. \\ \hline
         \end{tabular}
     }
 \end{table}
 
 
 \subsection{Location of UEs}\label{subsec:location-of-ues}
-The message presents the location data of the UEs. Table~\ref{tab:ue_payload} presents the message payload.
-To extract this information, it is necessary to detect the bounding boxes of the markers associated with the UEs.
+The message presents the location data of the UEs, and Table~\ref{tab:ue_payload} presents the message payload.
+To extract this information, detecting the bounding boxes of the markers associated with the UEs is necessary.
 The system continuously monitors the movement of the UEs and transmits updates whenever changes are detected.
-This process involves identifying and tracking the bounding boxes of the ArUco markers associated with the UEs.
-Then, comparing the current visible ArUco IDs with the previously detected IDs. This is done though buffering, temporarily storing changes to ensure accuracy and consistency.
-Periodically, location reports are sent when changes in the UEs' positions are confirmed.
+This process involves identifying and tracking the bounding boxes of the ArUco markers associated with the UEs and comparing the current visible ArUco IDs with the previously detected IDs.
+This is done through buffering, temporarily storing changes to ensure accuracy and consistency.
+Location reports are sent periodically when changes in the UEs' positions are confirmed.
 This approach ensures precise and timely updates on the UEs' locations.
 
 \begin{table}[H]
-    \caption{Components of the UE Location Message payload}
+    \caption{Components of the UE Location message payload.}
     \label{tab:ue_payload}
     \centering
     \resizebox{0.7\textwidth}{!}{
@@ -299,39 +324,37 @@ This approach ensures precise and timely updates on the UEs' locations.
 
 
 \subsection{Frame Processed}\label{subsec:frame-processed}
-In our system, frame processed messages play an important role in maintaining communication and monitoring the performance of the Vision Module.
-These messages are primarily designed to inform the xApp that the Vision Module is actively running and processing frames.
-Additionally, they allow for the tracking of the time taken to process each frame, which is essential for performance optimization and debugging purposes.
+In our system, frame processed messages play an important role in maintaining communications and monitoring the performance of the VM.
+These messages are primarily designed to inform the xApp that the VM is actively running and processing frames.
+Additionally, they allow tracking of the time taken to process each frame, which is essential for performance optimization and debugging purposes.
 
 The frame processed message contains the following fields, as detailed in Table~\ref{tab:frame_proc_pay}:
 
 \begin{table}[H]
-    \caption{Components of the Frame Processed Message payload}
+    \caption{Components of the Frame Processed message payload.}
     \label{tab:frame_proc_pay}
     \centering
     \resizebox{0.7\textwidth}{!}{
         \begin{tabular}{|c|c|}
             \hline
             \textbf{Field} & \textbf{Description} \\ \hline
-            frameID & Sequential identification number of the frame \\ \hline
-            timeProcessed & Time taken to process the frame in milliseconds \\ \hline
+            frameID & Sequential identification number of the frame. \\ \hline
+            timeProcessed & Time taken to process the frame in milliseconds. \\ \hline
         \end{tabular}
     }
 \end{table}
 
-These messages serve as heartbeat signals to the xApp, confirming the Vision Module's operational status and performance.
-By continuously sending frame processed messages, the system ensures that the xApp is kept up-to-date with the Vision Module's activity.
+These messages serve as heartbeat signals to the xApp, confirming the VM's operational status and performance.
+By continuously sending frame processed messages, the system ensures that the xApp is kept up-to-date with the VM's activity.
 
 
-\section{System Design}\label{sec:design}
+\section{System Implementation}\label{sec:system-implementation}
 
 This section presents the system designed to implement and evaluate the proposed solution.
-The system is depicted in Figure~\ref{fig:design_arch}.
-It is composed of two main logical units.
-The first implements the 5G Core Network, the Near-RT RIC and the Vision-aided gNB\@.
-The second unit implements the UE software.
+The system, depicted in Figure~\ref{fig:design_arch}, is composed of two main logical units.
+The first unit implements the 5G Core Network, the Near-RT RIC, and the Vision-aided gNB, while the second unit implements the UE\@.
 
-
+\textcolor{red}{AUMENTAR FONTE NA FIGURA}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/System Arch.drawio}
@@ -339,76 +362,78 @@ The second unit implements the UE software.
     \label{fig:design_arch}
 \end{figure}
 
-The following subsections detail the hardware used in the implementation and the choices for software packages.
+The following subsections detail the hardware used in the implementation and the software packages choices.
 
 
 \subsection{Software}\label{subsec:software}
 This section presents the main software packages used to develop the Vision Module and implement the 5G network.
-Beyond this, in the repository containing the VM, there is a file for reproducing the Python virtual environment.
+Beyond this, in the repository containing the VM~\ref{repository}, includes a file for reproducing the Python virtual environment.
 
 \subsubsection{OpenCV}
-% revision
+\textcolor{red}{SUMARIZE OR SEND TO SOA}
 There are several open-source software packages available for Computer Vision in Python.
 Open Source Computer Vision Library (OpenCV)~\cite{opencv} is one of them.
-It contains several optimized algorithms, which can be used for different tasks, including object detection, image processing, and real-time video analysis.
-This diverse support makes it suitable for both basic tasks and complex applications requiring advanced functionalities.
-Moreover, OpenCV's well-documented API facilitates ease of use and integration into various projects, ensuring efficient development and deployment.
-Unlike some other libraries that may focus on specific aspects of image processing or lack support across different domains, OpenCV provides a solution with cross-platform compatibility, making it applicable across diverse operating systems and hardware setups.
-Furthermore, OpenCV benefits from a large and active community, offering extensive resources, tutorials, and community support, which are invaluable for developers and researchers seeking assistance or collaboration in tackling complex computer vision challenges effectively and efficiently.
+It contains several optimized algorithms, that can be used for various tasks, including object detection, image processing, and real-time video analysis.
+This diverse support makes it suitable for both basic tasks and complex applications that require advanced functionalities.
+Moreover, OpenCV's well-documented API facilitates its use and integration into various projects, ensuring efficient development and deployment.
+Unlike some other libraries that focus on specific aspects of image processing or lack support across different domains, OpenCV provides a solution with cross-platform compatibility, making it applicable across diverse operating systems and hardware setups.
+Furthermore, OpenCV benefits from a large and active community, offering extensive resources, tutorials, and community support, which are invaluable for developers and researchers seeking assistance or collaboration in tackling complex computer vision challenges.
 Therefore, OpenCV is the leading choice for robust and scalable computer vision applications.
 
-Additionally, OpenCV is the only library who directly supports ArUco Markers.
-ArUco is a widely-used open-source library for Augmented Reality (AR) applications that involves detecting and tracking augmented markers.
+Additionally, OpenCV is the only library that directly supports ArUco Markers.
+ArUco is a widely-used open-source library for Augmented Reality (AR) applications involving the detection and tracking augmented markers.
 These markers are specially designed square or rectangular patterns with a unique binary encoding, which can be printed and placed in the physical environment.
-ArUco markers are typically used in computer vision tasks to provide reference points in a scene, enabling accurate localization and tracking of objects or video cameras.
+ArUco markers are typically used in Computer Vision tasks to provide reference points in a scene, enabling accurate localization and tracking of objects.
 
-OpenCV emerges as the premier choice among general computer vision libraries, distinguished by its extensive feature set, optimized performance, and robust community support.
+OpenCV emerges as the premier choice among general CV libraries, distinguished by its extensive feature set, optimized performance, and robust community support.
 Unlike scikit-image~\cite{Scikit-learn}, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and video camera calibration.
-In contrast to Pillow (PIL Fork)~\cite{pillow}, which specializes in image format handling and basic manipulation, OpenCV provides comprehensive tools for both foundational and advanced computer vision applications.
-Moreover, while SimpleCV~\cite{simplecv} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, which is crucial for real-time processing and large-scale data operations.
+In contrast to Pillow (PIL Fork)~\cite{pillow}, which specializes in image format handling and basic manipulation, OpenCV provides tools for both basic and advanced computer vision applications.
+Moreover, while SimpleCV~\cite{simplecv} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, crucial for real-time processing and large-scale data operations.
 
-In our proposed solution, OpenCV is utilized to:
+In our proposed solution, OpenCV is used to:
 \begin{itemize}
-    \item \textbf{Obtain Frames:} OpenCV is used to capture video frames from the video camera.
+    \item \textbf{Obtain Frames:} OpenCV captures video frames from the video camera.
     It provides easy-to-use interfaces to capture and manipulate video streams from various input sources.
     \item \textbf{Detect ArUco Markers:} OpenCV includes modules for detecting ArUco markers, which are widely used in computer vision applications for video camera calibration, pose estimation, and augmented reality.
-    In our solution, these markers help in identifying the UEs without the need to train the YOLO model to perceive such objects.
+    In our solution, these markers help in identifying the UEs without needing to train the YOLO model to perceive such objects.
 \end{itemize}
 
 \subsubsection{Ultralytics YOLO}
 As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO (You Only Look Once)~\cite{ultralytics_docs} is a state-of-the-art, real-time object detection solution.
-It is known for its speed and accuracy, making it suitable for applications that require fast and reliable object detection and tracking.
-While there are other solutions, also presented in that Section, we chose Ultralytics YOLO due to simplicity, integration and since it is suitable for the intended application and use in state-of-the-art object detection and tracking situations.
+It is known for its speed and accuracy, making it suitable for applications requiring fast and reliable object detection and tracking.
+While there are other solutions, also presented in Section~\ref{sec:CV}, we chose Ultralytics YOLO for its simplicity, and because it is suitable for the intended application and state-of-the-art object detection and tracking situations.
 
 In our proposed solution, Ultralytics YOLO is employed to:
 \begin{itemize}
-    \item \textbf{Detection:} YOLO is used to detect various objects in the frames captured by the video camera.
+    \item \textbf{Detection:} YOLO detects various objects in the frames captured by the video camera.
     Its real-time capabilities allow for the immediate identification of obstacles within the field of view.
     \item \textbf{Tracking:} YOLO’s tracking module is used to keep track of detected objects over successive frames.
-    This is crucial for maintaining the continuity of object identification and for predicting future positions of the obstacles. %BOTSORT and BYTETRACK
+    This is crucial for maintaining the continuity of object identification and predicting future positions of the obstacles. %BOTSORT and BYTETRACK
 \end{itemize}
 
 The combination of OpenCV and Ultralytics YOLO allows for robust detection, tracking, and message exchange functionalities in our vision module.
-OpenCV handles the initial capture and processing of video frames, while YOLO and BoT-SORT performs the real-time detection and tracking of objects.
-This integrated approach ensures that the vision module can effectively monitor and report on obstacles, providing key information to subscribed services.
+OpenCV handles the initial capture and processing of video frames, while YOLO and BoT-SORT perform the real-time detection and tracking of objects.
+This integrated approach ensures that the vision module can effectively monitor and report obstacles, providing key information to subscriber services.
 
 \subsubsection{ASN1Tools and ASN1C}
 There are a few open-source libraries available for handling ASN.1.
-FlexRIC utilizes asn1c~\cite{asn1c}, so for simplicity we chose the same for the xApp (client).
-asn1c is a open-source ASN.1 compiler that generated C/C++ code for ASN.1 data structures, supporting different encoding rules.
-While this library also supports Python, we chose not to use it, since there are simpler APIs specially tailored for Python development.
-As for the Vision Module (Python server), we chose ASN1Tools because it offers certain advantages.
+ASN.1 provides a standardized way to define data structures that can be serialized and deserialized across different systems, ensuring interoperability and efficient data exchange.
+Moreover, the E2 interface uses ASN.1 for encoding and decoding messages.
+FlexRIC utilizes \emph{asn1c}~\cite{asn1c}; as such for simplicity, we chose the same for the xApp (client).
+\emph{asn1c} is an open-source ASN.1 compiler that generates C/C++ code for ASN.1 data structures, supporting different encoding rules.
+While this library also supports Python, we chose not to use it since there are simpler APIs specially tailored for Python development.
+As for the Vision Module (Python server), we chose ASN1Tools because this solution offers certain advantages.
 
-ASN1Tools~\cite{asn1tools} is a Python library provides a simple way to handle ASN.1 data structures, through a straightforward API\@.
-The library support for a range of ASN.1 specifications and encoding rules, including BER, DER, and PER\@.
+ASN1Tools~\cite{asn1tools} is a Python library that provides a simple way to handle ASN.1 data structures, through a straightforward API\@.
+The library supports a range of ASN.1 specifications and encoding rules, including Basic Encoding Rules(BER), Distinguished Encoding Rules (DER), and Packed Encoding Rules(PER)\@.
 Moreover, ASN1Tools is actively maintained, with regular updates and improvements.
-This guarantees that we have access to the latest features and bug fixes, which enhances the reliability and stability of our system.
+This guarantees that we have access to the latest features and bug fixes, enhancing the reliability and stability of our system.
 ASN1Tools is optimized for performance, allowing for fast encoding and decoding operations.
-This optimization is suited for real-time applications like our Vision Module, where processing speed is essential to maintain system responsiveness and accuracy.
+This optimization suits real-time applications like our Vision Module, where processing speed is essential to maintain system responsiveness and accuracy.
 
 While other libraries such as pyasn1~\cite{pyasn1} and libtasn1~\cite{libtasn1} are available, they have certain limitations.
-pyasn1, for instance, is less efficient in terms of performance and has a more complex API\@.
-libtasn1, part of the GNU project, is less user-friendly and optimized for performance.
+\emph{pyasn1}, for instance, is less efficient in terms of performance and has a more complex API\@.
+libtasn1, part of the GNU project, is less user-friendly and not optimized for performance.
 
 
 \subsubsection{5G Core Network, 5G gNB, and 5G UE}
@@ -417,23 +442,23 @@ For our system, we chose OAI because it provides all the necessary components to
 In contrast, srsRAN only supports the deployment of the RAN, requiring an additional software package, such as OAI, to implement the Core network.
 
 \subsubsection{Near-RT RIC}
-The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC~\cite{flexric} and  O-RAN Software Community’s Near-RT RIC~\cite{oran-sc}.
+The main open-source software packages able to implement a Near-RT RIC are Mosaic5G’s FlexRIC~\cite{flexric} and the O-RAN Software Community’s Near-RT RIC~\cite{oran-sc}.
 FlexRIC was chosen for our solution due to its lightweight nature, launched from an executable file.
 
-In contrast, the O-RAN RIC presents a disadvantage in terms of its complexity and resource requirements.
-It often demands more substantial computational resources and a more involved setup process, which is a significant drawback for our solution.
+In contrast, the O-RAN RIC presents disadvantages in terms of its complexity and resource requirements.
+It often demands more substantial computational resources and a more involved setup process, which are significant drawbacks for our solution.
 
 \subsection{Hardware}\label{subsec:hardware}
 
 
 \subsubsection{Core Network, FlexRIC, Computer Vision module and gNB}
-The OAI Core Network, FlexRIC,the Computer Vision module and the gNB were deployed in a laptop Acer Aspire A715-74G, show in Figure~\ref{fig:computer_acer}.
-The OAI Core was deployed using Docker containers, requiring 4 cores CPU, 16GB of RAM and a minimum of 1.5GB free storage for the docker images.
-As for FlexRIC, it does not have hardware requirements listed, but while deploying it was noticed that it is not resource intensive, sufficing the same ones required for the Core Network.
-The xApp was deployed alongside FlexRIC in order to assure reduced latency between the two components.
-Also,  the way interface E42 is implemented requires them to be running in the same computing unit.
-As for the gNB, the hardware recommended are 8 physical CPU cores and 32 GB of RAM\@.
-While the laptop used did not fulfill these requirements, it has proven sufficient to run the OAI gNB software, as it was noted before in~\cite{queiros2023autonomous}.
+The OAI Core Network, FlexRIC, the Vision Module, and the gNB were deployed on a laptop, the Acer Aspire A715-74G, which id shown in Figure~\ref{fig:computer_acer}.
+The OAI Core was deployed using Docker containers, requiring a 4-core CPU, 16 GB of RAM and a minimum of 1.5 GB free storage for the Docker images.
+FlexRIC does not have listed hardware requirements; however, during deployment, it was noticed that it is not resource-intensive, sufficing with the same requirements as the Core Network.
+The xApp was deployed alongside FlexRIC to ensure reduced latency between the two components.
+Also,  the implementation of interface E42 requires them to be run on the same computing unit.
+For the gNB, the recommended hardware is 8 physical CPU cores and 32 GB of RAM\@.
+Although the laptop used did not meet these requirements, it proved sufficient to run the OAI gNB software, as noted previously in~\cite{queiros2023autonomous}.
 
 \begin{figure}[H]
     \centering

@@ -1,5 +1,18 @@
 
 \chapter*{Abstract}
 %\addcontentsline{toc}{chapter}{Abstract}
+The evolution of mobile networks, characterized by increasing complexity and reliance on proprietary solutions, has led to challenges when integrating new technologies.
+These networks, using millimeter-wave frequencies, are highly susceptible to Line-of-Sight (LoS) obstruction, which leads to connectivity issues.
+Addressing these challenges requires adaptive solutions, and the integration of open-source architectures is essential.
+The O-RAN Alliance seeks to address those challenges, by promoting open interfaces and architectures to enhance interoperability and innovation in Radio Access Networks (RANs).
+Leveraging O-RAN's principles when integrating mobile Base Stations (BSs) can enable ubiquitous network connectivity.
+Mobile BSs offer a dynamic deployment approach, promising to meet varying Quality of Service (QoS) requirements in diverse contexts.
+In this direction, the convergence of sensing and telecommunications is expected to revolutionize network performance by providing real-time environmental awareness.
+Computer Vision (CV) offers significant potential for enhancing network performance by providing real-time environmental awareness to overcome signal propagation challenges.
+By processing and interpreting visual data, networks can proactively identify and mitigate obstacles to ensure optimal signal propagation.
+This capability is vital for maintaining consistent signal strength and quality in dense urban environments, where traditional methods struggle with dynamic and moving obstacles.
 
-This document introduces the preliminary work on a perception-aided solution for 6G networks, addressing the increasing demands of users and overcoming limitations posed by proprietary solutions. It provides insights into the paradigms and applications of 5G and 6G networks and deployment approaches for Radio Access Networks (RANs). The document explores computer vision detection and tracking models, highlighting relevant work on blockage prediction, proactive handover, and O-RAN. It also presents the Horizon Europe CONVERGE research project. The main objective of this dissertation is to implement vision-based functionality into a 6G Base Station (gNB), paving the way for obstacle-aware networks. Specific objectives include implementing object detection and tracking mechanisms, developing a Vision-Enabled gNB Enhancement Application for real-time perception, creating a web service for information dissemination, and researching validation in networking scenarios. The document presents a proposed solution and outlines a work plan for the dissertation, detailing objectives that involve integrating computer vision tools with a service-oriented network architecture to support the operation of a perception-aided Base Station. The proposed solution aims to enable obstacle-aware networks by providing video-based information to a 6G Base Station repositioning. To validate the solution's effectiveness, a use case illustrating the synergy between computer vision, machine learning, and wireless communications will be considered, to demonstrate the potential of visual perception for seamless wireless connectivity.
+The dissertation's main objective was to implement a vision-based RAN, enabling a BS to perceive its environment.
+The main contribution was the creation of a Computer Vision Module, responsible for extracting information from video and generating relevant obstacle messages to the RAN\@.
+In order to interpret this messages, an xApp was developed, integrating them with RAN metrics, such as Signal to Noise Ratio (SNR). This aimed at enhancing the environmental perception of the gNodeB(gNB).
+The proposed solution was experimentally validated considering a realistic use case, showcasing the potential of vision-based RANs in optimizing network performance.
