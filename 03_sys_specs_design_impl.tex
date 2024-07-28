@@ -263,6 +263,8 @@ Table~\ref{tab:block_payload} presents the payload fields of this message.
 \end{table}
 
 The time limit for an object being considered \("\)blocked\("\) is set to 5 seconds, which matches the persistence time.
+The persistence time is an arbitrary threshold that can be adjusted in our implementation.
+If an object (UE or obstacle) is more than 5s outside the field of view from the video camera, it is considered gone.
 If  the object's blocking time exceeds this limit, the object will no longer be registered in the tracking model, ensuring that the object blocking the ArUco marker is no longer tracked.
 This design choice ensures that the VM remains resilient when the UE is no longer in the frame or in LoS, even in situations without obstruction.
 

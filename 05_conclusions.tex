@@ -14,6 +14,14 @@ USRP B210 SDR boards were used to enable communications between UE and gNB\@.
 The developed xApp monitored and processed the data, showcasing the practical application of CV in enhancing 5G network performance.
 
 Through the development of the proposed solution we faced some challenges.
+lack of documentation in OpenAirInterface and FlexRIC
+lack of documentation of library asn1c
+instabilities caused by the board.
+- relaunched the sofware and unplug and replug.
+
+time contrains
+
+working on two different areas.
 
 In summary, this dissertation illustrates the feasibility and advantages of integrating CV technologies within 5G networks, paving the way for future advancements in telecommunications.
 
@@ -25,10 +33,27 @@ USRP B210 SDR boards were used to enable communications between UE and gNB\@.
 Finally, the developed xApp monitored.
 
 \section{Known Limitations and Future Work}\label{sec:fut_work}
-% refine parameters in the vision module - optimal number of frames to obtain tracks and to prediction
+While this dissertation successfully met its objectives, the system has several limitations, which present opportunities for further enhancements and future work.
+
+The VM could benefit from refinements.
+These include the optimization of parameters, determining the optimal number of frames required to accurately obtain tracks, and enhancing the prediction capabilities of the messages.
+Additionally, employing two cameras to capture depth information would enable the extraction of more precise location of obstacles and UEs.
+Scaling the solution to manage multiple UEs simultaneously is another area for improvement.
+The current implementation also faced performance constraints due to hardware limitations, necessitating the use of dedicated hardware for real-time operation.
+
+For the information exchange between the RAN and the Vision Module, utilizing the E2 interface could enhance communication efficiency.
+
+Future work could also involve integrating the xApp with a robotic platform, enabling it to autonomously reposition the gNB\@.
+Additionally, the performance limitations of the Software Defined Radios (SDRs) need to be addressed to ensure more robust and reliable communications.
+
+Finally, extending the tests to include millimeter Wave (mmWave) frequencies would provide valuable insights into the system's performance in different operational scenarios, further validating and improving the proposed solution.
+
+
+
+% refine parameters in the vision module -
 % periodicity of messages
 % future blockage enhancement such as no duplicates
-% test in mmWaves
+
 % test in better hardware?
 
 %\begin{enumerate}
