@@ -26,7 +26,7 @@ Figure~\ref{fig:setup} shows a photograph of the experimental scenario.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=\linewidth]{figures/setup}
     \caption{Experimental setup}
     \label{fig:setup}
 \end{figure}
@@ -52,29 +52,39 @@ After the initialization of the Docker containers, it is possible to see the log
 
 In order to confirm the correct deployment, the interface \textit{demo-oai} must appear when running the \textit{ifconfig} command.
 
-Then, we verified that all the containers had connectivity using the interface created in the Host OS, using the ping tool,as shown by Figure~\ref{fig:ping_core}.
+Then, we verified that all the containers had connectivity using the interface created in the Host OS, using the ping tool,as shown by Figures ~\ref{fig:ping_core1} and ~\ref{fig:ping_core2}.
 Each interface sends requests to each network component according to the table~\ref{tab:ip_core}.
+Successfully concluding this tests ensures that the 5G Core Network is operational.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\linewidth]{figures/uporto-feup}
-\caption[Pinging NRF, MySQL Database, AMF, SMF, UPF, UDR, UDM and AUSF respectively from Host OS
-interface]{Pinging NRF, MySQL Database, AMF, SMF, UPF, UDR, UDM and AUSF respectively from Host OS
+\includegraphics[width=0.5\linewidth]{figures/ping_core_1}
+\caption[Pinging Core Network components from Host OS
+interface]{Pinging Core Network components from Host OS
 interface}
-\label{fig:ping_core}
+\label{fig:ping_core1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/ping_core_2}
+    \caption[Pinging Core Network components from Host OS
+    interface]{Pinging Core Network components from Host OS
+    interface}
+    \label{fig:ping_core2}
 \end{figure}
 
 
-Successfully concluding this tests ensures that the 5G Core Network is operational.
 
-\section{FleXRIC}\label{sec:flexric}
+
+\section{FlexRIC}\label{sec:flexric}
 As for the FlexRIC deployment, it is simply necessary to assure its correct launch.
 Upon launching, it awaits for incoming connection requests from an E2 Node.
 Figure~\ref{fig:near-rt-ric} shows the initialization of the FlexRIC\@.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=0.5\linewidth]{figures/flexric_init}
     \caption{Initialization of FlexRIC's executable}
     \label{fig:near-rt-ric}
 \end{figure}
@@ -82,24 +92,39 @@ Figure~\ref{fig:near-rt-ric} shows the initialization of the FlexRIC\@.
 When it is properly launched, the gNB can be initialized.
 
 \section{gNB}\label{sec:gnb}
-\textcolor{red}{Finish}
 To ensure the correct functioning of the gNB, it should be registered in the 5G Core Network, connected to the FlexRIC and registered as a E2 node.
 They need to be validated separately since the connections are independent.
 
-To access the gNB connectivity to the Core, we need to check the connection between the gNB Host and the AMF and UPF, since the gNB needs to communicate with them.
-This can be tested with ping from the gNB's Host to these entities.
-Figure~\ref{fig:ping_gnb} shows the results.
+After executing the command to launch the gNB\@, it is possible to verify the proper operation of the SDR by its Light-Emitting Diodes (LEDs).
+Three LEDs blue, green and red indicate the powering of the SDR, the transition, and the reception of radio signals respectively, depicted by Figure~\ref{fig:usrp_working}.
 
-% figure with ping to AMF and UPF 132 and 134
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/usrp_working}
+    \caption[USRP B210 SDR operating]{USRP B210 SDR operating}
+    \label{fig:usrp_working}
+\end{figure}
+
+To ensure the correct registering in the Core Network, it is necessary to check the packet exchange between gNB and Core, using Wireshark.
+Figure~\ref{fig:gnb_reg} presents the successful registration of the gNB with the AMF\@.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
-    \caption{Conection test to AMF and UPF, respectively, from gNB Host.}
-    \label{fig:ping_gnb}
+    \caption[gNB registering via N2 interface]{gNB registering via N2 interface}
+    \label{fig:gnb_reg}
 \end{figure}
 
-After
+The final verification is to check the connection between FlexRIC and gNB through E2 interface.
+This is possible to observer in the terminal running FlexRIC, where logs show the registration .
+Figure~\ref{fig:gnb_e2} shows this registration.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/gnb_e2_flexric}
+    \caption[gNB's E2 node registering with FlexRIC]{gNB's E2 node registering with FlexRIC}
+    \label{fig:gnb_e2}
+\end{figure}
 
 \section{UE}\label{sec:ue}
 \textcolor{red}{Finish}
@@ -109,7 +134,7 @@ After executing the command present in~\ref{subsec:oai-5g-ue}, we observed in Wi
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=0.5\linewidth]{figures/ue_registration}
     \caption{Registration of the UE}
     \label{fig:registration_ue}
 \end{figure}
@@ -133,22 +158,20 @@ Figures~\ref{fig:ping_ue_core} and~\ref{fig:ping_ue_internet} shows the outcome 
 \end{figure}
 
 
+\section{Vision Module}\label{sec:cv_module}
+To ensure the correctness and reliability of the VM, a series of validation tests were conducted.
+These tests were designed to evaluate both the processing capabilities of the module and the accuracy of the message exchange between the VM and the xApp.
 
+The time for processing a frame varies according to some factors, such as the complexity (i.e.\ number of objects present) and the temporal variation of the scene.
+This implicates in design choices such as the periodicity of extraction of metrics by the xApp.
+The processing time of each frame was measured to assess the performance of the VM\@.
+The average processing time, testing with real-time capturing is 5 FPS\@.
+While this is 17\% of the frame capture rate, this value is sufficient to evaluate if our solution allows the adaptation of the gNB\@.
 
-\section{Computer Vision Module}\label{sec:cv_module}
-To ensure the correctness and reliability of the computer vision module, a series of validation tests were conducted.
-These tests were designed to evaluate both the processing capabilities of the module and the accuracy of the message exchange between the vision module and the xApp.
-
-The processing time of each frame was measured to assess the real-time performance of the computer vision module.
-This is important to ensure that the module could keep up with dynamic environments, such as an office setting where people and objects are constantly moving.
-The tests showed that the processing times were within acceptable limits, allowing for timely detection and response.
-% show some math on why this result is sufficient
-% plot some results
-
-A reference video was used to evaluate the detection and tracking results of the computer vision module.
-This video, containing typical office movements like people walking and objects being moved, was processed to check for detection accuracy and tracking consistency.
-The results confirmed that the module could accurately detect and track objects, validating its effectiveness in a real-world scenario.
-Figure~\ref{fig:reference_video} shows the
+A reference video was used to evaluate the detection and tracking results of the VM\@.
+This video, containing people walking, was processed to check for detection accuracy and tracking consistency.
+It was confirmed that the module could accurately detect and track objects, validating its effectiveness in a real-world scenario.
+Figure~\ref{fig:reference_video} shows a capture of such video, as well as the encoded and decoded messages generated.
 
 % image of a frame of the video and the corresponding messages
 \begin{figure}[H]
@@ -159,30 +182,30 @@ Figure~\ref{fig:reference_video} shows the
 \end{figure}
 
 Print statements were used on the server side to verify the correct formatting, coding, and decoding of the messages.
-This step was crucial to ensure that the messages sent from the computer vision module to the xApp were correctly structured and could be properly interpreted upon receipt.
+This step was crucial to ensure that the messages sent from the module to the xApp were correctly structured and could be properly interpreted upon receipt.
 
 On the client side,the xApp, print statements were employed to confirm the correct reception of the messages.
-This validation step ensured that the messages transmitted through the socket connection were received intact and could be  correctly processed.
+This validation step ensured that the messages transmitted through the socket connection were properly received and could be correctly processed.
 
-To further validate the communication, Wireshark was used to capture SCTP packets containing the messages exchanged between the server and client.
-This capture provided a detailed view of the message flow, confirming that the messages were being transmitted as expected without any loss or corruption.
-The capture presents the
+To further validate the communication, Wireshark was used to capture SCTP packets containing the messages exchanged between the server and client, shown in Figure~\ref{fig:capture_messages}.
+This capture provided a view of the message flow, confirming that the messages were being transmitted as expected without any loss or corruption.
 
-% image of the wireshark capture
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \caption[SCTP packet exchange between VM and xApp]{SCTP packet exchange between VM and xApp}
+    \label{fig:capture_messages}
+\end{figure}
 
-% MEASURE IF THE SCTP MESSAGES ARE BOTTLENEKING THE APPLICATION.
-
-% maybe define a periodicity for it.
-
-
-The computer vision module's performance proved adequate for the intended application, i.e.\ an office environment where movements are frequent yet the velocity is low, such as people walking or objects being moved.
-The module demonstrated good performance in these scenarios, and its near real-time processing capability can ensure prompt reactions to environmental changes.
-
-
+The VM's performance proved adequate for the intended application, i.e.\ an indoor environment where movements are frequent yet the velocity is low, such as people walking or objects being moved.
+The module demonstrated good performance in these scenarios, and its near real-time processing capability can trigger prompt reactions to environmental changes.
 
 \section{xApp}\label{sec:mm_xapp}
-This section focuses on the Mobility Management xApp and its role in the system.
+This section focuses on the xApp and its role in the system.
 It details the design and implementation of the xApp, how it interfaces with other components, and the results of its validation.
+
+After all components of our system were deployed, and properly functioning, we acessed the correct functioning of the xApp.
+The first verification is to access if the xApp could subscribe to the
 
 \section{Use case}\label{sec:use_case}
 In order to validate the implemented solution, a use case testing scenario was established.

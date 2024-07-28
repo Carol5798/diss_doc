@@ -60,7 +60,7 @@ These requirements translate into Table ~\ref{tab:spec}, containing system speci
 \hline
 \textbf{Specification} & \textbf{Description} \\ \hline
 \textbf{Detection and tracking} & Use YOLOv5 Ultralytics~\cite{Ultralytics_repo} and BoT-SORT~\cite{botsort} for high accuracy and optimized speed. \\ \hline
-\textbf{Messaging} & Encode messages using ASN.1 definitions~\cite{ITU_ASN1}. \newline Transmit messages via SCTP. \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
+\textbf{Messaging} & Encode messages using ASN.1 definitions~\cite{ITU_ASN1}. \newline Transmit messages via Stream Control Transmission Protoco(SCTP). \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
 \end{tabular}}
 \end{table}
 
@@ -71,7 +71,6 @@ Following these requirements and specifications, the system architecture was des
 
 \section{System Design}\label{sec:design}
 
-\textcolor{red}{Modify figure to include RAN and Core distinction - maybe colors and change interface of vision module to E2'}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/Syst_Arch.drawio}
@@ -89,7 +88,7 @@ The gNB acts as the intermediary between the UE and the 5G core network, managin
 The AMF authenticates the UE using credentials stored in the UDM. Upon successful authentication, the UE is granted  network access.
 Subsequently, the AMF and UPF establish a data session for the UE, configuring the necessary resources for data transmission.
 User data is transmitted between the UE and the UPF via the gNB\@.
-The UPF routes the data to and from external networks, ensuring data fowarding.
+The UPF routes the data to and from external networks, ensuring data forwarding.
 
 %------------ move to another place
 %The 5G Core Network is responsible for managing the overall network functions, including authentication, mobility management, and routing of data.
@@ -125,7 +124,7 @@ This design enables the VM to communicate with the xApp, allowing the integratio
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.25\linewidth]{figures/VisionModule_ProtocolStack.drawio(2)}
+    \includegraphics[width=0.2\linewidth]{figures/VisionModule_ProtocolStack.drawio(2)}
     \caption[Proposed Vision Module Protocol Stack]{Proposed vision module protocol stack.}
     \label{fig:stack}
 \end{figure}
@@ -354,10 +353,9 @@ This section presents the system designed to implement and evaluate the proposed
 The system, depicted in Figure~\ref{fig:design_arch}, is composed of two main logical units.
 The first unit implements the 5G Core Network, the Near-RT RIC, and the Vision-aided gNB, while the second unit implements the UE\@.
 
-\textcolor{red}{AUMENTAR FONTE NA FIGURA}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/System Arch.drawio}
+    \includegraphics[width=0.75\linewidth]{figures/System Arch.drawio(3)}
     \caption[System architecture designed for implementing and evaluating the proposed solution]{System architecture designed for implementing and evaluating the proposed solution.}
     \label{fig:design_arch}
 \end{figure}
@@ -370,22 +368,13 @@ This section presents the main software packages used to develop the Vision Modu
 Beyond this, in the repository containing the VM~\ref{repository}, includes a file for reproducing the Python virtual environment.
 
 \subsubsection{OpenCV}
-\textcolor{red}{SUMARIZE OR SEND TO SOA}
 There are several open-source software packages available for Computer Vision in Python.
 Open Source Computer Vision Library (OpenCV)~\cite{opencv} is one of them.
-It contains several optimized algorithms, that can be used for various tasks, including object detection, image processing, and real-time video analysis.
-This diverse support makes it suitable for both basic tasks and complex applications that require advanced functionalities.
-Moreover, OpenCV's well-documented API facilitates its use and integration into various projects, ensuring efficient development and deployment.
-Unlike some other libraries that focus on specific aspects of image processing or lack support across different domains, OpenCV provides a solution with cross-platform compatibility, making it applicable across diverse operating systems and hardware setups.
-Furthermore, OpenCV benefits from a large and active community, offering extensive resources, tutorials, and community support, which are invaluable for developers and researchers seeking assistance or collaboration in tackling complex computer vision challenges.
-Therefore, OpenCV is the leading choice for robust and scalable computer vision applications.
+OpenCV offers optimized algorithms for tasks such as object detection, image processing, and real-time video analysis.
+Its well-documented API and cross-platform compatibility make it suitable for diverse applications.
+OpenCV's large, active community provides extensive resources and support.
+Additionally, OpenCV is the only library that directly supports ArUco Markers, which are essential for Augmented Reality applications involving the detection and tracking of unique binary-encoded markers for accurate localization and tracking.
 
-Additionally, OpenCV is the only library that directly supports ArUco Markers.
-ArUco is a widely-used open-source library for Augmented Reality (AR) applications involving the detection and tracking augmented markers.
-These markers are specially designed square or rectangular patterns with a unique binary encoding, which can be printed and placed in the physical environment.
-ArUco markers are typically used in Computer Vision tasks to provide reference points in a scene, enabling accurate localization and tracking of objects.
-
-OpenCV emerges as the premier choice among general CV libraries, distinguished by its extensive feature set, optimized performance, and robust community support.
 Unlike scikit-image~\cite{Scikit-learn}, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and video camera calibration.
 In contrast to Pillow (PIL Fork)~\cite{pillow}, which specializes in image format handling and basic manipulation, OpenCV provides tools for both basic and advanced computer vision applications.
 Moreover, while SimpleCV~\cite{simplecv} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, crucial for real-time processing and large-scale data operations.
@@ -467,10 +456,10 @@ Although the laptop used did not meet these requirements, it proved sufficient t
     \label{fig:computer_acer}
 \end{figure}
 
-As for the Computer Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{ultralytics_faq}, for Ultralytics YOLO model to properly run.
-Given that for our solution a pre-trained model has proven enough to accurately detect and track objects, we did not necessitate great GPU capacity to train a model.
+As for the Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{ultralytics_faq} for Ultralytics YOLO model to run properly.
+Since a pre-trained model has proven sufficient to accurately detect and track objects for our solution, we did not require a high GPU capacity to train a model.
 
-Table ~\ref{tab:specs_pc} presents the specification of the computer.
+Table ~\ref{tab:specs_pc} presents the specification of the computer used.
 
 \begin{table}[H]
     \caption{Specifications of the Acer Aspire A715-74G.}
@@ -480,16 +469,16 @@ Table ~\ref{tab:specs_pc} presents the specification of the computer.
         \textbf{Specification} & \textbf{Details} \\ \hline
         Processor                      &           Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz   \\ \hline
         RAM                      &          16GB        \\ \hline
-        Disk                      &   2 SSDs  512GB and 256GB         \\ \hline
+        Disk                      &   2 SSDs  (512GB and 256GB)         \\ \hline
         GPU                     &   GeForce GTX 1050 (3GB)      \\ \hline
-        Operational System & Ubuntu 22.04.4 LTS                  \\ \hline
+        Operating System & Ubuntu 22.04.4 LTS                  \\ \hline
     \end{tabular}
 \end{table}
 
-For the Computer Vision Module, we opted to use a webcam due to its simplicity and ease of integration.
-The chosen was a model LL-4196, offering Full HD (1920 x 1080 Pixels) resolution and supporting a frame rate of 30 FPS\@.
-This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion necessary for accurate computer vision processing.
-The camera connects to the computer using a USB 2.0 interface.
+For the Vision Module, we opted to use a webcam due to its simplicity and ease of integration.
+The chosen model was LL-4196, offering Full HD (1920 x 1080 Pixels) resolution and supporting a frame rate of 30 frames/s\@.
+This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion, necessary for accurate computer vision processing.
+The video camera connects to the computer using a USB 2.0 interface.
 Figure~\ref{fig:camera} shows the video camera and its USB interface.
 
 \begin{figure}[H]
@@ -499,13 +488,13 @@ Figure~\ref{fig:camera} shows the video camera and its USB interface.
     \label{fig:camera}
 \end{figure}
 
-Deploying the gNB and the UE in two different host computers implicates the use of Software-Defined Radio (SDR) in order to establish a 5G connection between the gNB and the UE\@.
-OAI recommends the use of three SDR models: USRP B210, USRP N300 and USRP X300\@ \cite{openairinterface_tutorial}.
-For our implementation, we have selected the first since it is cost-effective and a popularity across the community.
-This model uses a USB 3.0 interface to connect to the computer acting as a processing unit.
+In order to implement the gNB and the UE in two different host computers, we used two Software-Defined Radios (SDRs).
+OAI recommends the use of three SDR models: USRP B210, USRP N300, and USRP X300\@ \cite{openairinterface_tutorial}.
+For our implementation, we have selected the first model since it is cost-effective and popular within the community.
+This model uses a USB 3.0 interface to connect to the computer that acts as a processing unit.
 The SDR was equipped with two W5208K dipole antennas.
 Figure~\ref{fig:SDRs} shows the two SDRs with their respective antennas.
-We have selected 3.6GHz as the carrier frequency for the 5G RAN\@.
+We selected 3.6 GHz as the carrier frequency for the 5G RAN\@.
 
 \begin{figure}[H]
     \centering
@@ -517,15 +506,15 @@ We have selected 3.6GHz as the carrier frequency for the 5G RAN\@.
 
 
 \subsubsection{UE}
-The UE was deployed in HP EliteBook 840 Laptop, shown in Figure~\ref{fig:computer_hp}.
-The hardware requirements for the deployment of the UE are 8 cores and 8GB of RAM\@.
-Table~\ref{tab:specs_pc_ue} depicts the specification of the computer responsible for the UE\@, showcasing that the hardware is enough to run the UE application.
-The UE used the USRP B210 SDR board in order to communicate with the gNB\@.
+The UE was deployed on an HP EliteBook 840 Laptop, shown in Figure~\ref{fig:computer_hp}.
+The hardware requirements for deploying the UE are 8 cores and 8 GB of RAM\@.
+Table~\ref{tab:specs_pc_ue} depicts the specifications of the computer responsible for the UE\@, confirming that the hardware is compatible wth the UE software requirements.
+The UE used the USRP B210 SDR to communicate with the gNB\@.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\linewidth]{figures/hp}
-    \caption{HP EliteBook 840 Laptop}
+    \caption{HP EliteBook 840 Laptop.}
     \label{fig:computer_hp}
 \end{figure}
 
@@ -535,47 +524,46 @@ The UE used the USRP B210 SDR board in order to communicate with the gNB\@.
     \begin{tabular}{|c|c|}
         \hline
         \textbf{Specification} & \textbf{Details} \\ \hline
-        Processor                      &  Intel(R) Core(TM) i7-5600U CPU @ 2.60GHz          \\ \hline
-        RAM                      &          16GB        \\ \hline
-        Disk                      &   128GB         \\ \hline
+        Processor                      &  Intel(R) Core(TM) i7-5600U CPU @ 2.6 GHz          \\ \hline
+        RAM                      &          16 GB        \\ \hline
+        Disk                      &   128 GB         \\ \hline
         GPU                     &   Intel Corporation HD Graphics 5500                \\ \hline
-        Operational System & Ubuntu 22.04.4 LTS                  \\ \hline  %  check
+        Operating System & Ubuntu 22.04.4 LTS                  \\ \hline  %  check
     \end{tabular}
 \end{table}
 
-\section{System Implementation}\label{sec:impl}
 
 \subsection{Vision Module}\label{subsec:vision-module}
 Our vision module is implemented as a Python server, designed to interface with the xApp (its client) via an SCTP socket over the Loopback interface (127.0.0.1) on port 4321.
-The module is designed to manage the following functions efficiently:
+The module manages the following functions:
 
 \begin{itemize}
-\item Information Exchange: Facilitates communication between the server and client.
-\item Detection and Tracking: Identifies and tracks objects within the video feed.
-\item Image Processing: Processes video data to derive meaningful insights.
-\item Utility Operations: Performs various supportive tasks to enhance overall functionality.
+\item Information exchange: Facilitates communications between the server and client.
+\item Detection and tracking: Identifies and tracks objects within the video feed.
+\item Image processing: Processes video data to derive environmental information.
+\item Utility operations: Performs various supportive tasks (such as conversion of coordinates and calculation of intersecting bounding boxes) to enhance overall functionality.
 \end{itemize}
 
 To ensure timely and efficient video processing, we utilize a multi-threading approach:
 
 \begin{enumerate}
-\item Communication Thread: Manages the connection with the client, handling message exchanges and maintaining seamless communication.
-\item Processing Thread: Focuses on video analysis, including object identification and generating messages based on the environmental data processed from the video stream.
+\item Communications thread: Manages the connection with the client, handling message exchanges and maintaining seamless communications.
+\item Processing thread: Focuses on video analysis, including object identification, while generating messages based on the environmental data processed from the video stream.
 \end{enumerate}
 
 For optimized performance in handling the computationally intensive tasks of image processing, we leverage GPU acceleration.
-We selected the nano version, YOLOv8n, due to its reduced parameter count, which makes it less resource-intensive and better suited to our use case.
-This choice significantly accelerates processing times and reduces CPU load, leading to enhanced overall system efficiency and responsiveness.
-The combination of GPU utilization and the streamlined YOLOv8n model ensures that our module operates effectively.
+We selected the nano version, YOLOv8n, due to its reduced parameter count, making it less resource-intensive and better suited to our solution.
+This choice significantly accelerates processing times and reduces CPU load, enhancing overall system efficiency and responsiveness.
+The combination of GPU utilization and the streamlined YOLOv8n model ensures effective operation of our module.
 
 
 
 \subsection{OAI 5G Core Network}\label{subsec:oai-5g-core-network}
 OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{oai5gcore}.
-Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, which enhances the overall efficiency and flexibility of the network infrastructure.
-Figure~\ref{fig:core_depl} shows a diagram of the deployed 5G Core containers, in version v1.5.1~\cite{oai-cn5g-fed-v1.5.1}.
-The Figure also presents the configuration commands necessary in order to properly forward traffic to and from the Core Network containers.
-The IP addresses for each Core Network component and Data Network and can be seen respectively in Tables~\ref{tab:ip_core} and~\ref{tab:ip_dn}.
+Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, while enhancing the overall efficiency and flexibility of the network infrastructure.
+Figure~\ref{fig:core_depl} shows a diagram of the deployed 5G Core containers, version v1.5.1~\cite{oai-cn5g-fed-v1.5.1}.
+It also presents the configuration commands necessary to properly forward traffic to and from the Core Network containers.
+The IP addresses for each Core Network component and Data Network can be seen in Table~\ref{tab:ip_core} and Table~\ref{tab:ip_dn}, respectively.
 
 
 \begin{figure}[H]
@@ -587,7 +575,7 @@ The IP addresses for each Core Network component and Data Network and can be see
 
 
 \begin{table}[H]
-    \caption{Deployed 5G Core Network Functions IP addresses.}
+    \caption{Deployed 5G Core Network functions IP addresses.}
     \label{tab:ip_core}
     \centering
     \resizebox{0.3\textwidth}{!}{%
@@ -606,7 +594,7 @@ The IP addresses for each Core Network component and Data Network and can be see
 \end{table}
 
 \begin{table}[H]
-    \caption{Deployed Data Network Components IP addresses.}
+    \caption{Deployed data network components IP addresses.}
     \label{tab:ip_dn}
     \centering
     \resizebox{0.3\textwidth}{!}{%
@@ -618,36 +606,33 @@ The IP addresses for each Core Network component and Data Network and can be see
         \end{tabular}}
 \end{table}
 
-
-
-
-
 \subsection{OAI gNB}\label{subsec:oai-gnb}
-The deployment of the OAI gNB, we used the latest version of OAI RAN, following the steps present in~\ref{openairinterface5g_e2ap}.
-Other than the steps described in the tutorial, in order to deploy the gNB with the SDR, it was required to do some alterations to \textit{gnb.sa.band78
+For the deployment of the OAI gNB, we used the latest version of OAI RAN, following the steps present in~\cite{openairinterface5g_e2ap}.
+Besides the steps described in the tutorial, deploying the gNB with the SDR, it was required changing the \textit{gnb.sa.band78
 .fr1.106PRB.usrpb210.conf} configuration file.
-Namely, edit MCC, MNC and TAC values to assure they corresponded to the values present in the Core \textit{docker-compose.yaml} file.
-Figure~\ref{fig:gnb_conf} depicts the alterations, in lines 13 and 14 of the file to comply with the Core values.
-If these values do not align, the NGAP setup between AMF and gNB over N2 interface will fail.
-It is also necessary to modify the IP address of the AMF and an IP so that the gNB can communicate with the AMF and SMF\@.
+Specifically, edit Mobile Country Code (MCC), Mobile Network Code (MNC), and Tracking Area Code (TAC) values to ensure they corresponded to the values present in the Core \textit{docker-compose.yaml} file.
+Figure~\ref{fig:gnb_conf} depicts the changes, in lines 13 and 14 of the file to comply with the 5G Core Network values.
+If these values do not align, the NGAP setup between AMF and gNB over the N2 interface fails.
+It was also necessary to modify the IP address of the AMF and assign an IP so that the gNB was able to communicate with the AMF and SMF\@.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/gnb_conf}
-    \caption{.}
+    \caption{Intial segment of textit{gnb.sa.band78
+    .fr1.106PRB.usrpb210.conf} configuration file, with the respective MCC, MNC and TAC values}
     \label{fig:gnb_conf}
 \end{figure}
 
-Besides configuring the fields above, it is also necessary to configure the proper IP address of the AMF\@.
-As seen in Table~\ref{tab:ip_core}, this value is 192.168.70.132.
-Following that, we set the IP that the gNB use in order to communicate with the AMF and SMF\@.
-We have selected to use the Wi-Fi link for it.
+Besides configuring the fields above, it was also necessary to configure the proper IP address for the AMF\@.
+As presented in Table~\ref{tab:ip_core}, such IP address is 192.168.70.132.
+Following that, we set the IP that the gNB uses to communicate with the AMF and SMF\@.
+We have chosen to use a Wi-Fi link for this purpose.
 
 
-Finally, it is necessary to establish a connection between the OAI gNB software and the SDR\@.
-As recommended by OAI, we utilized the USRP Hardware Driver (UHD)~\cite{uhdusrpdriver}.
+Finally, it was necessary to establish a connection between the OAI gNB software and the SDR\@.
+As recommended by OAI, we used the USRP Hardware Driver (UHD)~\cite{uhdusrpdriver}.
 UHD is a driver that enables communication between software and USRP hardware, providing a standardized interface for configuring and controlling aspects of the SDR devices, such as frequency, sample rate, gain, and antenna settings.
-Figure~\ref{fig:uhd_probe} illustrates the UHD driver detecting the USRP device, loading its firmware, and performing diagnostic tests.
+Figure~\ref{fig:uhd_probe} illustrates the UHD driver detecting USRP device, loading its firmware, and performing diagnostic tests.
 
 \begin{figure}[H]
     \centering
@@ -658,47 +643,36 @@ Figure~\ref{fig:uhd_probe} illustrates the UHD driver detecting the USRP device,
 
 \subsection{OAI 5G UE}\label{subsec:oai-5g-ue}
 In order to deploy the OAI UE, we needed to initiate the OAI UE software modem with parameters corresponding to the gNB settings.
-The command used is as follows:
+The command used was:
 
 \lstinline[columns=flexible,breaklines=true]{sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --ue-fo-compensation --sa -E --uicc0.imsi 208990200000001}
 
 
-The parameters are:
+The parameters include:
 
 \begin{itemize}
-    \item \texttt{-r 106}: Sets the radio configuration to 106.
-    This must match the radio configuration set on the gNB to ensure proper communication.
-    \item \texttt{--numerology 1}: Specifies the numerology index, set to 1, defining sub carrier spacing and slot duration.
+    \item \texttt{-r 106}: Sets the channel bandwidth in terms of Resource Blocks (RBs), to 106.
+    \item \texttt{--numerology 1}: Specifies the numerology index, set to 1, defining subcarrier spacing and slot duration.
     The gNB must use the same numerology index for compatibility.
-    \item \texttt{--band 78}: Configures the UE to operate in the n78 band.
-    The gNB is also set to operate in the n78 band, facilitating the connection.
-    \item \texttt{-C 3619200000}: Sets the center frequency to 3619.2 MHz. The gNB is configured to transmit on this same center frequency.
-    \item \texttt{--ue-fo-compensation}: Enables frequency offset compensation for the UE, ensuring synchronization with the gNB.
-    \item \texttt{--sa}: Indicates that the UE is operating in standalone mode, directly connecting to the 5G network without relying on an LTE anchor, matching the gNB configuration.
-    \item \texttt{-E}: Specifies that the program should utilize 75\% of the sampling rate frequency.
-    \item \texttt{--uicc0.imsi 208990200000001}: Sets the IMSI for the UE to \texttt{208990200000001}.
+    \item \texttt{--band 78}: Configures the UE to operate in the n78 band, with the gNB is also set to operate in the same frequency.
+    \item \texttt{-C 3619200000}: Sets the center frequency to 3619.2 MHz, which the gNB is also configured to transmit.
+    \item \texttt{--ue-fo-compensation}: Enables frequency offset compensation for the UE, to ensure synchronization with the gNB\@.
+    \item \texttt{--sa}: Indicates that the UE is operating in standalone mode, directly connecting to the 5G network without relying on an LTE anchor, thus matching the gNB configuration.
+    \item \texttt{-E}: Specifies that the program should utilize 75\% of the sampling frequency.
+    \item \texttt{--uicc0.imsi 208990200000001}: Sets the IMSI of the UE to \texttt{208990200000001}.
 \end{itemize}
 
-We needed to use one of the International Mobile Subscriber Identity (IMSI) values present in the Core database to ensure that the UE could authenticate successfully.
-The IMSI value, \texttt{208990200000001}, was selected from the Core database and used in the \texttt{nr-uesoftmodem} command.
-This selection was crucial because it aligns with the subscriber information stored in the network, facilitating proper authentication and allowing the UE to connect and communicate with the network.
-By ensuring that the IMSI used in the UE configuration matches an entry in the Core database, we verify that the UE can be authenticated correctly and allowed access to the network services.
-
-If we use an IMSI value that is not present in the Core database, the authentication process will fail, as illustrated by the Wireshark capture shown in Figure~\ref{fig:UE_failure}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{figures/Ue_fail}
-    \caption{UE registration rejected due to UE SIM details}
-    \label{fig:UE_failure}
-\end{figure}
+We needed to use one of the International Mobile Subscriber Identity (IMSI) values from the Core database to ensure the UE could authenticate successfully.
+The IMSI value \texttt{208990200000001} was selected from the 5G Core database and used in the \texttt{nr-uesoftmodem} command.
+This selection was crucial as it aligns with the subscriber information stored in the network, facilitating proper authentication and allowing the UE to connect and communicate with the network.
+Ensuring that the IMSI used in the UE configuration matches an entry in the Core database, enables that the UE can authenticate correctly and access the network services.
 
 \subsection{FlexRIC}\label{subsec:flexric}
-FlexRIC is deployed in the same computer as the OAI 5G Core Network.
-The procedure is to install the required dependencies and compile FlexRIC software.
+FlexRIC is deployed on the same computer as the OAI 5G Core Network.
+The procedure involves installing the required dependencies and compiling FlexRIC software.
 By default, FlexRIC is configured to run on the Loopback Interface address (127.0.0.1).
-Since we are deploying gNB and FlexRIC in the same Host, this is not necessary to change.
-In order to assure the use of the E2 Agent, is necessary to include in the configuration file of the gNB the following:
+Since we are deploying gNB and FlexRIC on the same host, this did not need to be to changed.
+In order to ensure the use of the E2 Agent, it was necessary to include the following information in the configuration file:
 
 \begin{verbatim}
 e2_agent = {
@@ -707,26 +681,27 @@ e2_agent = {
 }
 \end{verbatim}
 
-This informs that FlexRIC is running on the localhost IP, indicating that the RIC is running on the same machine as the E2 agent.
-The directory informs where the Service Models for FlexRIC are located.
-This is essential to assure the correct communication between OAI gNB and FlexRIC\@.
+This indicates that FlexRIC is running on the localhost IP, while the RIC is running on the same machine as the E2 agent.
+The directory specifies where the Service Models for FlexRIC are located.
+This is essential to ensure the correct communications between OAI gNB and FlexRIC\@.
 
 \subsection{xApp}\label{subsec:xapp}
-To enhance the functionality and adaptability of our 5G network, we developed an xApp specifically designed to receive and process messages sent by the Vision Module.
-The xApp operates by combining the decoded location data with Signal-to-Noise Ratio (SNR) metrics received from the network.
-By analyzing this combined information, the xApp can make intelligent decisions regarding the optimal positioning of the gNB\@.
-Specifically, if the SNR metrics indicate that the current location of the gNB is low and the Vision Module indicates that this is due to obstacles, the xApp will print a message indicating the need to move the gNB.
-This dynamic adjustment helps maintain optimal SNR, ensuring better network performance and reliability.
+To enhance the functionality and adaptability of our 5G network, we developed an xApp designed to receive and process messages from the Vision Module.
+The xApp operates by combining the decoded location data with Signal-to-Noise Ratio (SNR) values from the network.
+By analyzing this information, the xApp makes automated decisions regarding the optimal positioning of the gNB\@.
+Specifically, if the SNR values indicate that the gNB's current location is not adequate due to obstacles, the xApp prints a message indicating the need to move the gNB\@.
+This dynamic adjustment aims at maintaining optimal SNR, ensuring better network performance and reliability.
 
+\textcolor{red}{EXPAND WITH THE maquina de estados}
 
 \section{Summary}\label{sec:summary}
-Our proposed architecture is divided into two logical units.
-The first one comprises the OAI 5G Core Network, FlexRIC, xApp and Vision Module, deployed in an Acer Aspire Laptop.
-The second unit comprehends the OAI UE, deployed in an HP Elitebook.
-The gNB and the UE used USRP B210 SDR board to connect via 5G Wireless Link.
-The Vision Module received a video feed, processed it and sent relevant obstacle information seen in the video, via its interface.
-The xApp was responsible for monitoring the received messages and the SNR between gNB and UE\@.
-In summary, this chapter explains how we integrated CV in 5G OAI\@.
+The proposed architecture consits of two logical units.
+The first unit comprises the OAI 5G Core Network, FlexRIC, xApp, and Vision Module, deployed on an Acer Aspire laptop.
+The second unit includes the OAI UE, deployed on an HP Elitebook laptop.
+The gNB and the UE use USRP B210 SDR to connect via 5G wireless link.
+The Vision Module receives a video feed, processes it, and sends relevant obstacle information from the video via its interface.
+The xApp is responsible for monitoring the received messages and the SNR between gNB and UE\@.
+In summary, this chapter details how we integrated CV in 5G OAI as a novel solution for improved RAN\@.
 
 
 
