@@ -127,7 +127,6 @@ Figure~\ref{fig:gnb_e2} shows this registration.
 \end{figure}
 
 \section{UE}\label{sec:ue}
-\textcolor{red}{Finish}
 
 In order to test the correct initialization of the UE we needed to ensure connection with the Core Network.
 After executing the command present in~\ref{subsec:oai-5g-ue}, we observed in Wireshark the correct registration of the UE in Figure~\ref{fig:registration_ue}.
@@ -201,19 +200,39 @@ The VM's performance proved adequate for the intended application, i.e.\ an indo
 The module demonstrated good performance in these scenarios, and its near real-time processing capability can trigger prompt reactions to environmental changes.
 
 \section{xApp}\label{sec:mm_xapp}
-This section focuses on the xApp and its role in the system.
-It details the design and implementation of the xApp, how it interfaces with other components, and the results of its validation.
+After all components of our system were deployed, and properly functioning, we accessed the correct functioning of the xApp.
+The first verification is to access if the xApp could communicate with the FlexRIC software.
+This allows the E2 subscription to the E2 node on the gNB, in order to retrieve data from it.
+Figure~\ref{fig:xapp_subscription} shows this process.
 
-After all components of our system were deployed, and properly functioning, we acessed the correct functioning of the xApp.
-The first verification is to access if the xApp could subscribe to the
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/xapp_subscription}
+    \caption{FlexRIC receiving the subscription request from the xApp.}
+    \label{fig:xapp_subscription}
+\end{figure}
+
+E2 indication messages are received by the xApp once this subscription process is concluded.
+The periodicity of such messages can be defined in the xApp.
+We chose to receive each 10ms, Medium Access Control (MAC) layer metrics, in order to obtain SNR measurements.
+Those values are essential for the state machine described in Section~\ref{subsec:xapp}.
+The E2 subscription procedure can be seen in Figure~\ref{fig:captura_e2ap}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/e2ap_capture}
+    \caption{E2 Subscription Request and E2 Indication messages.}
+    \label{fig:captura_e2ap}
+\end{figure}
 
 \section{Use case}\label{sec:use_case}
 In order to validate the implemented solution, a use case testing scenario was established.
-In an indoor environment, the system followed the architecture presented in Figure~\ref{fig:}.
+In an indoor environment, the system followed the architecture presented in Figure~\ref{fig:my_arch}.
 
-The goal of test was to access the functionality of the whole system, considering maintaining end-to-end connection between the UE and the external DN. The Mobile RAN positioning is defined by the mobility management xApp, based on data collected from the Computer Vision Module and the radio metrics collected from the RAN via the Near-RT RIC. It aimed at maintaining the channel quality, or increasing it whenever possible.
+The goal of test was to access the functionality of the whole system, considering maintaining channel quality, or increasing it whenever possible.
+The xApp suggests the repositioning of the gNB, based on data collected from the Vision Module and the RF metrics collected from the RAN via the Near-RT RIC\@.
 
-The use case shows the system's capabilities in three test scenarios, described in the following subsections.
+The use case shows the system's capabilities in four test scenarios, described in the following subsections.
 
 For all scenarios we are assuming constant velocity for all moving entities.
 
@@ -292,27 +311,38 @@ Table~\ref{tab:iperf} presents the measured values.
 \end{table}
 
 
-
-
-
-
-\subsection{Scenario 0.1: Fixed gNB, moving UE}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue}
+\subsection{Scenario 1: Fixed gNB, moving UE}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue}
 This scenario also aimed at evaluating the
 
 This test occurred as expected.
 We noticed that the CV module generated wrong messages specially when it came to Pior Blockage messages, as anticipated.
 This is due to the fact that the module has no notion of depth.
 
-\subsection{Scenario 0.1: Fixed gNB, moving UE, Obstacle present}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue-obstacle-present}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/dummy results}
+    \caption{Dummy results}
+    \label{fig:results_1}
+\end{figure}
 
-This scenarios aims at evaluating the accuracy of the messages generated.
+\subsection{Scenario 2: Fixed gNB, moving UE, Obstacle present}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue-obstacle-present}
+
+This scenario aims at evaluating the accuracy of the messages generated.
 It also aims at showcasing the multi obstacle capacity of the bot-SORT model and how it interferes with the messages generated by the vision module..
 
-\subsection{Scenario 1: Moving gNB}\label{subsec:scenario-1:-moving-gnb}
+\subsection{Scenario 2: Moving gNB}\label{subsec:scenario-1:-moving-gnb}
 % change it
-In this scenario, the User Equipment (UE) encounters an obstacle that obstructs its line of sight. % change specially this sentance
+In this scenario, the UE encounters an obstacle that obstructs its LoS. % change specially this sentance
 The system promptly identifies the obstacle and predicts when the blockage is expected to happen.
-A message indicating the future blockage is sent to the xApp, which then informs the gNB (gNodeB). In response, the gNB preemptively adjusts its position to maintain a clear line of sight with the UE, thereby sustaining a consistent average Signal-to-Noise Ratio (SNR). This proactive approach ensures uninterrupted communication and optimal performance despite the presence of obstacles.
+A message indicating the future blockage is sent to the xApp, which then informs the gNB.
+In response, the gNB preemptively adjusts its position to maintain a clear line of sight with the UE, thereby sustaining a consistent average Signal-to-Noise Ratio (SNR). This proactive approach ensures uninterrupted communication and optimal performance despite the presence of obstacles.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/dummy results}
+    \caption{Dummy results}
+    \label{fig:results_2}
+\end{figure}
 
 %\subsection{Scenario 2: UE Moving Away from the gNB}\label{subsec:scenario-2:-ue-moving-away-from-the-gnb}
 
@@ -321,5 +351,12 @@ A message indicating the future blockage is sent to the xApp, which then informs
 
 
 \section{Discussion}\label{sec:discuss}
-This section provides a discussion on the results obtained from the validation process.
-It includes insights, lessons learned, and potential areas for improvement in future iterations of the system.
+The tests conducted successfully validated the proposed solution, demonstrating that the objectives of this dissertation were achieved.
+
+Component tests confirmed the operational status of all individual entities, ensuring each part of the system functioned correctly.
+Interoperability tests verified the seamless integration of these entities, confirming that the system operates cohesively as a whole.
+The evaluation demonstrated the viability of the proposed solution, indicating its potential for application in real-world scenarios.
+
+The use of O-RAN facilitates the introduction of technologies within the RAN\@.
+Specifically, the use of an xApp to incorporate CV messages, thereby enhancing RAN performance.
+This integration showcases the flexibility and potential of O-RAN in enabling innovative solutions that improve network capabilities.

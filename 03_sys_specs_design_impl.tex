@@ -78,10 +78,6 @@ Following these requirements and specifications, the system architecture was des
     \label{fig:my_arch}
 \end{figure}
 
-% draw: SMF[x], SPGWU[x], AMF[x], AUSF, UDM, UDR, mysql, NRF ext DN[x]
-% requires improvements
-
-\textcolor{red}{Confirm acronism}
 The proposed architecture, shown in Figure~\ref{fig:my_arch}, includes a UE requiring 5G connectivity.
 The 5G connection process begins with the UE initiating a connection request to the gNB, which then forwards the request to the AMF\@.
 The gNB acts as the intermediary between the UE and the 5G core network, managing the radio resources, handling data transmission, and ensuring seamless connectivity as the UE moves.
@@ -688,11 +684,36 @@ This is essential to ensure the correct communications between OAI gNB and FlexR
 \subsection{xApp}\label{subsec:xapp}
 To enhance the functionality and adaptability of our 5G network, we developed an xApp designed to receive and process messages from the Vision Module.
 The xApp operates by combining the decoded location data with Signal-to-Noise Ratio (SNR) values from the network.
-By analyzing this information, the xApp makes automated decisions regarding the optimal positioning of the gNB\@.
-Specifically, if the SNR values indicate that the gNB's current location is not adequate due to obstacles, the xApp prints a message indicating the need to move the gNB\@.
-This dynamic adjustment aims at maintaining optimal SNR, ensuring better network performance and reliability.
+We implemented a state machine to manage the varying network conditions and obstacles dynamically.
+Figure~\ref{fig:state_xapp} graphically illustrate the state machine, with the transitions between different states based on SNR values and obstacle detection events.
 
-\textcolor{red}{EXPAND WITH THE maquina de estados}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/State_machine.drawio}
+    \caption{State machine diagram for the xApp's operation.}
+    \label{fig:state_xapp}
+\end{figure}
+
+
+The state machine is designed to handle events related to obstacle detection and SNR fluctuations, enabling adaptive responses to maintain network performance.
+It manages transitions between different states based on SNR values and specific conditions such as the presence of obstacles.
+The state machine consists of three states: INITIAL\_STAGE, BLOCKAGE, and PRIOR\_BLOCKAGE\@.
+
+In the INITIAL\_STAGE, the default starting state, the system monitors for obstacles and SNR levels.
+If an obstacle is detected obstructing the UE and the SNR falls below a predefined threshold, the state machine transitions to the BLOCKAGE state.
+Alternatively, if there is an indication of a future blockage of the LoS, it transitions to the PRIOR\_BLOCKAGE state.
+
+The BLOCKAGE state indicates that there is an active blockage degrading the SNR\@.
+If a post-blockage message is received and the SNR has recovered above the threshold, the state machine transitions back to the INITIAL\_STAGE\@.
+
+In the PRIOR\_BLOCKAGE state, a blockage is expected to occur soon.
+If an obstacle is detected as post-blocked and the SNR is above the threshold, the state machine transitions back to the INITIAL\_STAGE\@.
+If the blockage becomes active and the SNR drops below the threshold, it transitions to the BLOCKAGE state.
+If a timeout occurs, meaning the expected blockage did not happen within a set timeframe, it transitions back to the INITIAL\_STAGE.
+
+By analyzing this information, the xApp makes automated decisions regarding the optimal positioning of the gNB\@.
+Specifically, if the SNR values indicate that the gNB's current location is not adequate due to obstacles, the xApp emits messages indicating the need to move the gNB\@.
+This dynamic adjustment aims at maintaining optimal SNR, ensuring better network performance and reliability.
 
 \section{Summary}\label{sec:summary}
 The proposed architecture consits of two logical units.
