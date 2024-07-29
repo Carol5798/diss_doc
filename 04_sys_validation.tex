@@ -1,13 +1,10 @@
 \chapter{System Validation}\label{ch:validation}
 
-\textcolor{red}{THIS IS AN UNFINISHED CHAPTER}
-
 This chapter presents the validation of the proposed solution.
 The validation process is described into different sections, each addressing different components of the system.
 Section~\ref{sec:meth} outlines the methodology used for validation.
 Section ~\ref{sec:experimental-setup} presents the experimental setup.
-In Section ~\ref{sec:component-testing}, each component is tested.
-\textcolor{red}{UPDATE ACCORDINLY}
+In Section ~\ref{sec:component-testing}, each component is individually tested, as well as its proper functioning in the system.
 Section~\ref{sec:use_case} presents a specific use case to demonstrate the system's functionality.
 Finally, Section~\ref{sec:discuss} provides a discussion of the results and insights gained from the validation process.
 
@@ -16,9 +13,9 @@ We have divided our tests into three categories: Component Testing, Interoperabi
 The first was used to validate the proper functioning of each component, with a performance evaluation when possible.
 The second category serve to determine if the components were working jointly properly.
 The last seek to validate the proposed system in a reference scenario.
-In each set of tests, we conducted a functional validation using tools such as ping and Iperf~\cite{iperf}.
+We have conducted functional validation using tools such as ping and Iperf~\cite{iperf}.
 When applicable, the performance was evaluated.
-\textcolor{red}{Maybe write something more}
+Following that, the last set of tests consisted of a use case validation in various scenarios.
 
 \section{Experimental Setup}\label{sec:experimental-setup}
 This section presents the experimental setup.
@@ -31,8 +28,21 @@ Figure~\ref{fig:setup} shows a photograph of the experimental scenario.
     \label{fig:setup}
 \end{figure}
 
+In order to produce a higher attention introduced by an obstacle, we have used an RF absorbing material.
+Since we are not using mmWaves, the attenuation introduced by obstacles is not so great, and so to simulate this scenario, we used it.
+The person,i.e.\ the obstacle holds the material when passing between the gNB and UE\@.
+Figure~\ref{fig:foam} shows the material utilized.
 
-\section{Component testing}\label{sec:component-testing}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/foam}
+    \caption{}
+    \label{fig:foam}
+\end{figure}
+
+
+
+\section{Component and interoperability testing}\label{sec:component-testing}
 
 
 \subsection{Core Network}\label{subsec:core_network}
@@ -77,7 +87,7 @@ interface.}
 
 
 
-\section{FlexRIC}\label{sec:flexric}
+\subsection{FlexRIC}\label{subsec:flexric2}
 As for the FlexRIC deployment, it is simply necessary to assure its correct launch.
 Upon launching, it awaits for incoming connection requests from an E2 Node.
 Figure~\ref{fig:near-rt-ric} shows the initialization of the FlexRIC\@.
@@ -91,7 +101,7 @@ Figure~\ref{fig:near-rt-ric} shows the initialization of the FlexRIC\@.
 
 When it is properly launched, the gNB can be initialized.
 
-\section{gNB}\label{sec:gnb}
+\subsection{gNB}\label{subsec:gnb}
 To ensure the correct functioning of the gNB, it should be registered in the 5G Core Network, connected to the FlexRIC and registered as a E2 node.
 They need to be validated separately since the connections are independent.
 
@@ -110,7 +120,7 @@ Figure~\ref{fig:gnb_reg} presents the successful registration of the gNB with th
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=0.5\linewidth]{figures/register_gnb}
     \caption[gNB registering via N2 interface]{gNB registering via N2 interface.}
     \label{fig:gnb_reg}
 \end{figure}
@@ -126,7 +136,7 @@ Figure~\ref{fig:gnb_e2} shows this registration.
     \label{fig:gnb_e2}
 \end{figure}
 
-\section{UE}\label{sec:ue}
+\subsection{UE}\label{subsec:ue}
 
 In order to test the correct initialization of the UE we needed to ensure connection with the Core Network.
 After executing the command present in~\ref{subsec:oai-5g-ue}, we observed in Wireshark the correct registration of the UE in Figure~\ref{fig:registration_ue}.
@@ -144,20 +154,20 @@ Figures~\ref{fig:ping_ue_core} and~\ref{fig:ping_ue_internet} shows the outcome 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=0.5\linewidth]{figures/ue_core_ping}
     \caption{Pinging from UE to the Core Components.}
     \label{fig:ping_ue_core}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=0.5\linewidth]{figures/ue_to_ext}
     \caption{Pinging from UE to Google's public DNS server.}
     \label{fig:ping_ue_internet}
 \end{figure}
 
 
-\section{Vision Module}\label{sec:cv_module}
+\subsection{Vision Module}\label{subsec:cv_module}
 To ensure the correctness and reliability of the VM, a series of validation tests were conducted.
 These tests were designed to evaluate both the processing capabilities of the module and the accuracy of the message exchange between the VM and the xApp.
 
@@ -173,6 +183,7 @@ It was confirmed that the module could accurately detect and track objects, vali
 Figure~\ref{fig:reference_video} shows a capture of such video, as well as the encoded and decoded messages generated.
 
 % image of a frame of the video and the corresponding messages
+\textcolor{red}{UPDATE IMAGE}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
@@ -191,7 +202,7 @@ This capture provided a view of the message flow, confirming that the messages w
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
+    \includegraphics[width=0.5\linewidth]{figures/vm_xapp}
     \caption[SCTP packet exchange between VM and xApp]{SCTP packet exchange between VM and xApp.}
     \label{fig:capture_messages}
 \end{figure}
@@ -199,7 +210,7 @@ This capture provided a view of the message flow, confirming that the messages w
 The VM's performance proved adequate for the intended application, i.e.\ an indoor environment where movements are frequent yet the velocity is low, such as people walking or objects being moved.
 The module demonstrated good performance in these scenarios, and its near real-time processing capability can trigger prompt reactions to environmental changes.
 
-\section{xApp}\label{sec:mm_xapp}
+\subsection{xApp}\label{subsec:mm_xapp}
 After all components of our system were deployed, and properly functioning, we accessed the correct functioning of the xApp.
 The first verification is to access if the xApp could communicate with the FlexRIC software.
 This allows the E2 subscription to the E2 node on the gNB, in order to retrieve data from it.
@@ -220,8 +231,8 @@ The E2 subscription procedure can be seen in Figure~\ref{fig:captura_e2ap}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/e2ap_capture}
-    \caption{E2 Subscription Request and E2 Indication messages.}
+    \includegraphics[width=0.5\linewidth]{figures/ric_subs}
+    \caption{E2 Subscription Response and E2 Indication messages.}
     \label{fig:captura_e2ap}
 \end{figure}
 
@@ -245,19 +256,19 @@ Figure~\ref{fig:test_fixed} presents a top-view from the testing scenario.
 The obstacle moves from left to right, over time at a constant velocity.
 
 The results from this scenario serve as a baseline for comparison with other scenarios, where the positions of the gNB and UE may vary.
-This analysis is important for evaluating the gains of having computer vision solutions integrated into mobile networks.
+This analysis is important for evaluating the gains of having CV solutions integrated into mobile networks.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/uporto-feup}
-    \caption{Overview of scenario.}
+    \includegraphics[width=0.5\linewidth]{figures/scenario0}
+    \caption{Overview of the movement for scenario 0.}
     \label{fig:test_fixed}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/dummy results}
-    \caption{Dummy results.}
+    \includegraphics[width=\linewidth]{figures/results_0}
+    \caption{SNR variation over time and the respective VM messages for scenario 0.}
     \label{fig:results_0}
 \end{figure}
 
@@ -265,33 +276,33 @@ This analysis is important for evaluating the gains of having computer vision so
 This test was successful, showcasing the CV module messages received, as well as SNR metrics corresponding to those expected.
 
 Figure~\ref{fig:results_0} presents the graph with the results collected from this experiment.
-It is possible to see the SNR variation over time in the y-axis , associated with each message, over a period of 10 seconds.
+It is possible to see the SNR variation over time in the y-axis , associated with each message.
 The average SNR values are collected by the xApp in intervals of 200 milliseconds (20 sample collected over a period of 10ms).
 Possible values for this collection of data are 1ms,2ms, 5ms or 10ms.
-This value is set according to the estimated fps of the video.
-Since prior test has shown that capturing in 30fps results in the processing of video of about 5fps, we chose this value so that each message reception will have an SNR associated.
+This value is set according to the estimated processing framerate of the video.
+Since prior test has shown that capturing in 30 fps results in the processing of video of about 5fps, we chose this value so that each message reception will have an SNR associated.
 Each message is represented by a colour, as shown in the legend.
 Notice that we can also have situations were we have SNR data collection but no associated message, for instance when no obstacles are detected or when the obstacles seen are not expected to block the LoS\@.
 
 The graph is divided into three distinct stages, separated by the transition lines.
 In the first stage, where the obstacle is moving towards the UE, Prior Blockage messages are sent.
-The SNR is high (above 30dB) since there are no obstruction of LoS between gNB and UE, indicating a strong and clean signal.
+The SNR is high  since there is no obstruction of LoS between gNB and UE, indicating a strong and clean signal.
 
-The first transition at X seconds is labeled \("\)Lost LoS\("\).
+The first transition is labeled \('\)LoS lost\('\).
 This marks the beginning of the blockage period.
 
-In the second stage,the obstacle stops in front of UE,
-and it is possible to see the reception of the first Blockage Message, indicating the beginning of such obstruction.
+In the second stage,the obstacle stops in front of UE, and it is possible to see the reception of the first Blockage Message, indicating the beginning of such obstruction.
 As expected, the average SNR lowers.
 
-The second transition at X seconds is labeled **\("\)Return of LoS\("\)**, indicating the end of the blockage and the return to normal signal conditions.
+The second transition is labeled \('\)Return of LoS\('\), indicating the end of the blockage and the return to normal signal conditions.
 In the third stage, the obstacle moves away from the UE, no longer blocking the LoS\@.
 As expected, the average SNR approximate those seen in the first stage.
-The SNR values return to above 30 dB, similar to the prior blockage stage, indicating the restoration of a clear and strong signal, suggesting the removal or resolution of the blockage.
+The SNR values increase, similar to the prior blockage stage, indicating the restoration of a clear and strong signal, suggesting the passage of the blockage.
 
 In this scenario, we also have used iperf tool to test the throughput in two instants.
 The first one was when no blockage was occurring.
 The second on was when a blockage was ongoing.
+This test was using TCP packets and assessed the throughput of the uplink.
 As expected, the throughput is lower when there is a blockage.
 Table~\ref{tab:iperf} presents the measured values.
 
@@ -300,48 +311,112 @@ Table~\ref{tab:iperf} presents the measured values.
     \centering % Center the table
     \begin{tabular}{|c|c|c|c|}
         \hline
-        \textbf{Instant} & \textbf{Connection type} & \textbf{DL} & \textbf{UL} \\ \hline
-        \multirow{2}{*}{No blockage} & UDP & & \\ \cline{2-4}
-        & TCP & & \\ \hline
-        \multirow{2}{*}{Blockage}    & UDP & & \\ \cline{2-4}
-        & TCP & & \\ \hline
+        \textbf{Instant} & \textbf{Throughput} \\ \hline
+        No blockage & 936 kB \\ \hline
+        Blockage   &  643 kB\\ \hline
     \end{tabular}
-    \caption{Iperf results} % Add a caption for the table
+    \caption{Iperf results for LoS and NLoS} % Add a caption for the table
     \label{tab:iperf} % Add a label for referencing the table
 \end{table}
 
 
 \subsection{Scenario 1: Fixed gNB, moving UE}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue}
-This scenario also aimed at evaluating the
+
+In this scenario, the objective is to assess the limitations of our VM and characterize the messages' occurrence\@.
+We seek to access how the vision-aided gNB behaves when there is a moving UE\@.
+The UE is being carried by a person and the VM model can detect both the person and the UE\@.
+Figure~\ref{fig:test_movUE} presents a top-view from the testing scenario.
+The UE moves from left to right, over time at a constant velocity.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/scenario1}
+    \caption{Overview of the movement for scenario 1.}
+    \label{fig:test_movUE}
+\end{figure}
 
 This test occurred as expected.
 We noticed that the CV module generated wrong messages specially when it came to Pior Blockage messages, as anticipated.
 This is due to the fact that the module has no notion of depth.
+It interprets the person as an obstacle and calculates that the bounding box movement of the person will intersect with the UE's.
+
+Despite this limitation, it is possible to notice that the VM does not emit Blockage messages, since the UE has LoS with the gNB\@.
+In the same fashion, it does not emit Post Blockage messages.
+
+Figure~\ref{fig:results_1} presents the graph with the results collected from this experiment.
+It is possible to see the SNR variation over time in the y-axis , associated with each message.
+Notice that there is a variation in the SNR since the distance between gNB and UE increased.
+As them return to being closer, the SNR is restored.
+
+Some Prior Blockage messages are associated with those SNRs, while no obstacle is expected to block the LoS\@.
+The VM module is sending those messages because it views the person carrying the UE as an obstacle, and it is moving in the same direction as the UE\@.
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/dummy results}
-    \caption{Dummy results.}
+    \includegraphics[width=\linewidth]{figures/results_1}
+    \caption{SNR variation over time and the respective VM messages for scenario 1.}
     \label{fig:results_1}
 \end{figure}
 
 \subsection{Scenario 2: Fixed gNB, moving UE, Obstacle present}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue-obstacle-present}
 
-This scenario aims at evaluating the accuracy of the messages generated.
-It also aims at showcasing the multi obstacle capacity of the bot-SORT model and how it interferes with the messages generated by the vision module..
-
-\subsection{Scenario 3: Moving gNB}\label{subsec:scenario-1:-moving-gnb}
-% change it
-In this scenario, the UE encounters an obstacle that obstructs its LoS. % change specially this sentance
-The system promptly identifies the obstacle and predicts when the blockage is expected to happen.
-A message indicating the future blockage is sent to the xApp, which then informs the gNB.
-In response, the gNB preemptively adjusts its position to maintain a clear line of sight with the UE, thereby sustaining a consistent average Signal-to-Noise Ratio (SNR). This proactive approach ensures uninterrupted communication and optimal performance despite the presence of obstacles.
+In this scenario, the objective is similar to the previous.
+We seek to access how the vision-aided gNB behaves when there is a moving UE and multiple objects in the scene (a person carrying the UE and an obstacle represented by a person moving)\@.
+The UE is being carried by a person and the VM model can detect both people and the UE\@.
+Figure~\ref{fig:test_movUE} presents a top-view from the testing scenario.
+The UE moves from left to right, over time at a constant velocity and the obstacle moves from right to left in the same fashion.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figures/dummy results}
-    \caption{Dummy results.}
+    \includegraphics[width=0.5\linewidth]{figures/scenario2}
+    \caption{Overview of the movement for scenario 2.}
+    \label{fig:test_movUE_obst}
+\end{figure}
+
+This test occurred as expected.
+As the previous scenario, the VM generated wrong messages specially when it came to Pior Blockage messages, as anticipated.
+The difference from the previous scenario is that the VM still generates correct messages when it comes to the obstacle in the foreground of the frame.
+
+
+Figure~\ref{fig:results_2} presents the graph with the results collected from this experiment.
+It is possible to see the SNR variation over time in the y-axis , associated with each message.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/results_2}
+    \caption{SNR variation over time and the respective VM messages for scenario 2.}
     \label{fig:results_2}
+\end{figure}
+
+\subsection{Scenario 3: Moving gNB}\label{subsec:scenario-3:-moving-gnb}
+
+In this scenario, the objective is to move the gNB in order to mantain LoS\@.
+We seek to access the vision-aided gNB predictions and evaluate the benefits of moving a gNB\@.
+The gNB is being moved in a table and the VM model can detect the obstacle and the UE\@.
+Figure~\ref{fig:test_movgnb} presents a top-view from the testing scenario.
+The UE  is fixed, the obstacle moves from right to left at constant pace and the gNB moves in the opposite direction.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/scenario3}
+    \caption{Overview of the movement for scenario 3.}
+    \label{fig:test_movgnb}
+\end{figure}
+
+Figure~\ref{fig:results_3} presents the graph with the results collected from this experiment.
+It is possible to see the SNR variation over time in the y-axis , associated with each message.
+
+Despite the limitations on the movement of the gNB in order to maintain the LoS, the test occurred as expected.
+Such limitations are posed by the room where the tests were conducted, and for the SDRs limited range (about 2m), difficult the testing scenario.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/results_3}
+    \caption{SNR variation over time and the respective VM messages for scenario 3.}
+    \label{fig:results_3}
 \end{figure}
 
 %\subsection{Scenario 2: UE Moving Away from the gNB}\label{subsec:scenario-2:-ue-moving-away-from-the-gnb}
@@ -354,7 +429,7 @@ In response, the gNB preemptively adjusts its position to maintain a clear line 
 The tests conducted successfully validated the proposed solution, demonstrating that the objectives of this dissertation were achieved.
 
 Component tests confirmed the operational status of all individual entities, ensuring each part of the system functioned correctly.
-Interoperability tests verified the seamless integration of these entities, confirming that the system operates cohesively as a whole.
+Interoperability tests verified the integration of these entities, confirming that the system operates cohesively as a whole.
 The evaluation demonstrated the viability of the proposed solution, indicating its potential for application in real-world scenarios.
 
 The use of O-RAN facilitates the introduction of technologies within the RAN\@.
