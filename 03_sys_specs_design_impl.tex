@@ -1,9 +1,10 @@
 \chapter{System Specification, Design, and Implementation}\label{ch:specs_design_implem}
 
-This chapter details the proposed solution, in three sections.
+This chapter details the proposed solution.
 Section~\ref{sec:specs} discusses the requirements and specifications.
-Section~\ref{subsec:prop_vision} presents the system design.
-Finally, Section~\ref{sec:impl} describes the system implementation.
+Section~\ref{sec:design} presents the system design.
+Section~\ref{sec:system-implementation} describes the system implementation.
+Finally, Section~\ref{sec:summary} summarizes the content of this chapter.
 
 \section{System Specification}\label{sec:specs}
 The goal of this dissertation was to extract vision-based information relevant to a 5G network.
@@ -60,7 +61,7 @@ These requirements translate into Table ~\ref{tab:spec}, containing system speci
 \hline
 \textbf{Specification} & \textbf{Description} \\ \hline
 \textbf{Detection and tracking} & Use YOLOv5 Ultralytics~\cite{Ultralytics_repo} and BoT-SORT~\cite{botsort} for high accuracy and optimized speed. \\ \hline
-\textbf{Messaging} & Encode messages using ASN.1 definitions~\cite{ITU_ASN1}. \newline Transmit messages via Stream Control Transmission Protoco(SCTP). \newline Include relevant information such as object ID, type, position ( cartesian coordinates), and confidence score. \\ \hline
+\textbf{Messaging} & Encode messages using ASN.1 definitions~\cite{ITU_ASN1}. \newline Transmit messages via Stream Control Transmission Protocol (SCTP). \newline Include relevant information such as object ID, type, position (Cartesian coordinates), and confidence score. \\ \hline
 \end{tabular}}
 \end{table}
 
@@ -109,10 +110,10 @@ The UPF routes the data to and from external networks, ensuring data forwarding.
 %-------------------
 
 In our solution, the RAN can be repositioned based on environment conditions that may affect the RF signal propagation\@.
-These conditions, perceived and reported by the Vision Module (VM).
-This enables, as well as RF metrics such as SNR, allow the RAN to manage its placement.
-In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specified by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
-Communications between the VM and the xApp, is achieved through interface E2', based on the O-RAN E2 interface and E2 Application Protocol (E2AP).
+These conditions are perceived and reported by the Vision Module (VM).
+Jointly with RF metrics, such as SNR, this allows the RAN to manage its placement.
+In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specifiedll as RF metrics such as SNR, by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
+Communications between the VM and the xApp, is achieved through interface E2', based on the O-RAN E2 interface and E2AP\@.
 E2' interface supports reliable data exchange using a SCTP socket connection (cf.
 Figure~\ref{fig:stack}) along with an ASN.1 definition to structure the messages.
 The use of ASN.1 ensures that the standarized message formats , promoting interoperability and efficiency in data exchange.
@@ -321,7 +322,7 @@ This approach ensures precise and timely updates on the UEs' locations.
 
 
 \subsection{Frame Processed}\label{subsec:frame-processed}
-In our system, frame processed messages play an important role in maintaining communications and monitoring the performance of the VM.
+In our system, frame processed messages play an important role in maintaining communications and monitoring the performance of the VM\@.
 These messages are primarily designed to inform the xApp that the VM is actively running and processing frames.
 Additionally, they allow tracking of the time taken to process each frame, which is essential for performance optimization and debugging purposes.
 
@@ -353,7 +354,7 @@ The first unit implements the 5G Core Network, the Near-RT RIC, and the Vision-a
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\linewidth]{figures/System Arch.drawio(3)}
+    \includegraphics[width=0.75\linewidth]{figures/System Arch.drawio(4)}
     \caption[System architecture designed for implementing and evaluating the proposed solution]{System architecture designed for implementing and evaluating the proposed solution.}
     \label{fig:design_arch}
 \end{figure}
@@ -364,6 +365,7 @@ The following subsections detail the hardware used in the implementation and the
 \subsection{Software}\label{subsec:software}
 This section presents the main software packages used to develop the Vision Module and implement the 5G network.
 Beyond this, in the repository containing the VM~\ref{repository}, includes a file for reproducing the Python virtual environment.
+\textcolor{red}{REPOSITORY INCLUSION}
 
 \subsubsection{OpenCV}
 There are several open-source software packages available for Computer Vision in Python.
@@ -374,7 +376,7 @@ OpenCV's large, active community provides extensive resources and support.
 Additionally, OpenCV is the only library that directly supports ArUco Markers, which are essential for Augmented Reality applications involving the detection and tracking of unique binary-encoded markers for accurate localization and tracking.
 
 Unlike scikit-image~\cite{Scikit-learn}, which excels in image processing tasks with functions for filtering, morphology, and segmentation, OpenCV offers a broader range of over 2500 optimized algorithms spanning image and video processing, object detection, and video camera calibration.
-In contrast to Pillow (PIL Fork)~\cite{pillow}, which specializes in image format handling and basic manipulation, OpenCV provides tools for both basic and advanced computer vision applications.
+In contrast to Pillow ~\cite{pillow}, which specializes in image format handling and basic manipulation, OpenCV provides tools for both basic and advanced computer vision applications.
 Moreover, while SimpleCV~\cite{simplecv} simplifies OpenCV usage with a user-friendly interface, OpenCV's C++ backend and GPU acceleration capabilities enable superior performance, crucial for real-time processing and large-scale data operations.
 
 In our proposed solution, OpenCV is used to:
@@ -386,7 +388,7 @@ In our proposed solution, OpenCV is used to:
 \end{itemize}
 
 \subsubsection{Ultralytics YOLO}
-As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO (You Only Look Once)~\cite{ultralytics_docs} is a state-of-the-art, real-time object detection solution.
+As discussed in Section ~\ref{sec:CV}, Ultralytics YOLO ~\cite{ultralytics_docs} is a state-of-the-art, real-time object detection solution.
 It is known for its speed and accuracy, making it suitable for applications requiring fast and reliable object detection and tracking.
 While there are other solutions, also presented in Section~\ref{sec:CV}, we chose Ultralytics YOLO for its simplicity, and because it is suitable for the intended application and state-of-the-art object detection and tracking situations.
 
@@ -419,12 +421,12 @@ ASN1Tools is optimized for performance, allowing for fast encoding and decoding 
 This optimization suits real-time applications like our Vision Module, where processing speed is essential to maintain system responsiveness and accuracy.
 
 While other libraries such as pyasn1~\cite{pyasn1} and libtasn1~\cite{libtasn1} are available, they have certain limitations.
-\emph{pyasn1}, for instance, is less efficient in terms of performance and has a more complex API\@.
+\emph{pyasn1}, for instance, is less efficient in terms of performance and has a more complex Application Programming Interface (API)\@.
 libtasn1, part of the GNU project, is less user-friendly and not optimized for performance.
 
 
 \subsubsection{5G Core Network, 5G gNB, and 5G UE}
-The main open-source 5G software packages for implementing an O-RAN based architecture are OAI~\cite{openairinterface} and srsRAN~\cite{srslte}.
+The main open-source 5G software packages for implementing an O-RAN based architecture are OpenAirInterface (OAI)~\cite{openairinterface} and software radio systems RAN (srsRAN)~\cite{srslte}.
 For our system, we chose OAI because it provides all the necessary components to deploy a 5G standalone network, including both the RAN and Core network.
 In contrast, srsRAN only supports the deployment of the RAN, requiring an additional software package, such as OAI, to implement the Core network.
 
@@ -440,7 +442,7 @@ It often demands more substantial computational resources and a more involved se
 
 \subsubsection{Core Network, FlexRIC, Computer Vision module and gNB}
 The OAI Core Network, FlexRIC, the Vision Module, and the gNB were deployed on a laptop, the Acer Aspire A715-74G, which id shown in Figure~\ref{fig:computer_acer}.
-The OAI Core was deployed using Docker containers, requiring a 4-core CPU, 16 GB of RAM and a minimum of 1.5 GB free storage for the Docker images.
+The OAI Core was deployed using Docker containers, requiring a 4-core Central Processing Unit (CPU), 16 GB of Random-access Memory (RAM) and a minimum of 1.5 GB free storage for the Docker images.
 FlexRIC does not have listed hardware requirements; however, during deployment, it was noticed that it is not resource-intensive, sufficing with the same requirements as the Core Network.
 The xApp was deployed alongside FlexRIC to ensure reduced latency between the two components.
 Also,  the implementation of interface E42 requires them to be run on the same computing unit.
@@ -454,7 +456,7 @@ Although the laptop used did not meet these requirements, it proved sufficient t
     \label{fig:computer_acer}
 \end{figure}
 
-As for the Vision Module, the minimal hardware requirement is a CUDA-compatible GPU ~\cite{ultralytics_faq} for Ultralytics YOLO model to run properly.
+As for the Vision Module, the minimal hardware requirement is a Compute Unified Device Architecture (CUDA)-compatible Graphics Processing Unit (GPU) ~\cite{ultralytics_faq} for Ultralytics YOLO model to run properly.
 Since a pre-trained model has proven sufficient to accurately detect and track objects for our solution, we did not require a high GPU capacity to train a model.
 
 Table ~\ref{tab:specs_pc} presents the specification of the computer used.
@@ -465,18 +467,18 @@ Table ~\ref{tab:specs_pc} presents the specification of the computer used.
     \begin{tabular}{|c|c|}
         \hline
         \textbf{Specification} & \textbf{Details} \\ \hline
-        Processor                      &           Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz   \\ \hline
-        RAM                      &          16GB        \\ \hline
-        Disk                      &   2 SSDs  (512GB and 256GB)         \\ \hline
-        GPU                     &   GeForce GTX 1050 (3GB)      \\ \hline
+        Processor                      &           Intel(R) Core(TM) i5-9300H CPU @ 2.4 GHz   \\ \hline
+        RAM                      &          16 GB        \\ \hline
+        Disk                      &   2 SSDs  (512 GB and 256 GB)         \\ \hline
+        GPU                     &   GeForce GTX 1050 (3 GB)      \\ \hline
         Operating System & Ubuntu 22.04.4 LTS                  \\ \hline
     \end{tabular}
 \end{table}
 
 For the Vision Module, we opted to use a webcam due to its simplicity and ease of integration.
 The chosen model was LL-4196, offering Full HD (1920 x 1080 Pixels) resolution and supporting a frame rate of 30 frames/s\@.
-This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion, necessary for accurate computer vision processing.
-The video camera connects to the computer using a USB 2.0 interface.
+This ensures that the video feed acquired is of high quality, providing sufficient detail and smooth motion, necessary for accurate CV processing.
+The video camera connects to the computer using a Universal Serial Bus (USB) 2.0 interface.
 Figure~\ref{fig:camera} shows the video camera and its USB interface.
 
 \begin{figure}[H]
@@ -557,7 +559,7 @@ The combination of GPU utilization and the streamlined YOLOv8n model ensures eff
 
 
 \subsection{OAI 5G Core Network}\label{subsec:oai-5g-core-network}
-OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions (NFs) in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{oai5gcore}.
+OAI offers three methods for implementing the Core Network: bare-metal installation or virtual machines, automated deployment of network functions in Docker containers using Docker-Compose, and cloud-native deployment using Helm Chart on OpenShift or Kubernetes clusters ~\cite{oai5gcore}.
 Choosing Docker for deployment simplifies the process by encapsulating network functions in containers, making them easier to manage, scale, and automate, while enhancing the overall efficiency and flexibility of the network infrastructure.
 Figure~\ref{fig:core_depl} shows a diagram of the deployed 5G Core containers, version v1.5.1~\cite{oai-cn5g-fed-v1.5.1}.
 It also presents the configuration commands necessary to properly forward traffic to and from the Core Network containers.
@@ -567,7 +569,7 @@ The IP addresses for each Core Network component and Data Network can be seen in
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/core_deply}
-    \caption{Core deployment diagram~\cite{oai_cn5g_fed_deploy}.}
+    \caption[Core deployment diagram]{Core deployment diagram~\cite{oai_cn5g_fed_deploy}.}
     \label{fig:core_depl}
 \end{figure}
 
@@ -616,12 +618,12 @@ It was also necessary to modify the IP address of the AMF and assign an IP so th
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/gnb_conf}
-    \caption{Intial segment of textit{gnb.sa.band78
+    \caption{Intial segment of \textit{gnb.sa.band78
     .fr1.106PRB.usrpb210.conf} configuration file, with the respective MCC, MNC and TAC values}
     \label{fig:gnb_conf}
 \end{figure}
 
-Besides configuring the fields above, it was also necessary to configure the proper IP address for the AMF\@.
+It was also necessary to configure the proper IP address for the AMF\@.
 As presented in Table~\ref{tab:ip_core}, such IP address is 192.168.70.132.
 Following that, we set the IP that the gNB uses to communicate with the AMF and SMF\@.
 We have chosen to use a Wi-Fi link for this purpose.
@@ -679,14 +681,14 @@ e2_agent = {
 }
 \end{verbatim}
 
-This indicates that FlexRIC is running on the localhost IP, while the RIC is running on the same machine as the E2 agent.
+This indicates that FlexRIC is running on the localhost Internet Protocol (IP), while the RIC is running on the same machine as the E2 agent.
 The directory specifies where the Service Models for FlexRIC are located.
 This is essential to ensure the correct communications between OAI gNB and FlexRIC\@.
 
 \subsection{xApp}\label{subsec:xapp}
 To enhance the functionality and adaptability of our 5G network, we developed an xApp designed to receive and process messages from the Vision Module.
-The xApp operates by combining the decoded location data with Signal-to-Noise Ratio (SNR) values from the network.
-We implemented a state machine to manage the varying network conditions and obstacles dynamically.
+The xApp operates by combining the decoded CV messages with SNR values from the network.
+We implemented a state machine to manage the varying network conditions and obstacles.
 Figure~\ref{fig:state_xapp} graphically illustrate the state machine, with the transitions between different states based on SNR values and obstacle detection events.
 
 \begin{figure}[H]

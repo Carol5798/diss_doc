@@ -36,7 +36,7 @@ Figure~\ref{fig:foam} shows the material utilized.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/foam}
-    \caption{}
+    \caption{Material used to absorve RF signals, in order to simulate strong attenuation introduced by obstacles.}
     \label{fig:foam}
 \end{figure}
 
@@ -63,7 +63,7 @@ After the initialization of the Docker containers, it is possible to see the log
 In order to confirm the correct deployment, the interface \textit{demo-oai} must appear when running the \textit{ifconfig} command.
 
 Then, we verified that all the containers had connectivity using the interface created in the Host OS, using the ping tool,as shown by Figures ~\ref{fig:ping_core1} and ~\ref{fig:ping_core2}.
-Each interface sends requests to each network component according to the table~\ref{tab:ip_core}.
+Each interface sends requests to each network component according to the Table~\ref{tab:ip_core}.
 Successfully concluding this tests ensures that the 5G Core Network is operational.
 
 \begin{figure}[H]
@@ -106,7 +106,7 @@ To ensure the correct functioning of the gNB, it should be registered in the 5G 
 They need to be validated separately since the connections are independent.
 
 After executing the command to launch the gNB\@, it is possible to verify the proper operation of the SDR by its Light-Emitting Diodes (LEDs).
-Three LEDs blue, green and red indicate the powering of the SDR, the transition, and the reception of radio signals respectively, depicted by Figure~\ref{fig:usrp_working}.
+Three LEDs blue, ref and green indicate the powering of the SDR, the trasmittion, and the reception of radio signals respectively, depicted by Figure~\ref{fig:usrp_working}.
 
 \begin{figure}[H]
     \centering
@@ -174,7 +174,7 @@ These tests were designed to evaluate both the processing capabilities of the mo
 The time for processing a frame varies according to some factors, such as the complexity (i.e.\ number of objects present) and the temporal variation of the scene.
 This implicates in design choices such as the periodicity of extraction of metrics by the xApp.
 The processing time of each frame was measured to assess the performance of the VM\@.
-The average processing time, testing with real-time capturing is 5 FPS\@.
+The average processing time, testing with real-time capturing is 5 frames/s\@.
 While this is 17\% of the frame capture rate, this value is sufficient to evaluate if our solution allows the adaptation of the gNB\@.
 
 A reference video was used to evaluate the detection and tracking results of the VM\@.
@@ -225,7 +225,7 @@ Figure~\ref{fig:xapp_subscription} shows this process.
 
 E2 indication messages are received by the xApp once this subscription process is concluded.
 The periodicity of such messages can be defined in the xApp.
-We chose to receive each 10ms, Medium Access Control (MAC) layer metrics, in order to obtain SNR measurements.
+We chose to receive each 10ms, MAC layer metrics, in order to obtain SNR measurements.
 Those values are essential for the state machine described in Section~\ref{subsec:xapp}.
 The E2 subscription procedure can be seen in Figure~\ref{fig:captura_e2ap}.
 
@@ -277,10 +277,10 @@ This test was successful, showcasing the CV module messages received, as well as
 
 Figure~\ref{fig:results_0} presents the graph with the results collected from this experiment.
 It is possible to see the SNR variation over time in the y-axis , associated with each message.
-The average SNR values are collected by the xApp in intervals of 200 milliseconds (20 sample collected over a period of 10ms).
+The average SNR values are collected by the xApp in intervals of 200 milliseconds (20 sample collected periodically every 10ms).
 Possible values for this collection of data are 1ms,2ms, 5ms or 10ms.
 This value is set according to the estimated processing framerate of the video.
-Since prior test has shown that capturing in 30 fps results in the processing of video of about 5fps, we chose this value so that each message reception will have an SNR associated.
+Since prior test has shown that capturing in 30 frames/s results in the processing of video of about 5 frames/s, we chose this value so that each message reception will have an SNR associated.
 Each message is represented by a colour, as shown in the legend.
 Notice that we can also have situations were we have SNR data collection but no associated message, for instance when no obstacles are detected or when the obstacles seen are not expected to block the LoS\@.
 
@@ -343,6 +343,8 @@ It interprets the person as an obstacle and calculates that the bounding box mov
 Despite this limitation, it is possible to notice that the VM does not emit Blockage messages, since the UE has LoS with the gNB\@.
 In the same fashion, it does not emit Post Blockage messages.
 
+\textcolor{red}{Falar que apesar disso o sistema suporta o movimento do UE}
+
 Figure~\ref{fig:results_1} presents the graph with the results collected from this experiment.
 It is possible to see the SNR variation over time in the y-axis , associated with each message.
 Notice that there is a variation in the SNR since the distance between gNB and UE increased.
@@ -382,6 +384,8 @@ The difference from the previous scenario is that the VM still generates correct
 Figure~\ref{fig:results_2} presents the graph with the results collected from this experiment.
 It is possible to see the SNR variation over time in the y-axis , associated with each message.
 
+\textcolor{red}{Primeiras mensagens de bloqueio apesar de haver bloqueio do marcador, nao houve obstrucao do SDR, isso implica que o momento em que cada um foi obstruido, impliacndo numa diferença temporal entre a variação do SNR e a detecção do bloqueio}
+
 
 \begin{figure}[H]
     \centering
@@ -411,6 +415,8 @@ It is possible to see the SNR variation over time in the y-axis , associated wit
 Despite the limitations on the movement of the gNB in order to maintain the LoS, the test occurred as expected.
 Such limitations are posed by the room where the tests were conducted, and for the SDRs limited range (about 2m), difficult the testing scenario.
 
+\textcolor{red}{Tempo de reação humana, tamanho da sala, }
+
 
 \begin{figure}[H]
     \centering
@@ -426,11 +432,14 @@ Such limitations are posed by the room where the tests were conducted, and for t
 
 
 \section{Discussion}\label{sec:discuss}
-The tests conducted successfully validated the proposed solution, demonstrating that the objectives of this dissertation were achieved.
-
+The tests conducted validated the proposed solution, demonstrating that the objectives of this dissertation were achieved.
 Component tests confirmed the operational status of all individual entities, ensuring each part of the system functioned correctly.
 Interoperability tests verified the integration of these entities, confirming that the system operates cohesively as a whole.
 The evaluation demonstrated the viability of the proposed solution, indicating its potential for application in real-world scenarios.
+
+Despite limited testing conditions, it was possible to identify the functionality, capabilities and limitations of the system.
+We could validate that the system can be implemented to maintain LoS in specific contexts, where the video camera has a good field of view of the scene.
+The inclusion of an automatic repositioning system could also benefit this solution.
 
 The use of O-RAN facilitates the introduction of technologies within the RAN\@.
 Specifically, the use of an xApp to incorporate CV messages, thereby enhancing RAN performance.

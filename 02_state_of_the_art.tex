@@ -158,7 +158,7 @@ The following section focuses on O-RAN, central to this dissertation's solution.
 
 \section{O-RAN}\label{sec:ORAN}
 At the core of O-RAN's initiatives is the development of its reference architecture, depicted in Figure~\ref{fig:ORAN}, which defines open interfaces and specifications.
-This section discusses the O-RAN architecture; it is divided into   Subsection~\ref{sec:Components} for the key components and Subsection~\ref{sec:Interfaces} for the interfaces of O-RAN\@.
+This section discusses the O-RAN architecture; it is divided into   Subsection~\ref{subsec:components} for the key components and Subsection~\ref{subsec:interfaces} for the interfaces of O-RAN\@.
  
 \begin{figure}[H]
     \centering
@@ -167,7 +167,7 @@ This section discusses the O-RAN architecture; it is divided into   Subsection~\
     \label{fig:ORAN}
 \end{figure}
 
-\subsection{O-RAN Components}\label{sec:Components}
+\subsection{O-RAN Components}\label{subsec:components}
 The O-RAN architecture comprises several key components, each serving a specific function to enhance network performance and promote openness and interoperability.
 The Centralized Unit Control Plane (O-CU-CP) and the Centralized Unit User Plane (O-CU-UP) are integral parts of the O-RAN architecture.
 The O-CU-CP handles the centralized control plane functions, enabling efficient coordination and management of radio resources.
@@ -196,7 +196,7 @@ In contrast, the Non-RT RIC manages and controls the RAN at non-real-time (more 
 It is part of the Service Management and Orchestration (SMO) framework, complementing the Near-RT RIC for intelligent RAN operation and optimization.
 The Non-RT RIC hosts multiple applications, called rApps, providing value-added services to support and facilitate RAN optimization and operations.
 
-\subsection{O-RAN Interfaces} \label{sec:Interfaces}
+\subsection{O-RAN Interfaces} \label{subsec:interfaces}
 
 The O-RAN architecture relies on multiple interfaces that enable seamless communications, control, and data exchange among diverse components of O-RAN. These open interfaces ensure interoperability, flexibility, and efficient orchestration within the RAN ecosystem.
 
@@ -222,7 +222,7 @@ This open and interoperable approach fosters competition, accelerates technologi
 The O-RAN Alliance's role in standardization efforts is essential in guaranteeing consistency and compatibility across the diverse elements of the O-RAN architecture.
 
 
-\subsubsection{E2 Interface}\label{sec:protocols}
+\subsubsection{E2 Interface}\label{subsubsec:protocols}
 The E2 interface connects the Near-RT RIC to the E2 nodes.
 The interaction between these entities is defined by the E2 Service Model (E2SM).
 Each E2SM model defines a service that a RAN function can perform.
@@ -235,7 +235,7 @@ The E2SM specifies the types of reports that can be sent and the events that tri
 Then, the RAN function sends an E2SM report transported through an E2AP Indication Message.
 
 Thus, the E2 interface uses the E2 Application Protocol (E2AP) to handle signaling and control procedures.
-E2 Service Models (E2SMs) define the specific application-level data and control exchanges, enabling the Near-Real-Time RAN Intelligent Controller (Near-RT RIC) to efficiently interact with and manage RAN functions in a standardized and customizable manner.
+E2 Service Models (E2SMs) define the specific application-level data and control exchanges, enabling the Near-RT RIC to efficiently interact with and manage RAN functions in a standardized and customizable manner.
 The protocol stack of the E2 interface is depicted in Figure~\ref{fig:E2_stack}.
 
 \begin{figure}[H]
@@ -291,11 +291,11 @@ Integrating vision-based capabilities in 5G systems paves the way to enable proa
 Overall, object detection and tracking contribute to improved network performance, efficient maintenance processes, and an enhanced user experience in the mobile telecom sector.
 
 This section is further divided into three sections.
-Section~\ref{sec:detect} discusses the state-of-the-art detection models.
-Section~\ref{sec:track} discusses the tracking solutions.
-Finally, Section~\ref{sec:open_tools} evaluates the existing open-source tools, their applicability, and their relevance to the specific challenges addressed in this dissertation.
+Section~\ref{subsec:detect} discusses the state-of-the-art detection models.
+Section~\ref{subsec:track} discusses the tracking solutions.
+Finally, Section~\ref{subsec:open_tools} evaluates the existing open-source tools, their applicability, and their relevance to the specific challenges addressed in this dissertation.
 
-\subsection{Detection models}\label{sec:detect}
+\subsection{Detection models}\label{subsec:detect}
 
 Object detection models are essential in locating and classifying objects within images, utilizing bounding boxes and labels.
 Generic object detectors, foundational in CV, exist in two main types: two-stage and one-stage detectors.
@@ -329,14 +329,14 @@ This one-stage approach prioritizes simplicity and speed, making it particularly
 
 
 The decision between single-shot and two-shot detectors involves balancing speed, accuracy, and complexity.
-Single-shot detectors like YOLOv3~\cite{YOLOv3} process images in a single pass, prioritizing speed and simplicity without a separate Region Proposal Network (RPN). This means that single-shot detectors employ one module comprising both tasks instead of having separate modules in the architecture for the RPN and the Classification and Regression Heads.
+Single-shot detectors like YOLOv3~\cite{YOLOv3} process images in a single pass, prioritizing speed and simplicity without a separate RPN. This means that single-shot detectors employ one module comprising both tasks instead of having separate modules in the architecture for the RPN and the Classification and Regression Heads.
 For this reason, they are simple to train and deploy but may sacrifice accuracy, especially for small or occluded objects.
 In contrast, two-shot detectors like Faster R-CNN improve accuracy and reliability by employing a region proposal network and a separate classification network.
 They handle complex scenes and small objects efficiently but are slower, more complex, and computationally intensive.
 The choice between the two detectors hinges on the application's specific needs, requiring the consideration of trade-offs between speed and accuracy.
 
 
-\subsection{Tracking models}\label{sec:track}
+\subsection{Tracking models}\label{subsec:track}
 
 Regarding deep learning-based object tracking, the methods can be classified into three distinct categories, each leveraging deep neural networks for enhanced tracking performance.
 Firstly, deep network features-based methods enhance tracking by utilizing semantic features extracted from deep Convolutional Neural Networks (CNNs).
@@ -366,7 +366,7 @@ The focus remains on the fundamental principles, applications, and the broader s
 Specialized algorithms designed for specific applications, while integral to the field, ensure in-depth discussions tailored to their unique contexts and use cases, which may extend beyond the scope of this work.
 More extensive research on state-of-the-art object detection and tracking can be found at~\cite{obj_detec_SOA}.
 
-\subsection{Open-source Tools}\label{sec:open_tools}
+\subsection{Open-source Tools}\label{subsec:open_tools}
 In object detection and tracking, open-source tools are essential in providing accessible and adaptable solutions.
 Integrating these tools into a gNB based on the O-RAN architecture in real-time applications requires careful consideration of speed, accuracy, and compatibility.
 Two notable tools mentioned previously stand out for their effectiveness: YOLO and BoT-SORT\@.
@@ -420,7 +420,7 @@ Their efforts have resulted in performance improvements, enhanced training capab
 Figure~\ref{fig:yolov7} compares real-time object detectors.
 Notice that, in the MS COCO dataset~\cite{COCO}, the algorithm that performs best is YOLOv7.
 
-While all categories of object tracking methods presented in Section~\ref{sec:track} can potentially be employed for Multiple Object Tracking, deep network features-based approach are presented herein.
+While all categories of object tracking methods presented in Section~\ref{subsec:track} can potentially be employed for Multiple Object Tracking, deep network features-based approach are presented herein.
 SORT, a representative method in this category, is designed for efficient tracking by primarily relying on basic motion and position information to link detections across frames.
 Although effective under ideal conditions, SORT may struggle with challenges like appearance variations and occlusions, due to its simplicity.
 
@@ -473,8 +473,8 @@ In~\cite{Block_predict}, a machine learning framework is proposed to enable proa
 The focus is on anticipating future blockages and facilitating user hand-offs in advance.
 The proposed two-component deep learning architecture, using YOLOv3~\cite{YOLOv3}, incorporates bimodal data, employing visual and radio information to predict blockages proactively and execute seamless user hand-offs.
 The results demonstrate the architecture's efficacy in accurately detecting blockages through experimentation, enhancing reliability, and reducing latency in the wireless network.
-The system model considers a small-cell millimeter-wave (mmWave) base station equipped with a uniform linear array and an RGB camera.
-The channel considers a geometric mmWave model with L clusters, and the authors provide a mathematical formulation for modeling signal blockage while defining Line-of-Sight (LOS) and Non-Line-of-Sight (NLOS) channels.
+The system model considers a small-cell mmWave base station equipped with a uniform linear array and an RGB camera.
+The channel considers a geometric mmWave model with L clusters, and the authors provide a mathematical formulation for modeling signal blockage while defining LoS and NLoS channels.
 Moreover, they propose a future exploration based on the investigation of radar-based detection approaches to pinpoint the location of users who are served post-blockage.
 This approach holds the potential for predicting blockages in real network environments with multiple users.
 The proposed approach may be integrated with the O-RAN architecture, envisioning the implementation of the CU at the Near-RT RIC. This approach introduces potential enhancements to wireless networks' reliability and predictive capabilities.
@@ -516,7 +516,7 @@ ViWi and Synthesia of Machines leverage simulation to provide data environments 
 While the presented datasets enable significant advancements in multimodal sensing and have facilitated breakthroughs in various research areas, they still need to integrate with the ongoing efforts in the O-RAN architecture.
 
 In the context of O-RAN deployments,~\cite{xApps} introduces OpenRAN Gym, a framework tailored for data-driven experimentation within the OpenRAN ecosystem, focusing on intelligent closed-loop control.
-OpenRAN Gym enables the development, training, and testing of xApps, data-driven applications specifically designed for the near-RT RIC. The xApp design process integrates service models (SMs) for communications with RAN nodes over the E2 interface, incorporating data-driven logic units hosting AI/ML models for RAN inference and control.
+OpenRAN Gym enables the development, training, and testing of xApps, data-driven applications specifically designed for the near-RT RIC. The xApp design process integrates service models for communications with RAN nodes over the E2 interface, incorporating data-driven logic units hosting AI/ML models for RAN inference and control.
 The framework's capabilities are exemplified through a compelling use case, considering an xApp that jointly manages scheduling and slicing functionalities of base stations based on real-time RAN data.
 Rigorous testing on the Colosseum wireless network emulator, featuring seven base stations and forty-two users, highlights xApp's adaptability to diverse traffic scenarios.
 The results emphasize the advantages of online fine-tuning, showcasing improved performance and generalization.
