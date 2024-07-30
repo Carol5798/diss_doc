@@ -2,51 +2,70 @@
 
 \section{Conclusions}\label{sec:conclusions}
 The goal of this dissertation was to implement vision-based RAN\@.
-The proposed solution allowed us to use Computer Vision techniques to extract relevant information and introduce messages to the RAN\@.
+The proposed solution allowed us to use Computer Vision techniques to extract relevant information and introduce vision-based messages to the RAN\@.
+Leveraging the O-RAN architecture, this work demonstrated the integration of sensing and telecommunications technologies.
+The convergence of these fields highlights the potential of CV to improve the efficiency and intelligence of 5G networks.
 
-Leveraging the O-RAN architecture, this work demonstrated the seamless integration of sensing and telecommunications technologies.
-The convergence of these fields highlights the potential of CV to significantly improve the efficiency and intelligence of 5G networks.
+On one hand, the O-RAN alliance develops and provides open and standard interfaces.
+The O-RAN architecture leverages SDN and NFV principles, representing a detachment from closed proprietary systems.
+This allows interfaces, such as the E2 interface, to extract information from the RAN easily, with the development of software, such as a xApp.
+On the other hand, solutions such as vision-aided BS's allow 5G networks to offer better QoS and QoE to clients.
+The introduction of vision in gNB's can enable environmental perception, in order to tackle LoS challenges.
+This enables the gNB to take more informed decisions when it comes to placement, specially in dynamic scenarios.
 
+The proposed solution takes advantage of CV techniques and O-RAN architecture, implementing a standalone 5G network, with a vision-aided RAN\@.
 The implementation utilized the open-source software of OpenAirInterface for the 5G Core Network and RAN\@.
 The Near-RT RIC was implemented using FlexRIC software.
-The Vision Module was developed using OpenCV, Ultralytics YOLO, and BoT-SORT for object detection and tracking.
+In order to use CV in our system, the Vision Module was developed using OpenCV, Ultralytics YOLO, and BoT-SORT for object detection and tracking.
 USRP B210 SDR boards were used to enable communications between UE and gNB\@.
-The developed xApp monitored and processed the data, showcasing the practical application of CV in enhancing 5G network performance.
+Finally, the developed xApp monitored and processed the data, showcasing the practical application of CV in enhancing 5G network performance.
 
-Through the development of the proposed solution we faced some challenges.
-lack of documentation in OpenAirInterface and FlexRIC
-lack of documentation of library asn1c
-instabilities caused by the board.
-- relaunched the sofware and unplug and replug.
+The proposed Vision Module is able to extract information captured from a real-time video feed and generate relevant information for the RAN\@.
+The xApp extract SNR measures, at a pace close to the video processing rate, in order to combine them.
+It combines such information and triggers suggestion on repositioning of the gNB, in order to maintain LoS between it and the UE\@.
 
-time contrains
+Throughout the development of the proposed solution, we encountered implementation challenges.
+One significant issue was the lack of documentation across different software packages.
+In OpenAirInterface and FlexRIC, this difficulty hindered the deployment of the 5G network.
+Since they are complex software packages and lacked information, we faced setbacks.
+The lack of comprehensive documentation and consequent sparse real-world examples make it difficult to understand setup and configuration requirements, leading to several trial and error situations.
+Software instability, version control, frequent bugs, and compatibility issues with new updates further complicate deployment of the OAI\@.
+Additionally, there is limited assistance from the development team.
 
-working on two different areas.
+Similarly, the library \emph{asn1c} also suffered from insufficient documentation and code maintenance, further complicating our implementation efforts, and integration of the messages with FlexRIC\@.
 
-In summary, this dissertation illustrates the feasibility and advantages of integrating CV technologies within 5G networks, paving the way for future advancements in telecommunications.
+When it came to hardware requirements, both OAI and the tracking solution are resource intensive.
+This led to occasional crashes and errors.
+For tracking, this required a lot of experimenting with different tracking solutions to improve processing rate of the video frames.
+Despite FlexRIC being less resource intensive, occasional crashes when developing the xApp occurred while using an emulated gNB\@.
 
+Additionally, we faced instabilities caused by the SDRs, which disrupted the progress of our tests.
+These instabilities often required us to relaunch the software or physically unplug and replug the board to restore functionality, consuming a considerable amount of time.
+They were mainly related to sending or receiving samples to and from the SDRs.
 
+These difficulties made it arduous to test the system as a whole, but they were eventually overcome.
+We managed to test and validate each component individually and interoperably, and deployed a testbed to validate our system in real-world conditions.
 
-The open-source software used to implement the 5G Core Network and RAN was OpenAirInterface.
-The developed VM used OpenCV, Ultralytics YOLO and BoT-SORT to detect and track objects.
-USRP B210 SDR boards were used to enable communications between UE and gNB\@.
-Finally, the developed xApp monitored.
+Our solution has room for improvement, particularly in the VM\@.
+Despite this, the thesis objectives were met, resulting in three contributions: the introduction of video-based information into a 5G network based on O-RAN architecture; the development of a xApp that such information and RAN metrics, enhancing the gNB's capabilities with environmental perception; and the validation and evaluation of the proposed solution's performance in a reference networking scenario, including a proof-of-concept for vision-aided networking solutions.
+This solution, then, serves as a baseline for integrating CV into the RAN.
 
 \section{Known Limitations and Future Work}\label{sec:fut_work}
-While this dissertation successfully met its objectives, the system has several limitations, which present opportunities for further enhancements and future work.
+While this dissertation successfully met its objectives, the system has limitations, which present opportunities for enhancements and future work.
 
 The VM could benefit from refinements.
-These include the optimization of parameters, determining the optimal number of frames required to accurately obtain tracks, and enhancing the prediction capabilities of the messages.
-Additionally, employing two cameras to capture depth information would enable the extraction of more precise location of obstacles and UEs.
+These include the optimization of parameters, determining the optimal number of frames required to the prediction capabilities of the messages, specially the Prior Blockage.
+Additionally, employing a 3D mapping solution in order to obtain depth information would enable the extraction of more precise location of obstacles and UEs.
 Scaling the solution to manage multiple UEs simultaneously is another area for improvement.
-The current implementation also faced performance constraints due to hardware limitations, necessitating the use of dedicated hardware for real-time operation.
+The current implementation also faced performance constraints due to hardware limitations.
+Testing the solution in dedicated hardware would improve the real-time operation and reaction of the system.
 
 For the information exchange between the RAN and the Vision Module, utilizing the E2 interface could enhance communication efficiency.
 
 Future work could also involve integrating the xApp with a robotic platform, enabling it to autonomously reposition the gNB\@.
-Additionally, the performance limitations of the Software Defined Radios (SDRs) need to be addressed to ensure more robust and reliable communications.
+Additionally, the performance limitations of the SDRs need to be addressed to ensure more robust and reliable communications.
 
-Finally, extending the tests to include millimeter Wave (mmWave) frequencies would provide valuable insights into the system's performance in different operational scenarios, further validating and improving the proposed solution.
+Finally, extending the tests to include mmWave frequencies would provide valuable insights into the system's performance in different operational scenarios, further validating and evaluating paths to improving the proposed solution.
 
 
 

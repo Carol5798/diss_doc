@@ -16,13 +16,16 @@ This solution envisions obstacle-aware networks and should enable a RAN to auton
 The scenario is set in an indoor environment, where it is determined if common objects will impact the LOS between a gNB and a UE\@.
 This concept is inspired in the anechoic chamber seen in Figure~\ref{fig:chamber_converge}.
 In this dissertation, we will make use of a single UE and a mobile BS\@.
-Figure~\ref{fig:my_chamber} presents the overall intended system.
+Figure~\ref{fig:my_chamber} highlights in light red the CONVERGE's architecture entities this dissertation contributes to.
+The CONVERGE Video Function executes the video processing, while the CVCF controls its operation and video camera management.
+In our solution, the control and execution of the video processing is done by the proposed Vision Module (VM), detailed in the following sections.
+Thus, the VM encapsulates those two entities, while our xApp seeks to address the control of the gNB, partially performing the responsibilities of the CgNBCF\@.
 
-\textcolor{red}{Figure to ilustrate system}
+The CONVERGE video function
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/uporto-feup}
-    \caption[Another figure]{Another figure}
+    \includegraphics[width=0.7\linewidth]{figures/converge_my_work.drawio}
+    \caption[CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red]{CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red (adapted from\cite{converge2023_specs})}
     \label{fig:my_chamber}
 \end{figure}
 
@@ -364,8 +367,8 @@ The following subsections detail the hardware used in the implementation and the
 
 \subsection{Software}\label{subsec:software}
 This section presents the main software packages used to develop the Vision Module and implement the 5G network.
-Beyond this, in the repository containing the VM~\ref{repository}, includes a file for reproducing the Python virtual environment.
-\textcolor{red}{REPOSITORY INCLUSION}
+Beyond this, in the repository containing the VM software~\cite{repository}, includes a file for reproducing the Python virtual environment.
+
 
 \subsubsection{OpenCV}
 There are several open-source software packages available for Computer Vision in Python.
@@ -693,7 +696,7 @@ Figure~\ref{fig:state_xapp} graphically illustrate the state machine, with the t
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/State_machine.drawio}
+    \includegraphics[width=0.7\linewidth]{figures/State_machine.drawio}
     \caption{State machine diagram for the xApp's operation.}
     \label{fig:state_xapp}
 \end{figure}
