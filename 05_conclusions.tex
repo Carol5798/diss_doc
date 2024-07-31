@@ -1,73 +1,70 @@
 \chapter{Conclusion}\label{ch:conclusion}
 
 \section{Conclusions}\label{sec:conclusions}
-The goal of this dissertation was to implement vision-based RAN\@.
-The proposed solution allowed us to use Computer Vision techniques to extract relevant information and introduce vision-based messages to the RAN\@.
-Leveraging the O-RAN architecture, this work demonstrated the integration of sensing and telecommunications technologies.
-The convergence of these fields highlights the potential of CV to improve the efficiency and intelligence of 5G networks.
+The goal of this dissertation was to implement a vision-aided RAN\@.
+The proposed solution enabled the use of use Computer Vision (CV) techniques to extract relevant information and introduce vision-based messages within the RAN\@.
+Leveraging the O-RAN architecture, this dissertation demonstrates the integration of sensing and telecommunications technologies.
+The convergence of these fields motivates the potential of CV to enhance the efficiency and intelligence of 5G and 6G networks.
 
-On one hand, the O-RAN alliance develops and provides open and standard interfaces.
-The O-RAN architecture leverages SDN and NFV principles, representing a detachment from closed proprietary systems.
-This allows interfaces, such as the E2 interface, to extract information from the RAN easily, with the development of software, such as a xApp.
-On the other hand, solutions such as vision-aided BS's allow 5G networks to offer better QoS and QoE to clients.
-The introduction of vision in gNB's can enable environmental perception, in order to tackle LoS challenges.
-This enables the gNB to take more informed decisions when it comes to placement, specially in dynamic scenarios.
+On one hand, the O-RAN Alliance develops and provides open and interfaces.
+The O-RAN architecture leverages SDN and NFV principles, representing a shift from closed proprietary systems.
+This allows interfaces, such as the E2 interface, to extract information from the RAN, with the development of software applications, such as a xApp.
+On the other hand, solutions such as vision-aided BSs' allow 5G networks to offer better QoS and QoE to clients.
+The introduction of vision in the RAN architecture enables environmental perception, in order to tackle LoS blockages.
+This enables the gNBs to make more informed decisions regarding their placement, especially in dynamic scenarios.
 
-The proposed solution takes advantage of CV techniques and O-RAN architecture, implementing a standalone 5G network, with a vision-aided RAN\@.
+The proposed solution leverages CV techniques and O-RAN architecture, to implement a standalone 5G network, with a vision-aided RAN\@.
 The implementation utilized the open-source software of OpenAirInterface for the 5G Core Network and RAN\@.
-The Near-RT RIC was implemented using FlexRIC software.
-In order to use CV in our system, the Vision Module was developed using OpenCV, Ultralytics YOLO, and BoT-SORT for object detection and tracking.
-USRP B210 SDR boards were used to enable communications between UE and gNB\@.
-Finally, the developed xApp monitored and processed the data, showcasing the practical application of CV in enhancing 5G network performance.
+The Near-RT RIC was implemented using the FlexRIC software.
+In order to incorporate CV into our system, a novel Vision Module solution was developed using OpenCV, Ultralytics YOLO, and BoT-SORT for object detection and tracking.
+USRP B210 SDRs were used to enable communications between a UE and a gNB, enabling the creation of a proof-of-concept.
+Finally, the developed xApp monitored and processed the data, demonstrating the practical application of CV in enhancing 5G network performance.
 
-The proposed Vision Module is able to extract information captured from a real-time video feed and generate relevant information for the RAN\@.
-The xApp extract SNR measures, at a pace close to the video processing rate, in order to combine them.
-It combines such information and triggers suggestion on repositioning of the gNB, in order to maintain LoS between it and the UE\@.
+The proposed Vision Module is able to extract data captured from a real-time video feed and generate relevant information for the RAN\@.
+The xApp extracts SNR measures, with a periodicity close to the video processing rate, in order to combine them.
+The xApp combines such information and triggers recommendations for repositioning the gNB, in order to maintain LoS with a UE\@.
 
-Throughout the development of the proposed solution, we encountered implementation challenges.
-One significant issue was the lack of documentation across different software packages.
-In OpenAirInterface and FlexRIC, this difficulty hindered the deployment of the 5G network.
-Since they are complex software packages and lacked information, we faced setbacks.
-The lack of comprehensive documentation and consequent sparse real-world examples make it difficult to understand setup and configuration requirements, leading to several trial and error situations.
-Software instability, version control, frequent bugs, and compatibility issues with new updates further complicate deployment of the OAI\@.
-Additionally, there is limited assistance from the development team.
+Throughout the development of the proposed solution, we encountered several implementation challenges.
+One significant issue was the lack of documentation for different software packages.
+When it comes to OpenAirInterface and FlexRIC, this difficulty hindered the deployment of the 5G network.
+As they are complex software packages lacking detailed information,this made it difficult to understand setup and configuration requirements, leading to numerous trial-and-error situations.
+Software instability, version control issues, frequent bugs, and compatibility problems with new updates further complicated the deployment of the OAI\@.
+Additionally, there was limited assistance from the development team.
 
-Similarly, the library \emph{asn1c} also suffered from insufficient documentation and code maintenance, further complicating our implementation efforts, and integration of the messages with FlexRIC\@.
+Similarly, the \emph{asn1c} library also suffered from insufficient documentation and code maintenance, further complicating our implementation efforts and the integration of messages with FlexRIC\@.
 
-When it came to hardware requirements, both OAI and the tracking solution are resource intensive.
+When it came to hardware requirements, both OAI and the tracking solution were resource intensive.
 This led to occasional crashes and errors.
-For tracking, this required a lot of experimenting with different tracking solutions to improve processing rate of the video frames.
-Despite FlexRIC being less resource intensive, occasional crashes when developing the xApp occurred while using an emulated gNB\@.
+For tracking, this required a lot of experimenting with different tracking solutions to improve the processing rate of the video frames.
+Despite FlexRIC being less resource intensive, occasional crashes occurred when developing the xApp using an emulated gNB\@.
 
-Additionally, we faced instabilities caused by the SDRs, which disrupted the progress of our tests.
-These instabilities often required us to relaunch the software or physically unplug and replug the board to restore functionality, consuming a considerable amount of time.
+Additionally, we faced instabilities caused by the SDRs, disrupting the progress of our tests.
+These instabilities often required us to relaunch the software or physically attach and detach the board to restore functionality, consuming a considerable amount of time.
 They were mainly related to sending or receiving samples to and from the SDRs.
 
-These difficulties made it arduous to test the system as a whole, but they were eventually overcome.
-We managed to test and validate each component individually and interoperably, and deployed a testbed to validate our system in real-world conditions.
+These difficulties made it arduous to test the system as a whole, but they were overcome.
+We managed to test and validate each component individually and jointly, and deploying a testbed to validate our system in representative scenarios.
 
-Our solution has room for improvement, particularly in the VM\@.
-Despite this, the thesis objectives were met, resulting in three contributions: the introduction of video-based information into a 5G network based on O-RAN architecture; the development of a xApp that such information and RAN metrics, enhancing the gNB's capabilities with environmental perception; and the validation and evaluation of the proposed solution's performance in a reference networking scenario, including a proof-of-concept for vision-aided networking solutions.
-This solution, then, serves as a baseline for integrating CV into the RAN.
+The objectives of this dissertation were fully met, resulting in three contributions: 1) the introduction of video-based information into a 5G network based on O-RAN architecture; 2) the development of an xApp that joins video information and RAN metrics, enhancing the gNB's capabilities with environmental perception; and 3) the validation and evaluation of the proposed solution's performance in reference networking scenarios, including a proof-of-concept for vision-aided networking solutions.
+Our solution serves as a baseline for integrating CV into the RAN\@.
 
 \section{Known Limitations and Future Work}\label{sec:fut_work}
-While this dissertation successfully met its objectives, the system has limitations, which present opportunities for enhancements and future work.
+While this dissertation successfully met its objectives, the solution has some limitations, which present opportunities for enhancements and future work.
 
-The VM could benefit from refinements.
-These include the optimization of parameters, determining the optimal number of frames required to the prediction capabilities of the messages, specially the Prior Blockage.
-The increase in accurate generation of Prior Blockage messages could also benefit from using the relative velocity between the marker and the obstacle.
-The current solution only uses the current location of the marker to make the projection of placement of the obstacle.
-Additionally, employing a 3D mapping solution in order to obtain depth information would enable the extraction of more precise location of obstacles and UEs.
+The VM may benefit from several improvements, including the optimization of parameters, such as the capturing frame rate and the persistence time, and determining the optimal number of frames required for the prediction capabilities of the messages, especially the Prior Blockage.
+Improving the accuracy of generating Prior Blockage messages may also benefit from using the relative velocity between the ArUco marker and the obstacle.
+The current solution only uses the marker's current location to project the placement of the obstacle.
+Additionally, employing a 3D mapping solution to obtain depth information would enable the extraction of more precise locations of obstacles and UEs.
 Scaling the solution to manage multiple UEs simultaneously is another area for improvement.
 The current implementation also faced performance constraints due to hardware limitations.
-Testing the solution in dedicated hardware would improve the real-time operation and reaction of the system.
+Testing the solution on dedicated hardware would improve the real-time operation and response of the system.
 
-For the information exchange between the RAN and the Vision Module, utilizing the E2 interface could enhance communication efficiency.
+Utilizing the E2 interface for information exchange between the RAN and the Vision Module may enhance communications efficiency.
 
-Future work could also involve integrating the xApp with a robotic platform, enabling it to autonomously reposition the gNB\@.
+Future work may also involve integrating the xApp with a robotic platform, enabling it to autonomously reposition the gNB\@.
 Additionally, the performance limitations of the SDRs need to be addressed to ensure more robust and reliable communications.
 
-Finally, extending the tests to include mmWave frequencies would provide valuable insights into the system's performance in different operational scenarios, further validating and evaluating paths to improving the proposed solution.
+Finally, extending the experimental tests to include mmWave carrier frequencies may provide valuable conclusions about the system's performance in different operational scenarios, further validating and evaluating approaches to improve the state of the art.
 
 
 

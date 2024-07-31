@@ -27,7 +27,7 @@ Figure~\ref{fig:setup} depicts the experimental scenario considered.
 \end{figure}
 
 Since we did not use a mmWave carrier frequency, in order to produce a greater attenuation introduced by an obstacle, we used an RF absorbing material.
- the attenuation introduced by obstacles is not significant.
+The attenuation introduced by obstacles is not significant.
 A person acting as the obstacle, holds the material when passing between the gNB and UE\@.
 Figure~\ref{fig:foam} shows the RF absorbing material used.
 
@@ -242,8 +242,6 @@ The use case demonstrates the system's capabilities in four test scenarios, desc
 For all scenarios we assume a constant velocity for all moving entities.
 
 \subsection{Scenario A : Fixed gNB and UE}\label{subsec:scenario-0-:-fixed-gnb-and-ue}
-\textcolor{red}{- UE NOS CENARIOS : DESMEMBRAR PARA ARUCO E SDR
-- INCLUIR MAIS COMENTARIOS SOBRE O GRAFICO, POR EXEMPLO NO UE A SE MOVER FALAR QUE NUM TRECHO NAO HA MENSAGENS PQ MOMENTANEAMENTE O UE PARA DE SE MOVER}
 
 In this scenario, the objective was to assess the impact of blockages on the LoS between the gNB and the UE\@.
 By maintaining a fixed position for both the gNB and the UE, we could introduce obstacles to observe their effects on signal quality.
@@ -253,7 +251,7 @@ The obstacle moves from left to right, over time at a constant velocity.
 
 The results from this scenario serve as a baseline for comparison with other scenarios, in which the positions of the gNB and UE may vary.
 This analysis is important for evaluating the benefits of integrating CV solutions into mobile networks.
-\textcolor{red}{Change image of scenario to A!}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/scenario0}
@@ -264,7 +262,7 @@ This analysis is important for evaluating the benefits of integrating CV solutio
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/results_0}
-    \caption{SNR variation over time and the respective VM messages for scenario 0.}
+    \caption{SNR variation over time and the respective VM messages for scenario A.}
     \label{fig:results_0}
 \end{figure}
 
@@ -274,7 +272,7 @@ This test was successful, showcasing the CV module messages received, as well as
 Figure~\ref{fig:results_0} presents a graph with the results collected from this experiment.
 The to see the SNR variation over time is shown on in the y-axis, associated with each message.
 The average SNR values are collected by the xApp in intervals of 200 milliseconds (20 samples collected periodically every 10 ms).
-Possible intervals for this data collection are 1 ms,2 ms, 5 ms, or 10 ms.
+Possible intervals for this data collection are 1 ms, 2 ms, 5 ms, or 10 ms.
 This value is set according to the estimated processing framerate of the video.
 Since prior tests have shown that capturing at 30 frames/s results in the processing of video at about 5 frames/s, we chose this value so that each message reception has an SNR value associated.
 Each message is represented by a color, as shown in the legend.
@@ -285,6 +283,8 @@ In the first stage, where the obstacle is moving towards the UE, Prior Blockage 
 The SNR is high  since there is no obstruction of LoS between gNB and UE, indicating a strong signal.
 
 The first transition is labeled \('\)LoS lost\('\), marking the beginning of the blockage period.
+It is important to note that since the ArUco is positioned to the left of the SDR, the blockage from the CV perspective happens first and then the LoS, from the radio perspective, is lost.
+This explains why the SNR only lowers after a few Blockage messages.
 
 In the second stage,the obstacle stops in front of the UE and the reception of the first Blockage Message is observed, indicating the beginning of the obstruction.
 As expected, the average SNR decreases.
@@ -310,7 +310,7 @@ Table~\ref{tab:iperf} presents the measured values.
         No blockage & 7.67 Mbits/s \\ \hline
         Blockage   &  5.27 Mbits/s \\ \hline
     \end{tabular}
-    \caption{Throughput results for LoS and NLoS} % Add a caption for the table
+    \caption{Throughput results for LoS and NLoS.} % Add a caption for the table
     \label{tab:iperf} % Add a label for referencing the table
 \end{table}
 
@@ -320,9 +320,10 @@ Table~\ref{tab:iperf} presents the measured values.
 In this scenario, the objective was to assess the limitations of our VM and characterize the occurrence of messages, including how the vision-aided gNB behaves when there is a moving UE\@.
 The UE was carried by a person and the VM model could detect both the person and the UE\@.
 Figure~\ref{fig:test_movUE} presents a top-view of the testing scenario.
-The UE moved from left to right, at a constant velocity.
+The UE moved away from the gnB, at a constant velocity.
+It stops briefly and rotates left slowly.
+This movement is important to characterize to interpret the results of the graph.
 
-\textcolor{red}{update : mobile UE and scenario B}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/scenario1}
@@ -340,12 +341,15 @@ Similarly, it does not emit Post Blockage messages.
 Nonetheless, the system does support the movement of the UE, as at each frame, it checks the current position of the marker.
 
 Figure~\ref{fig:results_1} presents a graph with the results collected from this experiment.
-The SNR variation is shown in the y-axis, associated with each message.
-Note that there is a variation in the SNR as the distance between the gNB and UE increased.
-As they move closer again, the SNR is restored.
-
 Some Prior Blockage messages are associated with these SNRs, while no obstacle is expected to block the LoS\@.
 The VM module sends these messages because it viewed the person carrying the UE as an obstacle, and the person was moving in the same direction as the UE\@.
+The SNR variation is shown in the y-axis, associated with each message.
+Note that there is a variation in the SNR as the distance between the gNB and UE increased.
+The period with no messages associated (black dots) corresponds to the period the UE was static.
+Since the person carrying it was not moving, there were no obstacles moving towards the UE, in the perspective of the VM\@.
+As UE rotated, the person was moving again, returning to the indication of Prior Blockage messages.
+The rotation of the UE causes a variation on the SNR\@.
+As the UE's antennas rotate closer to the gNB, the SNR increases.
 
 \begin{figure}[H]
     \centering
@@ -359,9 +363,8 @@ The VM module sends these messages because it viewed the person carrying the UE 
 In this scenario, the objective was similar to the previous, we aimed at assessing how the vision-aided gNB behaves when there is a moving UE and multiple objects in the scene (a person carrying the UE and an obstacle represented by another moving person)\@.
 The UE was carried by a person and the VM model could detect both the people and the UE\@.
 Figure~\ref{fig:test_movUE} depicts a top-view of the testing scenario.
-The UE moved from left to right at a constant velocity, while the obstacle moved from right to left.
+Although a person was carrying the UE, its position only residually changed, while the obstacle moved from left to right.
 
-\textcolor{red}{update : mobile UE and scenario C}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/scenario2}
@@ -373,11 +376,16 @@ This test proceeded as expected.
 Similar to the previous scenario, the VM generated incorrect messages, especially when it came to Prior Blockage messages, as anticipated.
 The difference from the previous scenario is that the VM still generated correct messages concerning the obstacle in the foreground of the frame.
 
-
 Figure~\ref{fig:results_2} presents a graph with the results collected from this experiment.
 The SNR variation over time can be seen in the y-axis, associated with each message.
+In the graph, the first Blockage messages happened before the obstruction of the LoS\@.
+The reason is that the ArUco is positioned to the left of the antenna, similarly to scenario A\@.
+This means that a few of these messages are received before the LoS is blocked and consequently, the SNR drastically decreases.
 
-\textcolor{red}{Incluir comentários: primeiras mensagens de bloqueio apesar de haver bloqueio do marcador, nao houve obstrucao do SDR, isso implica que o momento em que cada um foi obstruido, impliacndo numa diferença temporal entre a variação do SNR e a detecção do bloqueio}
+The positioning of the video camera too close to the objets is one of the reasons this happens.
+When a camera is close to the objects, they are perceived bigger and limiting the field of view.
+In our case, this means that both in the Blockage messages and the Post Blockage message, the LoS is not completely synchronized with the messages.
+This limitation is caused by the short range of the SDRs, making it difficult to have 2 people and use the absorbing material in a range of 2 m.
 
 
 \begin{figure}[H]
@@ -393,7 +401,7 @@ In this scenario, the objective was to move the gNB to maintain LoS\@.
 We assessed the vision-aided gNB predictions and evaluated the benefits of moving a gNB\@.
 The gNB was moved on a table and the VM model could detect the obstacle and the UE\@.
 Figure~\ref{fig:test_movgnb} shows a top-view of the testing scenario.
-The UE  was fixed, the obstacle moved from right to left at constant pace, and the gNB moved in the opposite direction.
+The UE was fixed, the obstacle moved from right to left at constant pace, and the gNB moved in the opposite direction.
 
 \begin{figure}[H]
     \centering
@@ -405,10 +413,11 @@ The UE  was fixed, the obstacle moved from right to left at constant pace, and t
 Figure~\ref{fig:results_3} depicts a graph with the results collected from this experiment.
 The SNR variation over time on the y-axis, associated with each message.
 
-Despite the limitations on the movement of the gNB, to maintain the LoS, the test proceeded as expected.
-Such limitations are posed by the room where the tests were conducted and the SDRs' limited range (about 2m), making the testing scenario difficult.
+One noticeable factor is that we could not preventivelly move the gNB due to human time reaction, leading to a blockage.
+We needed to read a Prior Blockage message and reposition the gNB before the obstacle (person walking) reached the UE\@.
+Although this happened, the LoS returned after the repositioning of the gNB\@.
 
-\textcolor{red}{Tempo de reação humana, tamanho da sala, }
+Despite this setback on the movement of the gNB, the test proceeded as expected.
 
 
 \begin{figure}[H]

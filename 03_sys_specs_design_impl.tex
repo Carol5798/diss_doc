@@ -21,11 +21,10 @@ The CONVERGE Video Function executes the video processing, while the CVCF contro
 In our solution, the control and execution of the video processing is done by the proposed Vision Module (VM), detailed in the following sections.
 Thus, the VM encapsulates those two entities, while our xApp seeks to address the control of the gNB, partially performing the responsibilities of the CgNBCF\@.
 
-The CONVERGE video function
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/converge_my_work.drawio}
-    \caption[CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red]{CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red (adapted from\cite{converge2023_specs})}
+    \includegraphics[width=0.9\linewidth]{figures/converge_my_work.drawio}
+    \caption[CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red]{CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red (adapted from\cite{converge2023_specs}).}
     \label{fig:my_chamber}
 \end{figure}
 
@@ -78,7 +77,7 @@ Following these requirements and specifications, the system architecture was des
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/Syst_Arch.drawio}
-    \caption[System architecture of the proposed solution]{System architecture of the proposed solution}
+    \caption[System architecture of the proposed solution]{System architecture of the proposed solution.}
     \label{fig:my_arch}
 \end{figure}
 
@@ -113,7 +112,7 @@ The UPF routes the data to and from external networks, ensuring data forwarding.
 %-------------------
 
 In our solution, the RAN can be repositioned based on environment conditions that may affect the RF signal propagation\@.
-These conditions are perceived and reported by the Vision Module (VM).
+These conditions are perceived and reported by the VM.
 Jointly with RF metrics, such as SNR, this allows the RAN to manage its placement.
 In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specifiedll as RF metrics such as SNR, by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
 Communications between the VM and the xApp, is achieved through interface E2', based on the O-RAN E2 interface and E2AP\@.
@@ -158,12 +157,12 @@ We present a high level overview of the developed VM\@.
 
 The video processing starts capturing frames from the video camera.
 One frame is processed at a time.
-The UE has an ArUco marker in order to identify its placement.
+The UE has an Augmented Reality University of Cordoba (ArUco) marker in order to identify its placement.
 ArUco markers are square markers commonly used in CV applications to simplify the process of camera pose estimation and object tracking.
 They are easily detectable in images and videos, providing a reliable method for identifying and localizing objects in various environments.
 In order to simply the differentiation between UE and obstacles, they were chosen to represent the position of the UE\@.
 
-OpenCV is responsible for identifying ArUco marker and returning the ROI corresponding to the marker, as well as its identification.
+OpenCV is responsible for identifying ArUco marker and returning the RoI corresponding to the marker, as well as its identification.
 Periodically, the VM sends a message containing the location (in normalized Cartesian coordinates) of the UE within the frame\@.
 Following this, \emph{yolov8n}, a YOLO pre-trained model jointly with BoT-SORT, is responsible for detecting and tracking the obstacles in the frame.
 To improve control over frame selection for tracking detected objects, we have set specific parameters that allow timing adjustments in object detection, extending the Ultralytics API and enabling us to adjust the duration an obstacle remains detectable in the frame.
@@ -220,7 +219,7 @@ If the module predicts an impending blockage, it generates a message containing 
 
 
 \begin{table}[H]
-    \caption{Components of the Prior to Blockage message's payload}
+    \caption{Components of the Prior to Blockage message's payload.}
     \label{tab:future_block_message}
     \centering
     \resizebox{\textwidth}{!}{
@@ -417,15 +416,15 @@ While this library also supports Python, we chose not to use it since there are 
 As for the Vision Module (Python server), we chose ASN1Tools because this solution offers certain advantages.
 
 ASN1Tools~\cite{asn1tools} is a Python library that provides a simple way to handle ASN.1 data structures, through a straightforward API\@.
-The library supports a range of ASN.1 specifications and encoding rules, including Basic Encoding Rules(BER), Distinguished Encoding Rules (DER), and Packed Encoding Rules(PER)\@.
+The library supports a range of ASN.1 specifications and encoding rules, including Basic Encoding Rules (BER), Distinguished Encoding Rules (DER), and Packed Encoding Rules (PER)\@.
 Moreover, ASN1Tools is actively maintained, with regular updates and improvements.
 This guarantees that we have access to the latest features and bug fixes, enhancing the reliability and stability of our system.
 ASN1Tools is optimized for performance, allowing for fast encoding and decoding operations.
 This optimization suits real-time applications like our Vision Module, where processing speed is essential to maintain system responsiveness and accuracy.
 
-While other libraries such as pyasn1~\cite{pyasn1} and libtasn1~\cite{libtasn1} are available, they have certain limitations.
-\emph{pyasn1}, for instance, is less efficient in terms of performance and has a more complex Application Programming Interface (API)\@.
-libtasn1, part of the GNU project, is less user-friendly and not optimized for performance.
+While other libraries such as \emph{pyasn1}~\cite{pyasn1} and \emph{libtasn1}~\cite{libtasn1} are available, they have certain limitations.
+\emph{pyasn1}, for instance, is less efficient in terms of performance and has a more complex API\@.
+\emph{libtasn1}, part of the GNU project, is less user-friendly and not optimized for performance.
 
 
 \subsubsection{5G Core Network, 5G gNB, and 5G UE}
@@ -455,7 +454,7 @@ Although the laptop used did not meet these requirements, it proved sufficient t
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\linewidth]{figures/acer}
-    \caption{Acer Aspire A715-74G Laptop}
+    \caption{Acer Aspire A715-74G Laptop.}
     \label{fig:computer_acer}
 \end{figure}
 
@@ -622,7 +621,7 @@ It was also necessary to modify the IP address of the AMF and assign an IP so th
     \centering
     \includegraphics[width=0.7\linewidth]{figures/gnb_conf}
     \caption{Intial segment of \textit{gnb.sa.band78
-    .fr1.106PRB.usrpb210.conf} configuration file, with the respective MCC, MNC and TAC values}
+    .fr1.106PRB.usrpb210.conf} configuration file, with the respective MCC, MNC and TAC values.}
     \label{fig:gnb_conf}
 \end{figure}
 
@@ -640,7 +639,7 @@ Figure~\ref{fig:uhd_probe} illustrates the UHD driver detecting USRP device, loa
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/uhd_usrp_probe}
-    \caption{UHD obtaining information about the connected USRP device and testing it}
+    \caption{UHD obtaining information about the connected USRP device and testing it.}
     \label{fig:uhd_probe}
 \end{figure}
 
@@ -696,7 +695,7 @@ Figure~\ref{fig:state_xapp} graphically illustrate the state machine, with the t
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/State_machine.drawio}
+    \includegraphics[width=0.8\linewidth]{figures/State_machine.drawio}
     \caption{State machine diagram for the xApp's operation.}
     \label{fig:state_xapp}
 \end{figure}
@@ -704,7 +703,7 @@ Figure~\ref{fig:state_xapp} graphically illustrate the state machine, with the t
 
 The state machine is designed to handle events related to obstacle detection and SNR fluctuations, enabling adaptive responses to maintain network performance.
 It manages transitions between different states based on SNR values and specific conditions such as the presence of obstacles.
-The state machine consists of three states: INITIAL\_STAGE, BLOCKAGE, and PRIOR\_BLOCKAGE\@.
+The state machine consists of three states: INITIAL\_STAGE, BLOCKAGE, and \\ PRIOR\_BLOCKAGE\@.
 
 In the INITIAL\_STAGE, the default starting state, the system monitors for obstacles and SNR levels.
 If an obstacle is detected obstructing the UE and the SNR falls below a predefined threshold, the state machine transitions to the BLOCKAGE state.
