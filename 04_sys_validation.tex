@@ -247,6 +247,9 @@ In this scenario, the objective was to assess the impact of blockages on the LoS
 By maintaining a fixed position for both the gNB and the UE, we could introduce obstacles to observe their effects on signal quality.
 This scenario also aimed at validating the accuracy of the messages sent by the VM regarding the presence of blockages.
 Figure~\ref{fig:test_fixed} depicts a top-view from the testing scenario.
+This scenario contain two variations: one where the obstacle moves at a constant velocity and one where the obstacle holds its position for a few seconds.
+
+\subsubsection{Constant velocity}
 The obstacle moves from left to right, over time at a constant velocity.
 
 The results from this scenario serve as a baseline for comparison with other scenarios, in which the positions of the gNB and UE may vary.
@@ -262,7 +265,7 @@ This analysis is important for evaluating the benefits of integrating CV solutio
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/results_0}
-    \caption{SNR variation over time and the respective VM messages for scenario A.}
+    \caption{SNR variation over time and the respective VM messages for scenario A at constant velocity.}
     \label{fig:results_0}
 \end{figure}
 
@@ -313,6 +316,31 @@ Table~\ref{tab:iperf} presents the measured values.
     \caption{Throughput results for LoS and NLoS.} % Add a caption for the table
     \label{tab:iperf} % Add a label for referencing the table
 \end{table}
+
+\subsubsection{Holding position}
+
+The obstacle moves from left to right.
+It first holds its position in the camera field of view, without blocking the LoS\@.
+After a few seconds it moves to a blocking position and holds still for a few seconds.
+Finally, it leaves the blocking position.
+
+The test was successful.
+Figure~\ref{fig:results_01} presents a graph with the results collected from this experiment.
+This graph is similar to the one presented by Figure~\ref{fig:results_0}, as expected.
+
+It is noticeable that the SNR between the blocked and unblocked states is more pronounced than in the scenario where the obstacle moves continuously.
+
+This results in a more uniform distribution of SNR values associated with each message.
+The SNR variation is more coherent with the messages.
+For instance, the average SNR values for blockage messages is much lower than in the previous experiment, since the communications suffer attenuation for a longer period.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/results_01}
+    \caption{SNR variation over time and the respective VM messages for scenario A, while holding the obstacle holds the position.}
+    \label{fig:results_01}
+\end{figure}
 
 
 \subsection{Scenario B: Fixed gNB, moving UE}\label{subsec:scenario-0.1:-fixed-gnb-moving-ue}

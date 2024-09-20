@@ -112,9 +112,9 @@ The UPF routes the data to and from external networks, ensuring data forwarding.
 %-------------------
 
 In our solution, the RAN can be repositioned based on environment conditions that may affect the RF signal propagation\@.
-These conditions are perceived and reported by the VM.
+These conditions are perceived and reported by the VM\@.
 Jointly with RF metrics, such as SNR, this allows the RAN to manage its placement.
-In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specifiedll as RF metrics such as SNR, by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
+In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specifically as RF metrics such as SNR, by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
 Communications between the VM and the xApp, is achieved through interface E2', based on the O-RAN E2 interface and E2AP\@.
 E2' interface supports reliable data exchange using a SCTP socket connection (cf.
 Figure~\ref{fig:stack}) along with an ASN.1 definition to structure the messages.
@@ -692,6 +692,7 @@ To enhance the functionality and adaptability of our 5G network, we developed an
 The xApp operates by combining the decoded CV messages with SNR values from the network.
 We implemented a state machine to manage the varying network conditions and obstacles.
 Figure~\ref{fig:state_xapp} graphically illustrate the state machine, with the transitions between different states based on SNR values and obstacle detection events.
+
 
 \begin{figure}[H]
     \centering
