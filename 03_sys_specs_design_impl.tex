@@ -24,7 +24,7 @@ Thus, the VM encapsulates those two entities, while our xApp seeks to address th
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/converge_my_work.drawio}
-    \caption[CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red]{CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red (adapted from\cite{converge2023_specs}).}
+    \caption[CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red]{CONVERGE service-oriented architecture with the entities contributed by this dissertation highlighted in red (adapted from~\cite{converge2023_specs}).}
     \label{fig:my_chamber}
 \end{figure}
 
@@ -114,11 +114,11 @@ The UPF routes the data to and from external networks, ensuring data forwarding.
 In our solution, the RAN can be repositioned based on environment conditions that may affect the RF signal propagation\@.
 These conditions are perceived and reported by the VM\@.
 Jointly with RF metrics, such as SNR, this allows the RAN to manage its placement.
-In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specifically as RF metrics such as SNR, by O-RAN, to deploy a xApp responsible for handling both RF metrics and the VM messages.
+In order to integrate of Computer Vision into the 5G architecture, we took advantage of the Near-RT RIC, specifically as RF metrics such as SNR, by O-RAN, to deploy an xApp responsible for handling both RF metrics and the VM messages.
 Communications between the VM and the xApp, is achieved through interface E2', based on the O-RAN E2 interface and E2AP\@.
 E2' interface supports reliable data exchange using a SCTP socket connection (cf.
 Figure~\ref{fig:stack}) along with an ASN.1 definition to structure the messages.
-The use of ASN.1 ensures that the standarized message formats , promoting interoperability and efficiency in data exchange.
+The use of ASN.1 ensures that the standardized message formats, promoting interoperability and efficiency in data exchange.
 This design enables the VM to communicate with the xApp, allowing the integration of data extracted from video for the mobile RAN management.
 
 \begin{figure}[H]
@@ -443,7 +443,7 @@ It often demands more substantial computational resources and a more involved se
 
 
 \subsubsection{Core Network, FlexRIC, Computer Vision module and gNB}
-The OAI Core Network, FlexRIC, the Vision Module, and the gNB were deployed on a laptop, the Acer Aspire A715-74G, which id shown in Figure~\ref{fig:computer_acer}.
+The OAI Core Network, FlexRIC, the Vision Module, and the gNB were deployed on a laptop, the Acer Aspire A715-74G, which is shown in Figure~\ref{fig:computer_acer}.
 The OAI Core was deployed using Docker containers, requiring a 4-core Central Processing Unit (CPU), 16 GB of Random-access Memory (RAM) and a minimum of 1.5 GB free storage for the Docker images.
 FlexRIC does not have listed hardware requirements; however, during deployment, it was noticed that it is not resource-intensive, sufficing with the same requirements as the Core Network.
 The xApp was deployed alongside FlexRIC to ensure reduced latency between the two components.
@@ -510,7 +510,7 @@ We selected 3.6 GHz as the carrier frequency for the 5G RAN\@.
 \subsubsection{UE}
 The UE was deployed on an HP EliteBook 840 Laptop, shown in Figure~\ref{fig:computer_hp}.
 The hardware requirements for deploying the UE are 8 cores and 8 GB of RAM\@.
-Table~\ref{tab:specs_pc_ue} depicts the specifications of the computer responsible for the UE\@, confirming that the hardware is compatible wth the UE software requirements.
+Table~\ref{tab:specs_pc_ue} depicts the specifications of the computer responsible for the UE\@, confirming that the hardware is compatible with the UE software requirements.
 The UE used the USRP B210 SDR to communicate with the gNB\@.
 
 \begin{figure}[H]
@@ -673,7 +673,7 @@ Ensuring that the IMSI used in the UE configuration matches an entry in the Core
 FlexRIC is deployed on the same computer as the OAI 5G Core Network.
 The procedure involves installing the required dependencies and compiling FlexRIC software.
 By default, FlexRIC is configured to run on the Loopback Interface address (127.0.0.1).
-Since we are deploying gNB and FlexRIC on the same host, this did not need to be to changed.
+Since we are deploying gNB and FlexRIC on the same host, this did not need to be changed.
 In order to ensure the use of the E2 Agent, it was necessary to include the following information in the configuration file:
 
 \begin{verbatim}

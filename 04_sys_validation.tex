@@ -4,7 +4,7 @@ This chapter presents the validation of the proposed solution.
 The validation process is described in different sections, each addressing multiple components of the system.
 Section~\ref{sec:meth} outlines the methodology used for validation.
 Section ~\ref{sec:experimental-setup} presents the experimental setup.
-Section ~\ref{sec:component-testing}, presents the individual testing of each system's component demonstrating its proper functioning.
+Section ~\ref{sec:component-testing} presents the individual testing of each system's component demonstrating its proper functioning.
 Section~\ref{sec:use_case} describes a specific use case to demonstrate the system's functionality.
 Finally, Section~\ref{sec:discuss} provides a discussion of the results and conclusions obtained from the validation process.
 
@@ -13,7 +13,7 @@ We have divided our tests into three categories: component testing, interoperabi
 The first category was used to validate the proper functioning of each component, including a performance evaluation.
 The second category allowed us to determine if the components were working together properly.
 The last category was defined to validate the proposed system in a reference scenario.
-We conducted functional and performance validations using tools such as \emph{ping} and \emph{Iperf}~\cite{iperf}.
+We conducted functional and performance validations using tools such as \emph{ping} and \emph{iPerf}~\cite{iperf}.
 
 \section{Experimental Setup}\label{sec:experimental-setup}
 This section presents the experimental setup.
@@ -34,7 +34,7 @@ Figure~\ref{fig:foam} shows the RF absorbing material used.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/foam}
-    \caption{Material used to absorve RF signals, in order to simulate strong attenuation introduced by obstacles.}
+    \caption{Material used to absorb RF signals, in order to simulate strong attenuation introduced by obstacles.}
     \label{fig:foam}
 \end{figure}
 
@@ -133,7 +133,7 @@ This can be observed in the terminal running FlexRIC, where logs show the regist
 \subsection{UE}\label{subsec:ue}
 
 In order to test the correct initialization of the UE, we needed to ensure connection with the Core Network.
-After launching the UE, using the command present in~\ref{subsec:oai-5g-ue}, we observed the correct registration of the UE in Wireshark , as shown in Figure~\ref{fig:registration_ue}.
+After launching the UE, using the command present in Section~\ref{subsec:oai-5g-ue}, we observed the correct registration of the UE in Wireshark, as shown in Figure~\ref{fig:registration_ue}.
 
 \begin{figure}[H]
     \centering
@@ -142,7 +142,7 @@ After launching the UE, using the command present in~\ref{subsec:oai-5g-ue}, we 
     \label{fig:registration_ue}
 \end{figure}
 
-When this synchronization occured, we verified the creation of \textit{oaitun\_ue1}, the tunnel interface between the UE and the Core Network.
+When this synchronization occurred, we verified the creation of \textit{oaitun\_ue1}, the tunnel interface between the UE and the Core Network.
 After that, we assessed the connectivity, by pinging every Core Network component, as well as the Internet.
 Figure~\ref{fig:ping_ue_core} and Figure~\ref{fig:ping_ue_internet} show the outcome of the connectivity tests to the Core Network and the Internet, respectively.
 
@@ -201,7 +201,7 @@ This capture provided a view of the message flow, confirming that the messages w
     \label{fig:capture_messages}
 \end{figure}
 
-The VM's performance proved adequate for the intended application, considering an indoor environment where movements are frequent yet the velocity is low, such as people walking or objects being moved.
+The VM's performance proved adequate for the intended application, considering an indoor environment where movements are frequent, yet the velocity is low, such as people walking or objects being moved.
 The module demonstrated good performance in these scenarios, and its near-real-time processing capability can trigger prompt reactions to environmental changes.
 
 \subsection{xApp}\label{subsec:mm_xapp}
@@ -241,18 +241,18 @@ The xApp suggests repositioning the gNB, based on data collected from the Vision
 The use case demonstrates the system's capabilities in four test scenarios, described in the following subsections.
 For all scenarios we assume a constant velocity for all moving entities.
 
-\subsection{Scenario A : Fixed gNB and UE}\label{subsec:scenario-0-:-fixed-gnb-and-ue}
+\subsection{Scenario A: Fixed gNB and UE}\label{subsec:scenario-0-:-fixed-gnb-and-ue}
 
 In this scenario, the objective was to assess the impact of blockages on the LoS between the gNB and the UE\@.
-By maintaining a fixed position for both the gNB and the UE, we could introduce obstacles to observe their effects on signal quality.
+By maintaining a fixed position for both the gNB and the UE, we introduced an obstacle to observe its effect on signal quality.
 This scenario also aimed at validating the accuracy of the messages sent by the VM regarding the presence of blockages.
-Figure~\ref{fig:test_fixed} depicts a top-view from the testing scenario.
-This scenario contain two variations: one where the obstacle moves at a constant velocity and one where the obstacle holds its position for a few seconds.
+Figure~\ref{fig:test_fixed} depicts a top-down view of the testing scenario.
+This scenario considered  the obstacle moving at a constant velocity and the obstacle holding its position for a few seconds, while blocking the LoS between the gNB and the UE\@.
 
-\subsubsection{Constant velocity}
-The obstacle moves from left to right, over time at a constant velocity.
+\subsubsection{Constant velocity}\label{subsubsec:constant}
+The obstacle moved from left to right over time, maintaining a constant velocity.
 
-The results from this scenario serve as a baseline for comparison with other scenarios, in which the positions of the gNB and UE may vary.
+The results from this scenario serve as a baseline for comparison with other scenarios, where the positions of the gNB and UE may vary.
 This analysis is important for evaluating the benefits of integrating CV solutions into mobile networks.
 
 \begin{figure}[H]
@@ -265,43 +265,46 @@ This analysis is important for evaluating the benefits of integrating CV solutio
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{figures/results_0}
-    \caption{SNR variation over time and the respective VM messages for scenario A at constant velocity.}
+    \caption{SNR variation over time and the respective VM messages for scenario A, with the obstacle moving at a constant velocity.}
     \label{fig:results_0}
 \end{figure}
 
 
-This test was successful, showcasing the CV module messages received, as well as SNR metrics corresponding to those expected.
+The test was successful, showcasing the CV module messages received, as well as SNR metrics corresponding to those expected.
+As the obstacle is moving towards blocking LoS, the xApp receives Prior-blockage messages.
+When the VM identifies the LoS obstruction, blockage messages are received.
+Since an obstacle was introduced between the gNB and the UE, the power signal is attenuated, as demonstrated by the decrease of the SNR measured colored blue.
+As the obstacle moves away from the scene, the xApp receives a Post-blockage message, in red, indicating that the LoS is no longer obstructed.
+The SNR returns to the previous values as shown by the following SNR measures, shown in black, since there are no obstacles in the scene and therefore no messages.
+
 
 Figure~\ref{fig:results_0} presents a graph with the results collected from this experiment.
-The to see the SNR variation over time is shown on in the y-axis, associated with each message.
-The average SNR values are collected by the xApp in intervals of 200 milliseconds (20 samples collected periodically every 10 ms).
-Possible intervals for this data collection are 1 ms, 2 ms, 5 ms, or 10 ms.
-This value is set according to the estimated processing framerate of the video.
-Since prior tests have shown that capturing at 30 frames/s results in the processing of video at about 5 frames/s, we chose this value so that each message reception has an SNR value associated.
-Each message is represented by a color, as shown in the legend.
-Note that we can also have situations were there are SNR values but no associated message, for instance when the detected obstacles are not expected to block the LoS\@.
+The SNR variation over time is shown on the y-axis, associated with each message.
+The average SNR values are collected by the xApp at intervals of 200 milliseconds (20 samples collected periodically every 10 ms).
+Possible intervals for data collection are 1 ms, 2 ms, 5 ms, or 10 ms.
+This interval is set based on the estimated processing framerate of the video.
+Since experimental tests have shown that capturing at 30 frames/s results in the processing of video at about 5 frames/s, we selected this interval to ensure that each message reception is associated with an SNR value.
+Each message is represented by a different color, as shown in the legend.
+It is worth noting that situations may arise where SNR values are collected but without an associated message, such as when the detected obstacles are not expected to block the LoS\@.
 
-The graph is divided into three distinct stages, separated by transition lines.
-In the first stage, where the obstacle is moving towards the UE, Prior Blockage messages are sent.
-The SNR is high  since there is no obstruction of LoS between gNB and UE, indicating a strong signal.
+The graph in Figure~\ref{fig:results_0} is divided into three stages, separated by transition lines.
+In the first stage, when the obstacle moves towards the UE, Prior Blockage messages are sent.
+The SNR is high  since there is no obstruction of LoS between gNB and UE\@.
 
-The first transition is labeled \('\)LoS lost\('\), marking the beginning of the blockage period.
-It is important to note that since the ArUco is positioned to the left of the SDR, the blockage from the CV perspective happens first and then the LoS, from the radio perspective, is lost.
-This explains why the SNR only lowers after a few Blockage messages.
+The first transition is labeled \('\)LoS lost\('\), marking the start of the blockage period.
+It is important to note that since the ArUco is positioned to the left of the SDR, the blockage from the CV perspective occurs first and then the LoS is lost, from the radio perspective.
+This explains why the SNR only decreases after a few Blockage messages.
 
-In the second stage,the obstacle stops in front of the UE and the reception of the first Blockage Message is observed, indicating the beginning of the obstruction.
+In the second stage, the obstacle stops in front of the UE and the first Blockage Message is received, indicating the start of the obstruction.
 As expected, the average SNR decreases.
 
-The second transition is labeled \('\)Return of LoS\('\), indicating the end of the blockage and the return to normal signal conditions.
+The second transition is labeled \('\)Return of LoS\('\), indicating the end of the blockage and the return to regular signal reception conditions.
 In the third stage, the obstacle moves away from the UE, no longer blocking the LoS\@.
-As expected, the average SNR approximates those seen in the first stage.
-The SNR values increase, similar to the prior blockage stage, indicating the restoration of a strong signal, suggesting the passage of the blockage.
+As expected, the average SNR values increase, similar to the prior blockage stage, indicating the restoration of a strong signal reception, due to the passage of the blockage.
 
-In this scenario, we also used the iperf tool to test the throughput at two points.
-The first was when no blockage was occurring.
-The second was during a blockage.
-This test considered TCP traffic and assessed the uplink throughput.
-As expected, the throughput was lower during a blockage.
+In this scenario, the iPerf tool was used to assess to test the throughput at two situations: with no blockage and during a blockage.
+The test considered TCP traffic and uplink direction.
+As expected, throughput was lower during a blockage.
 Table~\ref{tab:iperf} presents the measured values.
 
 
@@ -319,21 +322,17 @@ Table~\ref{tab:iperf} presents the measured values.
 
 \subsubsection{Holding position}
 
-The obstacle moves from left to right.
-It first holds its position in the camera field of view, without blocking the LoS\@.
-After a few seconds it moves to a blocking position and holds still for a few seconds.
-Finally, it leaves the blocking position.
+The obstacle moved from left to right, initially holding its position in the camera's field of view without blocking the LoS\@.
+After a few seconds it moved to a blocking position and remained stationary for a few seconds.
+Finally, it left the blocking position.
 
 The test was successful.
-Figure~\ref{fig:results_01} presents a graph with the results collected from this experiment.
+Figure~\ref{fig:results_01} presents a graph showing the results collected from this experiment.
 This graph is similar to the one presented by Figure~\ref{fig:results_0}, as expected.
 
-It is noticeable that the SNR between the blocked and unblocked states is more pronounced than in the scenario where the obstacle moves continuously.
-
-This results in a more uniform distribution of SNR values associated with each message.
-The SNR variation is more coherent with the messages.
-For instance, the average SNR values for blockage messages is much lower than in the previous experiment, since the communications suffer attenuation for a longer period.
-
+It is observed that the SNR difference between the blocked and unblocked states is more pronounced than in the scenario where the obstacle moved continuously.
+This leads to a more uniform distribution of SNR values associated with each message, were the SNR variation aligns more closely with the received messages.
+For instance, the average SNR values for blockage messages are considerably lower than in the experiment, described in Section~\ref{subsubsec:constant}.
 
 \begin{figure}[H]
     \centering
@@ -348,7 +347,7 @@ For instance, the average SNR values for blockage messages is much lower than in
 In this scenario, the objective was to assess the limitations of our VM and characterize the occurrence of messages, including how the vision-aided gNB behaves when there is a moving UE\@.
 The UE was carried by a person and the VM model could detect both the person and the UE\@.
 Figure~\ref{fig:test_movUE} presents a top-view of the testing scenario.
-The UE moved away from the gnB, at a constant velocity.
+The UE moved away from the gNB, at a constant velocity.
 It stops briefly and rotates left slowly.
 This movement is important to characterize to interpret the results of the graph.
 
@@ -410,15 +409,15 @@ In the graph, the first Blockage messages happened before the obstruction of the
 The reason is that the ArUco is positioned to the left of the antenna, similarly to scenario A\@.
 This means that a few of these messages are received before the LoS is blocked and consequently, the SNR drastically decreases.
 
-The positioning of the video camera too close to the objets is one of the reasons this happens.
+The positioning of the video camera too close to the objects is one of the reasons this happens.
 When a camera is close to the objects, they are perceived bigger and limiting the field of view.
 In our case, this means that both in the Blockage messages and the Post Blockage message, the LoS is not completely synchronized with the messages.
 This limitation is caused by the short range of the SDRs, making it difficult to have 2 people and use the absorbing material in a range of 2 m.
 
 One relevant note is the no message associated in this scenario.
-This happened because this corresponded to a moment were no detections were made by YOLO, since the RF absorbing material was covering the camera's field of view and the model is not trained to recognize such class of object.
+This happened because this corresponded to a moment where no detections were made by YOLO, since the RF absorbing material was covering the camera's field of view and the model is not trained to recognize such class of object.
 Hence, no detection of obstacle or marker was made during this period, and no messages generated by the VM\@.
-It is specially relevant to mention this as it indicates our system can accurately detect objects and in other scenarios would not assume any object is an obstacle, since we only selected from the classes available those relevant from the RF perspective.
+It is especially relevant to mention this as it indicates our system can accurately detect objects and in other scenarios would not assume any object is an obstacle, since we only selected from the classes available those relevant from the RF perspective.
 
 \begin{figure}[H]
     \centering
@@ -445,7 +444,7 @@ The UE was fixed, the obstacle moved from right to left at constant pace, and th
 Figure~\ref{fig:results_3} depicts a graph with the results collected from this experiment.
 The SNR variation over time on the y-axis, associated with each message.
 
-One noticeable factor is that we could not preventivelly move the gNB due to human time reaction, leading to a blockage.
+One noticeable factor is that we could not preventively move the gNB due to human time reaction, leading to a blockage.
 We needed to read a Prior Blockage message and reposition the gNB before the obstacle (person walking) reached the UE\@.
 Although we could not do this before the break of LoS, it returned after the repositioning of the gNB\@.
 
@@ -479,8 +478,8 @@ Component tests confirmed the operational status of all individual entities, ens
 Interoperability tests verified the integration of these entities, confirming that the system operated cohesively as a whole.
 The evaluation demonstrated the viability of the proposed solution, indicating its potential for application in real-world scenarios.
 
-In terms of the data extracted form the video, we noticed the correct generation of Blockage Messages and Post Blockage messages.
-Prior blockage messages are generated frequently and in some cases, incorrectly.
+In terms of the data extracted from the video, we noticed the correct generation of Blockage Messages and Post Blockage messages.
+Prior blockage messages are generated frequently and, in some cases, incorrectly.
 For this message type, we intentionally opted for detecting more false positives than false negatives in order to avoid ignoring a real potential blockage.
 Since the RAN is responsible for the placement management, having more false positives messages is not critical in the VM\@.
 
