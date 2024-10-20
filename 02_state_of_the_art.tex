@@ -278,7 +278,8 @@ These global procedures ensure that the E2 interface is capable of handling vari
 \section{Computer Vision}\label{sec:CV}
 
 CV, a branch of artificial intelligence, enables machines to interpret and make decisions based on visual data, involving the understanding and analyzing of images and videos.
-Object detection and tracking are tasks of CV, allowing machines to identify, locate, and monitor specific objects within visual content while facilitating recognition and comprehension of real-world scenarios.CV is used in various domains.
+Object detection and tracking are tasks of CV, allowing machines to identify, locate, and monitor specific objects within visual content while facilitating recognition and comprehension of real-world scenarios.
+CV is used in various domains.
 In autonomous vehicles, object detection and tracking tasks ensure safe navigation by identifying pedestrians, vehicles, and obstacles.
 Retail uses CV for automated checkout and inventory management, while security systems employ it for real-time monitoring and tracking of suspicious activities.
 AR relies on CV to seamlessly integrate virtual elements into the real world.
@@ -324,7 +325,7 @@ The architecture involves a series of convolutional layers forming a backbone ne
 The yellow cubes represent these convolutional layers, organized into blocks with the same resolution.
 Due to down-sampling operations after each block, the subsequent cubes gradually decrease in size.
 The thick blue cubes, consisting of convolutional layers, handle the final prediction, including object classification and bounding box regression.
-Notably, the flat blue cube represents the RoI pooling layer, which generates feature maps for objects of the same size.
+Notably, the flat blue cube represents the Region of Interest (RoI) pooling layer, which generates feature maps for objects of the same size.
 This one-stage approach prioritizes simplicity and speed, making it particularly efficient for real-time applications, though it may face challenges in accurately detecting small or occluded objects.
 
 
@@ -389,7 +390,7 @@ The mAP summarizes the classification performance of the object detection model 
         YOLOv4 & 57.8 & 1.21 & 28.9 & 568.484 & 16.458 \\
         YOLOv4-tiny & 38.1 & 18.46 & 65.8 & 46.751 & 13.351 \\
         YOLOv5-nano & 28.0 & 6 & 40 & 87.168 & 15.536 \\
-        YOLOvS-small & 37.4 & 4 & 36 & 152.821 & 18.187 \\
+        YOLOv5-small & 37.4 & 4 & 36 & 152.821 & 18.187 \\
         YOLOv6-nano & 35.9 & 5.4 & 110.7 & 103.253 & 16.551 \\
         YOLOv6-small & 43.5 & 2.7 & 72.8 & 289.838 & 18.911 \\
         YOLOv6-tiny & 40.3 & 4.2 & 80.9 & 196.117 & 18.078 \\

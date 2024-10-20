@@ -62,7 +62,7 @@ These requirements translate into Table ~\ref{tab:spec}, containing system speci
 \begin{tabular}{|l|p{12cm}|}
 \hline
 \textbf{Specification} & \textbf{Description} \\ \hline
-\textbf{Detection and tracking} & Use YOLOv5 Ultralytics~\cite{Ultralytics_repo} and BoT-SORT~\cite{botsort} for high accuracy and optimized speed. \\ \hline
+\textbf{Detection and tracking} & Use YOLOv8 Ultralytics~\cite{Ultralytics_repo} and BoT-SORT~\cite{botsort} for high accuracy and optimized speed. \\ \hline
 \textbf{Messaging} & Encode messages using ASN.1 definitions~\cite{ITU_ASN1}. \newline Transmit messages via Stream Control Transmission Protocol (SCTP). \newline Include relevant information such as object ID, type, position (Cartesian coordinates), and confidence score. \\ \hline
 \end{tabular}}
 \end{table}
@@ -160,7 +160,7 @@ One frame is processed at a time.
 The UE has an Augmented Reality University of Cordoba (ArUco) marker in order to identify its placement.
 ArUco markers are square markers commonly used in CV applications to simplify the process of camera pose estimation and object tracking.
 They are easily detectable in images and videos, providing a reliable method for identifying and localizing objects in various environments.
-In order to simply the differentiation between UE and obstacles, they were chosen to represent the position of the UE\@.
+In order to simplify the differentiation between UE and obstacles, they were chosen to represent the position of the UE\@.
 
 OpenCV is responsible for identifying ArUco marker and returning the RoI corresponding to the marker, as well as its identification.
 Periodically, the VM sends a message containing the location (in normalized Cartesian coordinates) of the UE within the frame\@.

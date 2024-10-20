@@ -2,9 +2,9 @@
 %% originally by JCL & JCF, modified by nhopf
 
 %% One-sided output by default
-\documentclass[11pt,a4paper]{report}
+%\documentclass[11pt,a4paper]{report}
 %% For two-sided printing (for dead-tree output) comment previous line and uncomment the next line
-% \documentclass[11pt,a4paper,twoside,openright]{report}
+\documentclass[11pt,a4paper,twoside,openright,final]{report}
 
 \usepackage[utf8]{inputenc}
 \usepackage{notoccite}
@@ -74,15 +74,15 @@
     \author{Carolina Simões}
 
 %% Uncomment next line for date of submission
-    \thesisdate{Jul 31, 2024}
+    \thesisdate{Oct 16, 2024}
 
 %% Comment next line copyright text if not used
     \copyrightnotice{Carolina Simões, 2024}
 
-    \supervisor{Supervisor}{Manuel Ricardo, PhD}
+    \supervisor{Supervisor}{Prof. Manuel Ricardo}
 
 %% Uncomment next line if necessary
-    \supervisor{Second Supervisor}{André Coelho, PhD}
+    \supervisor{Second Supervisor}{Dr. André Coelho}
 
 %% Uncomment committee stuff in the final version if used
 %\committeetext{Approved by \ldots:}
@@ -129,11 +129,13 @@
     \StartBody
 
 %% TIP: use a separate file for each chapter
+    \cleardoublepage
     \include{01_introduction}
     \include{02_state_of_the_art}
     \include{03_sys_specs_design_impl}
     \include{04_sys_validation}
     \include{05_conclusions}
+
 
 %%----------------------------------------
 %% Final materials
